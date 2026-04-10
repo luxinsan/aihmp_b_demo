@@ -1,1 +1,6 @@
 .DS_Store
+react-app/node_modules
+react-app/dist
+react-app/*.tsbuildinfo
+react-app/vite.config.js
+react-app/vite.config.d.ts

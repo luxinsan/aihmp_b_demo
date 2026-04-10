@@ -1,0 +1,26 @@
+{
+  "name": "aihmp-b-demo-react-migration",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "build:pages": "tsc -b && vite build --base=/aihmp_b_demo/",
+    "preview:pages": "vite preview --host 0.0.0.0 --port 4174",
+    "verify:pages": "npm run build:pages && node ./scripts/verify-pages-build.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "antd": "^6.3.5",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.2",
+    "typescript": "^5.8.3",
+    "vite": "^7.1.4"
+  }
+}
