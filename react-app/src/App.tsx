@@ -31,10 +31,10 @@ const QuestionnaireWorkspace = lazy(() =>
 
 function getMode() {
   if (typeof window === "undefined") {
-    return "parity-react";
+    return "lab";
   }
 
-  return new URLSearchParams(window.location.search).get("mode") ?? "parity-react";
+  return new URLSearchParams(window.location.search).get("mode") ?? "lab";
 }
 
 export default function App() {
