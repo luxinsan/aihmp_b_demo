@@ -118,7 +118,11 @@ export function QuestionnaireWorkspace() {
                         <h3 className="questionnaire-summary-title">{summary.form_name}</h3>
                       </div>
                     </header>
-                    <div className="questionnaire-summary-rate">已填写 {summary.latest_completion_rate}%</div>
+                    <div className="questionnaire-summary-rate">
+                      <span className="questionnaire-summary-rate-tag">
+                        已填写 {summary.latest_completion_rate}%
+                      </span>
+                    </div>
                     <div className="questionnaire-summary-info">
                       <p>
                         来源场景：{summary.scene_label}

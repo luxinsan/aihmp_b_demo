@@ -1,5 +1,4 @@
-import { sourceOptions } from "../data/configOptions";
-import { patientProfile } from "../data/patientProfile";
+import { configTemplateOptions, sourceOptions } from "../data/configOptions";
 import { services } from "../data/services";
 import type { DraftState } from "../types/draftState";
 import type { ReportDocumentDraft } from "../types/documentDraft";
@@ -20,31 +19,83 @@ function formatToday() {
     .replaceAll("-", "/");
 }
 
+function formatCompactToday() {
+  return new Intl.DateTimeFormat("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  })
+    .format(new Date())
+    .replaceAll("/", "")
+    .replaceAll("-", "");
+}
+
 export function buildDocumentName(serviceId: ReportRecord["serviceId"]) {
-  return `${patientProfile.identity.maskedName} · ${services[serviceId].label}`;
+  const dateLabel = formatCompactToday();
+
+  if (serviceId === "exam") {
+    return `体检方案-${dateLabel}`;
+  }
+
+  if (serviceId === "plan") {
+    return `健康管理方案-${dateLabel}`;
+  }
+
+  return `健康风险评估与建议-${dateLabel}`;
+}
+
+export function getDefaultTemplateId(serviceId: ReportRecord["serviceId"]) {
+  if (serviceId !== "plan") {
+    return "";
+  }
+
+  return configTemplateOptions[serviceId][0]?.id ?? "";
 }
 
 export function buildSelectedSources(config: DraftConfig) {
-  if (config.scope === "prompt" && config.promptDescription.trim()) {
-    return [`自然语言描述：${config.promptDescription.trim()}`];
+  const sources: string[] = [];
+
+  if (config.serviceId === "risk") {
+    if (config.sourceScope === "specific" && config.selectedSourceIds.length) {
+      sources.push(
+        ...config.selectedSourceIds.map(
+          (sourceId) => sourceOptions.find((item) => item.id === sourceId)?.name ?? sourceId,
+        ),
+      );
+    } else {
+      sources.push("全部健康档案资料");
+    }
+  } else {
+    sources.push("全部健康档案资料");
   }
 
-  if (config.scope === "specific" && config.selectedSourceIds.length) {
-    return config.selectedSourceIds.map(
-      (sourceId) => sourceOptions.find((item) => item.id === sourceId)?.name ?? sourceId,
-    );
+  if (config.meetingFiles.length) {
+    sources.push(...config.meetingFiles.map((file) => `会议纪要附件：${file.name}`));
   }
 
-  return ["全部档案数据"];
+  if (config.serviceId === "plan" && config.templateId) {
+    const template = configTemplateOptions[config.serviceId].find((item) => item.id === config.templateId);
+    if (template) {
+      sources.push(`选用模板：${template.label}`);
+    }
+  }
+
+  if (config.promptDescription.trim()) {
+    sources.push(`补充说明：${config.promptDescription.trim()}`);
+  }
+
+  return sources;
 }
 
 export function createInitialDraftConfig(defaultServiceId: ReportRecord["serviceId"]): DraftConfig {
   return {
     serviceId: defaultServiceId,
     documentName: buildDocumentName(defaultServiceId),
-    scope: "all",
+    sourceScope: "all",
     selectedSourceIds: [],
     promptDescription: "",
+    templateId: getDefaultTemplateId(defaultServiceId),
+    meetingFiles: [],
   };
 }
 

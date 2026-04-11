@@ -8,9 +8,9 @@ import type {
 } from "../types/documentDraft";
 
 function getInputScope(report: ReportRecord) {
-  const promptSource = report.selectedSources?.find((item) => item.startsWith("自然语言描述："));
+  const promptSource = report.selectedSources?.find((item) => item.startsWith("补充说明："));
   if (promptSource) {
-    return promptSource.replace("自然语言描述：", "");
+    return promptSource.replace("补充说明：", "");
   }
 
   if (report.selectedSources?.length) {

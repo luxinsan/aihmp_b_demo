@@ -17,14 +17,29 @@ export const serviceOptions: Array<{ id: ReportRecord["serviceId"]; label: strin
   { id: "exam", label: services.exam.label },
 ];
 
+export const configTemplateOptions: Record<
+  ReportRecord["serviceId"],
+  Array<{ id: string; label: string; description: string }>
+> = {
+  exam: [
+    { id: "exam-plan", label: "定制体检方案", description: "用于生成定制体检方案文档。" },
+  ],
+  risk: [
+    { id: "risk-interpretation", label: "体检报告解读", description: "用于生成体检报告解读文档。" },
+  ],
+  plan: [
+    { id: "plan-28d", label: "28天健康管理方案", description: "用于生成 28 天健康管理方案文档。" },
+    { id: "plan-90d", label: "90天健康管理方案", description: "用于生成 90 天健康管理方案文档。" },
+  ],
+};
+
 export const generationMenuOptions: Array<{
   id: string;
   serviceId: ReportRecord["serviceId"];
   label: string;
   tone: "risk" | "plan" | "exam";
 }> = [
-  { id: "risk-basic", serviceId: "risk", label: "健康风险评估", tone: "risk" },
-  { id: "risk", serviceId: "risk", label: "健康风险评估与建议", tone: "risk" },
-  { id: "exam", serviceId: "exam", label: "制定体检方案", tone: "exam" },
-  { id: "plan", serviceId: "plan", label: "制定健康管理方案", tone: "plan" },
+  { id: "exam-plan", serviceId: "exam", label: "定制体检方案", tone: "exam" },
+  { id: "risk-interpretation", serviceId: "risk", label: "体检报告解读", tone: "risk" },
+  { id: "plan-custom", serviceId: "plan", label: "定制健康管理方案", tone: "plan" },
 ];

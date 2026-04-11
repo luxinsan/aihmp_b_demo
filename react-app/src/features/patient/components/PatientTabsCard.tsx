@@ -1,6 +1,8 @@
+import type { PatientTabItem } from "../../../data/patientProfile";
+
 type PatientTabsCardProps = {
   onTabSelect?: (tab: string) => void;
-  tabs: readonly string[];
+  tabs: readonly PatientTabItem[];
   activeTab: string;
 };
 
@@ -9,12 +11,15 @@ export function PatientTabsCard({ tabs, activeTab, onTabSelect }: PatientTabsCar
     <article className="tab-card panel">
       {tabs.map((tab) => (
         <button
-          className={`detail-link${tab === activeTab ? " active" : ""}`}
-          key={tab}
+          className={`detail-link patient-tab-link${tab.label === activeTab ? " active" : ""}`}
+          key={tab.label}
           type="button"
-          onClick={() => onTabSelect?.(tab)}
+          onClick={() => onTabSelect?.(tab.label)}
         >
-          {tab}
+          <span className="patient-tab-icon" aria-hidden="true">
+            {tab.icon}
+          </span>
+          <span className="patient-tab-label">{tab.label}</span>
         </button>
       ))}
     </article>

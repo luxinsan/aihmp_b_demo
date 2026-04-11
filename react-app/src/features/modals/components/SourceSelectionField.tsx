@@ -19,10 +19,6 @@ export function SourceSelectionField({
 
   return (
     <div className="source-picker" id="reportSourceList">
-      <div className="source-picker-head">
-        <strong>选择档案资料</strong>
-        <span id="selectedSourceCount">已选 {selectedSourceIds.length} 项</span>
-      </div>
       <label className="source-search-field" htmlFor="sourceSearchInput">
         <input
           id="sourceSearchInput"

@@ -1,7 +1,11 @@
 import { useState } from "react";
 import type { DraftConfig } from "../types/generation";
 import type { ReportRecord } from "../types/report";
-import { buildDocumentName, createInitialDraftConfig } from "../utils/migrationWorkspace";
+import {
+  buildDocumentName,
+  createInitialDraftConfig,
+  getDefaultTemplateId,
+} from "../utils/migrationWorkspace";
 
 type UseDraftConfigStateOptions = {
   defaultServiceId: ReportRecord["serviceId"];
@@ -30,6 +34,7 @@ export function useDraftConfigState({
         ...current,
         serviceId,
         documentName: current.documentName === previousAutoName ? buildDocumentName(serviceId) : current.documentName,
+        templateId: getDefaultTemplateId(serviceId),
       };
     });
     onOpenConfigModal();
@@ -46,6 +51,10 @@ export function useDraftConfigState({
           current.documentName === previousAutoName && nextConfig.documentName === current.documentName
             ? nextAutoName
             : nextConfig.documentName,
+        templateId:
+          nextConfig.serviceId !== current.serviceId && nextConfig.templateId === current.templateId
+            ? getDefaultTemplateId(nextConfig.serviceId)
+            : nextConfig.templateId,
       };
     });
   }

@@ -3,8 +3,8 @@ import type { ReportRecord } from "../types/report";
 
 export const services: Record<ReportRecord["serviceId"], ServiceDefinition> = {
   risk: {
-    label: "健康风险评估报告及建议",
-    category: "健康风险评估报告及建议",
+    label: "体检报告解读",
+    category: "体检报告解读",
     description: "识别患者当前健康风险、异常指标与重点危险因素，输出正式交付版评估与建议文档。",
     brief: "面向健康档案解读与慢病管理场景，聚焦患者体检异常、风险判断与后续干预建议，输出正式可交付的健康风险评估文档。",
     coverLine: "春意盎然的健康人生",
@@ -50,8 +50,8 @@ export const services: Record<ReportRecord["serviceId"], ServiceDefinition> = {
     ],
   },
   plan: {
-    label: "健康管理方案",
-    category: "健康管理方案",
+    label: "定制健康管理方案",
+    category: "定制健康管理方案",
     description: "围绕患者当前风险等级、依从性和既往随访结果，生成阶段性健康管理方案。",
     brief: "根据患者风险程度、生活方式现状及干预目标，形成可执行、可追踪、可随访的阶段性管理方案。",
     coverLine: "春意盎然的健康人生",
@@ -90,8 +90,8 @@ export const services: Record<ReportRecord["serviceId"], ServiceDefinition> = {
     ],
   },
   exam: {
-    label: "体检报告解读",
-    category: "体检报告解读",
+    label: "定制体检方案",
+    category: "定制体检方案",
     description: "根据患者当前体检结果与健康档案，生成正式的体检报告解读文档。",
     brief: "结合体检报告、病历资料与随访情况，对本次体检结果进行结构化解读，形成贴近患者交付场景的正式文档。",
     coverLine: "春意盎然的健康人生",

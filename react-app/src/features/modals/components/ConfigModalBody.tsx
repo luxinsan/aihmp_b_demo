@@ -1,7 +1,14 @@
+import { UploadOutlined } from "@ant-design/icons";
+import Button from "antd/es/button";
+import Input from "antd/es/input";
+import Radio from "antd/es/radio";
+import Upload from "antd/es/upload";
+import type { UploadFile, UploadProps } from "antd";
 import { patientProfile } from "../../../data/patientProfile";
 import { ModalFrame } from "../../../components/design/ModalFrame";
+import { configTemplateOptions } from "../../../data/configOptions";
 import { services } from "../../../data/services";
-import type { DraftConfig } from "../../../types/generation";
+import type { DraftAttachment, DraftConfig } from "../../../types/generation";
 import { ScopeModeSwitcher } from "./ScopeModeSwitcher";
 import { SourceSelectionField } from "./SourceSelectionField";
 
@@ -18,14 +25,13 @@ export function ConfigModalBody({
   onClose,
   onStartGeneration,
 }: ConfigModalBodyProps) {
+  const { TextArea } = Input;
   const service = services[draftConfig.serviceId];
-  const dialogTitle = `AI 生成${service.label}`;
-  const scopeDescription =
-    draftConfig.scope === "specific"
-      ? "仅纳入本次需要参考的档案资料。"
-      : draftConfig.scope === "prompt"
-        ? "通过自然语言描述本次需要纳入的数据范围与分析要求。"
-        : "自动纳入患者全部健康数据。";
+  const dialogTitle = `AI ${service.label}`;
+  const templates = configTemplateOptions[draftConfig.serviceId];
+  const supportsTemplateSelection = draftConfig.serviceId === "plan";
+  const supportsSourceSelection = draftConfig.serviceId === "risk";
+  const supportsMeetingUpload = draftConfig.serviceId === "plan";
 
   function updateConfig(patch: Partial<DraftConfig>) {
     onDraftConfigChange({
@@ -37,9 +43,42 @@ export function ConfigModalBody({
   function toggleSource(sourceId: string) {
     const current = draftConfig.selectedSourceIds;
     updateConfig({
-      selectedSourceIds: current.includes(sourceId) ? current.filter((item) => item !== sourceId) : [...current, sourceId],
+      selectedSourceIds: current.includes(sourceId) ? [] : [sourceId],
     });
   }
+
+  const uploadFileList: UploadFile[] = draftConfig.meetingFiles.map((file) => ({
+    uid: file.id,
+    name: file.name,
+    size: file.size,
+    status: "done",
+  }));
+
+  const uploadProps: UploadProps = {
+    accept: ".pdf,.doc,.docx,.txt,.md",
+    beforeUpload: () => false,
+    fileList: uploadFileList,
+    multiple: true,
+    onChange: ({ fileList }) => {
+      const nextFiles: DraftAttachment[] = fileList.map((file) => ({
+        id: file.uid,
+        name: file.name,
+        size: file.size ?? 0,
+      }));
+
+      updateConfig({ meetingFiles: nextFiles });
+    },
+    showUploadList: {
+      extra: (file) => (
+        <span className="ds-upload-extra">
+          {`${((file.size ?? 0) / 1024 / 1024).toFixed(2)}MB`}
+        </span>
+      ),
+      showDownloadIcon: false,
+      showPreviewIcon: false,
+      showRemoveIcon: true,
+    },
+  };
 
   return (
     <ModalFrame
@@ -61,6 +100,7 @@ export function ConfigModalBody({
       titleId="configTitle"
     >
         <div className="config-patient-trigger">
+          <span className="config-patient-badge" aria-hidden="true">AI</span>
           <div className="avatar small" id="modalAvatar">{patientProfile.identity.avatar}</div>
           <div className="config-patient-copy">
             <div className="config-patient-main">
@@ -72,54 +112,96 @@ export function ConfigModalBody({
           </div>
         </div>
 
+        <p className="config-intro-copy">AI 助手将综合客户的多维健康数据生成内容</p>
+
+        {supportsTemplateSelection ? (
+          <div className="config-section">
+            <div className="section-title-row">
+              <h3>文档模板</h3>
+            </div>
+            <Radio.Group
+              className="template-option-list"
+              value={draftConfig.templateId}
+              onChange={(event) => updateConfig({ templateId: event.target.value })}
+            >
+              {templates.map((template) => (
+                <Radio
+                  className="template-option-card"
+                  key={template.id}
+                  value={template.id}
+                >
+                  <span className="template-option-check" aria-hidden="true">
+                    ✓
+                  </span>
+                  <span className="template-option-copy">
+                    <strong>{template.label}</strong>
+                  </span>
+                </Radio>
+              ))}
+            </Radio.Group>
+          </div>
+        ) : null}
+
         <div className="config-section">
           <div className="section-title-row">
             <h3>文档名称</h3>
-            <span className="sub-note" hidden>
-              默认规则：报告类型 + 患者姓名 + 当前日期 + 四位随机数
-            </span>
           </div>
-            <label className="document-name-field" htmlFor="documentNameInput">
-              <input
-                id="documentNameInput"
-                type="text"
-                autoComplete="off"
-                placeholder="请输入文档名称"
-              value={draftConfig.documentName}
-              onChange={(event) => updateConfig({ documentName: event.target.value })}
-            />
-          </label>
+          <Input
+            autoComplete="off"
+            className="ds-antd-config-input"
+            id="documentNameInput"
+            placeholder="请输入文档名称"
+            value={draftConfig.documentName}
+            onChange={(event) => updateConfig({ documentName: event.target.value })}
+          />
         </div>
 
-        <div className="config-section config-section-scope">
-          <h3>输入数据</h3>
-          <div className="scope-composer">
-            <ScopeModeSwitcher scope={draftConfig.scope} onChange={(scope) => updateConfig({ scope })} />
-            <p className="scope-description" id="scopeDescription">
-              {scopeDescription}
-            </p>
-
-            <div className="scope-prompt-field" id="scopePromptField" hidden={draftConfig.scope !== "prompt"}>
-              <label className="source-search-field scope-prompt-input" htmlFor="scopePromptInput">
-                <textarea
-                  id="scopePromptInput"
-                  autoComplete="off"
-                  rows={3}
-                  value={draftConfig.promptDescription}
-                  onChange={(event) => updateConfig({ promptDescription: event.target.value })}
-                  placeholder="如结合客户近三年的健康档案数据进行评估"
-                />
-              </label>
-            </div>
-
-            <div hidden={draftConfig.scope !== "specific"}>
-              <SourceSelectionField
-                selectedSourceIds={draftConfig.selectedSourceIds}
-                onToggleSource={toggleSource}
+        {supportsSourceSelection ? (
+          <div className="config-section config-section-scope">
+            <h3>输入数据</h3>
+            <div className="scope-composer">
+              <ScopeModeSwitcher
+                scope={draftConfig.sourceScope}
+                onChange={(sourceScope) => updateConfig({ sourceScope, selectedSourceIds: sourceScope === "all" ? [] : draftConfig.selectedSourceIds })}
               />
+              <div hidden={draftConfig.sourceScope !== "specific"}>
+                <SourceSelectionField
+                  selectedSourceIds={draftConfig.selectedSourceIds}
+                  onToggleSource={toggleSource}
+                />
+              </div>
             </div>
-
           </div>
+        ) : null}
+
+        {supportsMeetingUpload ? (
+          <div className="config-section">
+            <div className="section-title-row">
+              <h3>上传附件</h3>
+            </div>
+            <p className="config-field-hint">最多可上传5个参考文件</p>
+            <div className="config-upload-shell">
+              <Upload className="ds-antd-config-upload" {...uploadProps}>
+                <Button icon={<UploadOutlined />}>上传附件</Button>
+              </Upload>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="config-section">
+          <div className="section-title-row">
+            <h3>补充指令</h3>
+          </div>
+          <p className="config-field-hint">AI助手将重点结合您的补充指令进行文档生成</p>
+          <TextArea
+            autoComplete="off"
+            className="ds-antd-config-textarea"
+            id="scopePromptInput"
+            rows={4}
+            value={draftConfig.promptDescription}
+            onChange={(event) => updateConfig({ promptDescription: event.target.value })}
+            placeholder="例如：请突出异常指标与后续建议，语言更适合面向客户沟通；若涉及慢病风险，请给出更明确的随访节奏。"
+          />
         </div>
     </ModalFrame>
   );

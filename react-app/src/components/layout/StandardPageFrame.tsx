@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { PageSectionHeader } from "./PageSectionHeader";
 
 type StandardPageFrameProps = {
   title: string;
@@ -21,13 +22,7 @@ export function StandardPageFrame({
 
   return (
     <section className={classes}>
-      <header className={`panel-head page-frame-head${description ? " has-description" : ""}`}>
-        <div className="page-frame-title-wrap">
-          <h2 className="page-frame-title">{title}</h2>
-          {description ? <p className="page-frame-description">{description}</p> : null}
-        </div>
-        {actions ? <div className="page-frame-actions">{actions}</div> : null}
-      </header>
+      <PageSectionHeader actions={actions} className="panel-head page-frame-head" description={description} title={title} />
       {children}
     </section>
   );
