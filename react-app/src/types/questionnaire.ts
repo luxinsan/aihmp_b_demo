@@ -3,6 +3,15 @@ export type QuestionnaireSceneLabel =
   | "自行健康评估"
   | "健康计划任务";
 
+export const questionnaireSceneOptions: Array<{
+  label: QuestionnaireSceneLabel;
+  value: QuestionnaireSceneLabel;
+}> = [
+  { label: "基础健康信息采集", value: "基础健康信息采集" },
+  { label: "自行健康评估", value: "自行健康评估" },
+  { label: "健康计划任务", value: "健康计划任务" },
+];
+
 export type QuestionnaireQuestionType =
   | "single-choice"
   | "multiple-choice"

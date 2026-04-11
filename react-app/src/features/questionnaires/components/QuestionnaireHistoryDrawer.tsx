@@ -3,7 +3,6 @@ import { SideDrawer480 } from "../../../components/design/SideDrawer480";
 import type { QuestionnaireRecord } from "../../../types/questionnaire";
 
 type QuestionnaireHistoryDrawerProps = {
-  activeRecordId: string | null;
   formName: string;
   historyRecords: QuestionnaireRecord[];
   onClose: () => void;
@@ -12,7 +11,6 @@ type QuestionnaireHistoryDrawerProps = {
 };
 
 export function QuestionnaireHistoryDrawer({
-  activeRecordId,
   formName,
   historyRecords,
   onClose,
@@ -34,7 +32,7 @@ export function QuestionnaireHistoryDrawer({
         {historyRecords.length ? (
           historyRecords.map((record) => (
             <button
-              className={`questionnaire-history-card${activeRecordId === record.id ? " is-active" : ""}`}
+              className="questionnaire-history-card"
               key={record.id}
               type="button"
               onClick={() => {
