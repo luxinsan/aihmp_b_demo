@@ -361,6 +361,7 @@ export function useGenerationWorkspace({
     setActiveGenerationReportId(report.id);
     setGenerationVisible(true);
     setActiveModal(null);
+    setActionMessage("");
   }
 
   function handleDismissGeneration(reportId: string) {

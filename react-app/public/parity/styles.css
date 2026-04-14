@@ -1518,10 +1518,11 @@ body.loaded .document-panel {
 .config-patient-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   width: fit-content;
   max-width: 100%;
-  padding: 10px 14px;
+  min-height: 40px;
+  padding: 5px 12px 5px 8px;
   border: 1px solid #dfe7f4;
   border-radius: 999px;
   background: linear-gradient(180deg, #fbfdff 0%, #f4f8ff 100%);
@@ -1531,10 +1532,14 @@ body.loaded .document-panel {
   color: var(--text);
 }
 
+.config-patient-badge {
+  display: none;
+}
+
 #modalAvatar.avatar.small {
-  width: 32px;
-  height: 32px;
-  font-size: 16px;
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
   margin: 0;
 }
 
@@ -1548,18 +1553,18 @@ body.loaded .document-panel {
 .config-patient-main {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .config-patient-main strong {
-  font-size: 14px;
+  font-size: 13px;
   color: #21314f;
 }
 
 .config-patient-main span {
   color: #6d7b93;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.5;
   white-space: nowrap;
 }

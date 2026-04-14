@@ -1,4 +1,4 @@
-import { UploadOutlined } from "@ant-design/icons";
+import { RobotOutlined, UploadOutlined } from "@ant-design/icons";
 import Button from "antd/es/button";
 import Input from "antd/es/input";
 import Radio from "antd/es/radio";
@@ -100,7 +100,6 @@ export function ConfigModalBody({
       titleId="configTitle"
     >
         <div className="config-patient-trigger">
-          <span className="config-patient-badge" aria-hidden="true">AI</span>
           <div className="avatar small" id="modalAvatar">{patientProfile.identity.avatar}</div>
           <div className="config-patient-copy">
             <div className="config-patient-main">
@@ -112,7 +111,14 @@ export function ConfigModalBody({
           </div>
         </div>
 
-        <p className="config-intro-copy">AI 助手将综合客户的多维健康数据生成内容</p>
+        <div className="config-intro-copy" role="note" aria-label="AI 提示">
+          <span className="config-intro-icon" aria-hidden="true">
+            <RobotOutlined />
+          </span>
+          <div className="config-intro-content">
+            <p>AI 助手将综合客户的多维健康数据，进行深度分析并生成内容</p>
+          </div>
+        </div>
 
         {supportsTemplateSelection ? (
           <div className="config-section">
