@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, startTransition, Suspense, useEffect, useState } from "react";
 import { ParityHydratedApp } from "./components/ParityHydratedApp";
 import { WorkspaceSidebar } from "./components/WorkspaceSidebar";
 import { WorkspaceTopbar } from "./components/WorkspaceTopbar";
@@ -12,6 +12,8 @@ import {
 import { GenerationFloatingJobs } from "./features/generation/components/GenerationFloatingJobs";
 import { GenerationWorkspace } from "./features/generation/GenerationWorkspace";
 import { ModalHost } from "./features/modals/ModalHost";
+import { PatientHealthPlanStage } from "./features/patient/components/PatientHealthPlanStage";
+import { PatientCheckInRecordsStage } from "./features/patient/components/PatientCheckInRecordsStage";
 import { PatientProfileCard } from "./features/patient/components/PatientProfileCard";
 import { PatientTabsCard } from "./features/patient/components/PatientTabsCard";
 import { ReportPanelHeader } from "./features/reports/components/ReportPanelHeader";
@@ -41,7 +43,8 @@ export default function App() {
   const mode = getMode();
   const [reports, setReports] = useState(initialReports);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(initialReports[0]?.id ?? null);
-  const [activePatientTab, setActivePatientTab] = useState("报告文档");
+  const [activePatientTab, setActivePatientTab] = useState("健康计划");
+  const [healthPlanSubview, setHealthPlanSubview] = useState<"overview" | "checkin-records">("overview");
   const [activeModal, setActiveModal] = useState<ActiveModal>(null);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [jobsOpen, setJobsOpen] = useState(false);
@@ -118,6 +121,12 @@ export default function App() {
       document.body.classList.remove("mode-generation");
     }
   }, [generationVisible]);
+
+  useEffect(() => {
+    if (activePatientTab !== "健康计划" && healthPlanSubview !== "overview") {
+      setHealthPlanSubview("overview");
+    }
+  }, [activePatientTab, healthPlanSubview]);
 
   const questionnaireWorkspace = (
     <Suspense fallback={<div className="questionnaire-loading-state">量表记录加载中...</div>}>
@@ -247,11 +256,28 @@ export default function App() {
                 contactItems={patientContactItems}
                 identity={patientProfile.identity}
               />
-              <PatientTabsCard activeTab={activePatientTab} tabs={patientTabs} onTabSelect={setActivePatientTab} />
+              <PatientTabsCard
+                activeTab={activePatientTab}
+                tabs={patientTabs}
+                onTabSelect={(tab) => {
+                  startTransition(() => {
+                    setActivePatientTab(tab);
+                    if (tab !== "健康计划") {
+                      setHealthPlanSubview("overview");
+                    }
+                  });
+                }}
+              />
             </aside>
 
             {activePatientTab === "量表记录" ? (
               questionnaireWorkspace
+            ) : activePatientTab === "健康计划" ? (
+              healthPlanSubview === "checkin-records" ? (
+                <PatientCheckInRecordsStage onBack={() => setHealthPlanSubview("overview")} />
+              ) : (
+                <PatientHealthPlanStage onOpenCheckInRecords={() => setHealthPlanSubview("checkin-records")} />
+              )
             ) : (
               <section className="document-panel panel">
                 <ReportPanelHeader
