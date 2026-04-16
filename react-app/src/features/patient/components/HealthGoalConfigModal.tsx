@@ -24,6 +24,29 @@ function buildConfigMap(configs: PatientGoalConfig[]) {
   return new Map(configs.map((config) => [config.metricId, config]));
 }
 
+function splitBloodPressureValue(value: string) {
+  const [systolic = "", diastolic = ""] = value.split("/");
+  return {
+    systolic: systolic.trim(),
+    diastolic: diastolic.trim(),
+  };
+}
+
+function stripComparator(value: string) {
+  return value.replace(/^[<>≤≥=]+\s*/, "").trim();
+}
+
+function mergeBloodPressureValue(systolic: string, diastolic: string) {
+  const normalizedSystolic = systolic.trim();
+  const normalizedDiastolic = diastolic.trim();
+
+  if (!normalizedSystolic && !normalizedDiastolic) {
+    return "";
+  }
+
+  return `${normalizedSystolic}/${normalizedDiastolic}`;
+}
+
 function getMetricAssessment(template: GoalMetricTemplate, value: string) {
   const trimmedValue = value.trim();
   if (!trimmedValue) {
@@ -180,6 +203,56 @@ export function HealthGoalConfigModal({
     }, 700);
   }
 
+  function renderBloodPressureInput(options: {
+    value: string;
+    placeholder: string;
+    readOnly?: boolean;
+    fixedComparator?: string;
+    onChange?: (nextValue: string) => void;
+  }) {
+    const { systolic, diastolic } = splitBloodPressureValue(options.value);
+    const { systolic: systolicPlaceholder, diastolic: diastolicPlaceholder } = splitBloodPressureValue(options.placeholder);
+    const displaySystolic = options.fixedComparator ? stripComparator(systolic) : systolic;
+    const displayDiastolic = options.fixedComparator ? stripComparator(diastolic) : diastolic;
+
+    return (
+      <div className="health-goal-bp-stack">
+        <div className="health-goal-bp-input-row">
+          <span className="health-goal-bp-prefix">收缩压</span>
+          <div className="health-goal-bp-control">
+            {options.fixedComparator ? <span className="health-goal-bp-operator">{options.fixedComparator}</span> : null}
+            <Input
+              addonAfter={activeTemplate?.unit}
+              className="ds-antd-goal-input"
+              placeholder={systolicPlaceholder || options.placeholder}
+              readOnly={options.readOnly}
+              value={displaySystolic}
+              onChange={(event) =>
+                options.onChange?.(mergeBloodPressureValue(event.target.value, diastolic))
+              }
+            />
+          </div>
+        </div>
+        <div className="health-goal-bp-input-row">
+          <span className="health-goal-bp-prefix">舒张压</span>
+          <div className="health-goal-bp-control">
+            {options.fixedComparator ? <span className="health-goal-bp-operator">{options.fixedComparator}</span> : null}
+            <Input
+              addonAfter={activeTemplate?.unit}
+              className="ds-antd-goal-input"
+              placeholder={diastolicPlaceholder || options.placeholder}
+              readOnly={options.readOnly}
+              value={displayDiastolic}
+              onChange={(event) =>
+                options.onChange?.(mergeBloodPressureValue(systolic, event.target.value))
+              }
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Modal
       centered
@@ -235,8 +308,8 @@ export function HealthGoalConfigModal({
           </section>
 
           <div className="health-goal-overview-head health-goal-inline-head">
-            <h3>重点监测指标设置</h3>
-            <p>设置重点监测指标目标值，将在患者端可视化展示</p>
+            <h3>重点指标设置</h3>
+            <p>设置重点指标目标值，将在患者端可视化展示</p>
           </div>
 
           <div className="health-goal-config-layout">
@@ -300,18 +373,27 @@ export function HealthGoalConfigModal({
                               type="link"
                               onClick={() => refetchMetric(activeTemplate.id, activeTemplate.latestValue)}
                             >
-                              重新获取
+                              提取档案数据
                             </Button>
                           </div>
-                          <Input
-                            addonAfter={activeTemplate.unit}
-                            className="ds-antd-goal-input"
-                            placeholder={activeTemplate.currentPlaceholder}
-                            value={config?.currentValue ?? ""}
-                            onChange={(event) =>
-                              updateMetric(activeTemplate.id, { currentValue: event.target.value })
-                            }
-                          />
+                          {activeTemplate.id === "blood-pressure"
+                            ? renderBloodPressureInput({
+                                value: config?.currentValue ?? "",
+                                placeholder: activeTemplate.currentPlaceholder,
+                                onChange: (nextValue) =>
+                                  updateMetric(activeTemplate.id, { currentValue: nextValue }),
+                              })
+                            : (
+                              <Input
+                                addonAfter={activeTemplate.unit}
+                                className="ds-antd-goal-input"
+                                placeholder={activeTemplate.currentPlaceholder}
+                                value={config?.currentValue ?? ""}
+                                onChange={(event) =>
+                                  updateMetric(activeTemplate.id, { currentValue: event.target.value })
+                                }
+                              />
+                            )}
                           <Typography.Text className="health-goal-field-meta" type="secondary">
                             数据更新时间：{activeTemplate.latestRecordedAt}
                           </Typography.Text>
@@ -339,12 +421,21 @@ export function HealthGoalConfigModal({
                               <InfoCircleOutlined />
                             </Tooltip>
                           </div>
-                          <Input
-                            addonAfter={activeTemplate.unit}
-                            className="ds-antd-goal-input"
-                            readOnly
-                            value={config?.targetValue || activeTemplate.baseline}
-                          />
+                          {activeTemplate.id === "blood-pressure"
+                            ? renderBloodPressureInput({
+                                readOnly: true,
+                                value: config?.targetValue || activeTemplate.baseline,
+                                placeholder: activeTemplate.targetPlaceholder,
+                                fixedComparator: "<",
+                              })
+                            : (
+                              <Input
+                                addonAfter={activeTemplate.unit}
+                                className="ds-antd-goal-input"
+                                readOnly
+                                value={config?.targetValue || activeTemplate.baseline}
+                              />
+                            )}
                           <div className="health-goal-field-feedback" />
                         </div>
                       </div>
@@ -369,7 +460,7 @@ export function HealthGoalConfigModal({
           <footer className="health-goal-modal-footer">
             <Button onClick={onClose}>取消</Button>
             <Button type="primary" onClick={() => onSave(draftConfigs, draftOverview)}>
-              保存目标
+              保存
             </Button>
           </footer>
         </div>

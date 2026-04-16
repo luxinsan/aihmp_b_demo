@@ -1,8 +1,7 @@
 import { startTransition, useMemo, useState } from "react";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
 import Button from "antd/es/button";
 import Image from "antd/es/image";
-import { PageSectionHeader } from "../../../components/layout/PageSectionHeader";
 import { checkInRecords, type CheckInRecord } from "../../../data/checkInRecords";
 
 const WEEKDAY_LABELS = ["日", "一", "二", "三", "四", "五", "六"];
@@ -443,17 +442,21 @@ export function PatientCheckInRecordsStage({ onBack }: { onBack: () => void }) {
 
   return (
     <section className="document-panel panel checkin-records-stage" aria-label="打卡记录">
-      <PageSectionHeader
-        className="panel-head"
-        eyebrow="健康计划"
-        title="更多打卡记录"
-        description="按日历查看患者打卡记录，并在右侧查看对应类型的详细内容。"
-        actions={
-          <Button className="ds-antd-health-action-button" type="default" onClick={onBack}>
-            返回健康计划
-          </Button>
-        }
-      />
+      <header className="page-section-header panel-head checkin-records-head">
+        <div className="page-section-header-main">
+          <div className="page-section-header-title-wrap checkin-records-title-wrap">
+            <Button
+              className="ds-antd-health-action-button checkin-records-back-button"
+              icon={<ArrowLeftOutlined />}
+              type="default"
+              onClick={onBack}
+            >
+              返回
+            </Button>
+            <h2 className="page-section-header-title">查看打卡记录</h2>
+          </div>
+        </div>
+      </header>
 
       <div className="checkin-records-shell">
         <aside className="checkin-records-sidebar">

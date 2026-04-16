@@ -344,7 +344,7 @@ export function PatientHealthPlanStage({ onOpenCheckInRecords }: { onOpenCheckIn
         <div className="health-plan-block-head">
           <h3>日常打卡</h3>
           <Button className="ds-antd-health-action-button" type="default" onClick={onOpenCheckInRecords}>
-            更多打卡记录
+            查看打卡记录
           </Button>
         </div>
         <div className="health-checkin-grid">

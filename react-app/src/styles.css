@@ -769,6 +769,20 @@ body,
   gap: 24px;
 }
 
+.checkin-records-head {
+  margin-bottom: 0;
+}
+
+.checkin-records-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.checkin-records-back-button.ant-btn {
+  padding-inline: 10px;
+}
+
 .checkin-records-shell {
   display: grid;
   grid-template-columns: minmax(320px, 360px) minmax(0, 1fr);
@@ -1864,7 +1878,7 @@ body,
 
 .health-goal-dimension-tree.ant-tree {
   height: 100%;
-  padding: 4px 0;
+  padding: 8px 8px 10px;
   background: transparent;
 }
 
@@ -1877,6 +1891,12 @@ body,
   padding: 0;
 }
 
+.health-goal-dimension-tree .ant-tree-list-holder-inner > .ant-tree-treenode {
+  margin-bottom: 8px;
+  padding: 4px 0 2px;
+  background: transparent;
+}
+
 .health-goal-dimension-tree .ant-tree-node-content-wrapper {
   min-height: 30px;
   padding: 3px 12px;
@@ -1885,6 +1905,11 @@ body,
 
 .health-goal-dimension-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
   background: rgba(230, 239, 255, 0.68);
+}
+
+.health-goal-dimension-tree .ant-tree-list-holder-inner > .ant-tree-treenode > .ant-tree-node-content-wrapper.ant-tree-node-selected,
+.health-goal-dimension-tree .ant-tree-list-holder-inner > .ant-tree-treenode > .ant-tree-node-content-wrapper:hover {
+  background: transparent;
 }
 
 .health-goal-dimension-tree .ant-tree-switcher {
@@ -1907,7 +1932,7 @@ body,
 
 .health-goal-tree-dimension {
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .health-goal-tree-metric {
@@ -1933,11 +1958,17 @@ body,
 }
 
 .health-goal-dimension-tree .ant-tree-list-holder-inner > .ant-tree-treenode > .ant-tree-node-content-wrapper {
-  padding-left: 10px;
+  padding-left: 12px;
+  margin-bottom: 4px;
 }
 
 .health-goal-dimension-tree .ant-tree-child-tree .ant-tree-node-content-wrapper {
-  padding-left: 16px;
+  min-height: 28px;
+  padding: 2px 10px 2px 14px;
+  border: 1px solid rgba(214, 225, 241, 0.98);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96);
 }
 
 .health-goal-dimension-tree .ant-tree-child-tree .ant-tree-indent-unit {
@@ -1945,7 +1976,13 @@ body,
 }
 
 .health-goal-dimension-tree .ant-tree-child-tree .ant-tree-treenode {
-  padding: 0;
+  padding: 0 0 4px;
+}
+
+.health-goal-dimension-tree .ant-tree-child-tree .ant-tree-node-content-wrapper.ant-tree-node-selected,
+.health-goal-dimension-tree .ant-tree-child-tree .ant-tree-node-content-wrapper:hover {
+  border-color: rgba(190, 208, 235, 0.98);
+  background: rgba(235, 242, 255, 0.92);
 }
 
 .health-goal-config-detail {
@@ -2041,6 +2078,41 @@ body,
   align-items: flex-start;
   gap: 8px;
   min-height: 24px;
+}
+
+.health-goal-bp-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.health-goal-bp-input-row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+
+.health-goal-bp-control {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.health-goal-bp-prefix {
+  color: #233551;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.health-goal-bp-operator {
+  min-width: 10px;
+  color: #233551;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
 }
 
 .health-goal-assessment-tag.ant-tag {
