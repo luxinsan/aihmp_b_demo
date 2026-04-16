@@ -2,7 +2,7 @@ import Empty from "antd/es/empty";
 import { lazy, Suspense, useMemo, useState } from "react";
 import { SearchField } from "../../components/design/SearchField";
 import { SelectField } from "../../components/design/SelectField";
-import { StandardPageFrame } from "../../components/layout/StandardPageFrame";
+import { PatientTabPageFrame } from "../../components/layout/PatientTabPageFrame";
 import { patientProfile } from "../../data/patientProfile";
 import {
   getQuestionnaireHistory,
@@ -75,8 +75,8 @@ export function QuestionnaireWorkspace() {
 
   return (
     <>
-      <StandardPageFrame
-        className="questionnaire-panel"
+      <PatientTabPageFrame
+        bodyClassName="questionnaire-panel"
         description="展示当前患者已填写并提交的量表记录和详情"
         title="量表记录"
       >
@@ -153,7 +153,7 @@ export function QuestionnaireWorkspace() {
             </div>
           )}
         </div>
-      </StandardPageFrame>
+      </PatientTabPageFrame>
 
       <Suspense fallback={null}>
         <QuestionnaireDetailModal

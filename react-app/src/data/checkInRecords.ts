@@ -11,7 +11,6 @@ type CheckInRecordBase = {
 
 export type DietCheckInRecord = CheckInRecordBase & {
   type: "饮食打卡";
-  period: string;
   aiOverview: string;
   doctorComment: string;
   nutritionMetrics: Array<{
@@ -19,15 +18,11 @@ export type DietCheckInRecord = CheckInRecordBase & {
     label: string;
     value: string;
     unit: string;
-    tone: "orange" | "blue" | "amber" | "green";
   }>;
-  meals: Array<{
+  images: Array<{
     id: string;
-    label: string;
-    time: string;
-    note: string;
-    dishes: string[];
-    image: string;
+    alt: string;
+    src: string;
   }>;
 };
 
@@ -116,39 +111,29 @@ export const checkInRecords: CheckInRecord[] = [
     title: "三餐饮食记录",
     type: "饮食打卡",
     summary: "完成早餐、午餐、晚餐上传，整体热量控制良好。",
-    period: "全天饮食",
     aiOverview: "糙米饭与鸡胸肉提供了较稳定的优质碳水和蛋白质来源，蔬菜摄入较充足，整体结构均衡，晚餐主食量偏少。",
     doctorComment: "整体执行较好，建议晚餐补充少量粗粮或豆类，避免夜间过度饥饿；早餐可继续维持高蛋白组合。",
     nutritionMetrics: [
-      { id: "calories", label: "热量", value: "1555", unit: "Kcal", tone: "orange" },
-      { id: "protein", label: "蛋白质", value: "82", unit: "g", tone: "blue" },
-      { id: "fat", label: "脂肪", value: "46", unit: "g", tone: "amber" },
-      { id: "carb", label: "碳水", value: "168", unit: "g", tone: "green" },
+      { id: "calories", label: "热量", value: "1555", unit: "Kcal" },
+      { id: "protein", label: "蛋白质", value: "82", unit: "g" },
+      { id: "fat", label: "脂肪", value: "46", unit: "g" },
+      { id: "carb", label: "碳水", value: "168", unit: "g" },
     ],
-    meals: [
+    images: [
       {
         id: "breakfast",
-        label: "早餐",
-        time: "07:32",
-        note: "优先补充蛋白质和膳食纤维。",
-        dishes: ["水煮蛋 1 个", "全麦吐司 2 片", "牛油果番茄沙拉", "无糖豆浆 1 杯"],
-        image: createMealImage("轻食沙拉", "🍳", "#8dbb8b", "#4d7c67"),
+        alt: "轻食沙拉与鸡蛋",
+        src: createMealImage("轻食沙拉", "🍳", "#8dbb8b", "#4d7c67"),
       },
       {
         id: "lunch",
-        label: "午餐",
-        time: "12:11",
-        note: "主食比例控制正常，肉类较清淡。",
-        dishes: ["糙米饭 1 小碗", "清蒸鳕鱼", "西兰花炒菌菇", "紫菜豆腐汤"],
-        image: createMealImage("均衡午餐", "🍱", "#f2c078", "#c97a3d"),
+        alt: "均衡午餐便当",
+        src: createMealImage("均衡午餐", "🍱", "#f2c078", "#c97a3d"),
       },
       {
         id: "dinner",
-        label: "晚餐",
-        time: "18:24",
-        note: "晚餐量偏轻，适合当前减重阶段。",
-        dishes: ["鸡胸肉蔬菜卷", "凉拌秋葵", "玉米半根", "奇异果 1 个"],
-        image: createMealImage("低脂晚餐", "🍽️", "#6aa6d8", "#335f95"),
+        alt: "低脂晚餐餐盘",
+        src: createMealImage("低脂晚餐", "🍽️", "#6aa6d8", "#335f95"),
       },
     ],
   },
@@ -206,31 +191,24 @@ export const checkInRecords: CheckInRecord[] = [
     title: "午晚餐饮食记录",
     type: "饮食打卡",
     summary: "午餐外食，晚餐按计划执行。",
-    period: "午餐 + 晚餐",
     aiOverview: "外食场景下依然控制了主食和油脂比例，晚餐更偏轻食结构，但午餐蔬菜种类略少，纤维补充不足。",
     doctorComment: "本次外食控制意识较强，建议后续外食优先补充深色蔬菜，并减少酱汁使用。",
     nutritionMetrics: [
-      { id: "calories", label: "热量", value: "1320", unit: "Kcal", tone: "orange" },
-      { id: "protein", label: "蛋白质", value: "68", unit: "g", tone: "blue" },
-      { id: "fat", label: "脂肪", value: "39", unit: "g", tone: "amber" },
-      { id: "carb", label: "碳水", value: "141", unit: "g", tone: "green" },
+      { id: "calories", label: "热量", value: "1320", unit: "Kcal" },
+      { id: "protein", label: "蛋白质", value: "68", unit: "g" },
+      { id: "fat", label: "脂肪", value: "39", unit: "g" },
+      { id: "carb", label: "碳水", value: "141", unit: "g" },
     ],
-    meals: [
+    images: [
       {
         id: "lunch-2",
-        label: "午餐",
-        time: "12:36",
-        note: "外食场景下仍保持主食减半。",
-        dishes: ["藜麦鸡肉能量碗", "清炒时蔬", "黑咖啡 1 杯"],
-        image: createMealImage("外食能量碗", "🥙", "#c7a16e", "#80573c"),
+        alt: "外食能量碗",
+        src: createMealImage("外食能量碗", "🥙", "#c7a16e", "#80573c"),
       },
       {
         id: "dinner-2",
-        label: "晚餐",
-        time: "18:41",
-        note: "晚餐较清淡，适合控制夜间负担。",
-        dishes: ["番茄虾仁意面小份", "羽衣甘蓝沙拉", "无糖酸奶"],
-        image: createMealImage("居家轻晚餐", "🍝", "#d99889", "#925b53"),
+        alt: "居家轻晚餐",
+        src: createMealImage("居家轻晚餐", "🍝", "#d99889", "#925b53"),
       },
     ],
   },

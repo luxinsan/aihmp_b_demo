@@ -7,6 +7,7 @@ type StandardPageFrameProps = {
   actions?: ReactNode;
   children: ReactNode;
   className?: string;
+  headerClassName?: string;
 };
 
 export function StandardPageFrame({
@@ -15,6 +16,7 @@ export function StandardPageFrame({
   actions,
   children,
   className = "",
+  headerClassName = "panel-head page-frame-head",
 }: StandardPageFrameProps) {
   const classes = ["document-panel", "panel", "page-frame", className]
     .filter(Boolean)
@@ -22,7 +24,7 @@ export function StandardPageFrame({
 
   return (
     <section className={classes}>
-      <PageSectionHeader actions={actions} className="panel-head page-frame-head" description={description} title={title} />
+      <PageSectionHeader actions={actions} className={headerClassName} description={description} title={title} />
       {children}
     </section>
   );

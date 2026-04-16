@@ -58,6 +58,95 @@ body,
   flex-direction: column;
 }
 
+.patient-tab-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.patient-tab-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.patient-tab-page-header.is-align-start {
+  align-items: flex-start;
+}
+
+.patient-tab-page-header.has-no-divider {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.patient-tab-page-header.is-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
+}
+
+.patient-tab-page-header-main {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.patient-tab-page-title-wrap {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.patient-tab-page-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.patient-tab-page-title {
+  margin: 0;
+  color: #1f2937;
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.patient-tab-page-title-extra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.patient-tab-page-description {
+  margin: 0;
+  color: #7f8ba0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.patient-tab-page-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.patient-tab-page-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .page-section-header {
   position: relative;
   z-index: 1;

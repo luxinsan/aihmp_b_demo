@@ -4,7 +4,7 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import Button from "antd/es/button";
-import { PageSectionHeader } from "../../../components/layout/PageSectionHeader";
+import { PatientTabPageFrame } from "../../../components/layout/PatientTabPageFrame";
 import { goalMetricTemplates, initialPatientGoalConfigs } from "../../../data/goalMetricTemplates";
 import {
   healthPlanCheckIns,
@@ -272,19 +272,17 @@ export function PatientHealthPlanStage({ onOpenCheckInRecords }: { onOpenCheckIn
   );
 
   return (
-    <section className="document-panel panel health-plan-stage" aria-label="健康计划">
-      <PageSectionHeader
-        className="panel-head"
-        title="健康计划"
-        actions={
-          <div className="actions">
-            <button className="more-button" type="button" aria-label="更多操作">
-              <MoreIcon />
-            </button>
-          </div>
-        }
-      />
-
+    <PatientTabPageFrame
+      actions={
+        <div className="actions">
+          <button className="more-button" type="button" aria-label="更多操作">
+            <MoreIcon />
+          </button>
+        </div>
+      }
+      bodyClassName="health-plan-stage"
+      title="健康计划"
+    >
       <section className="health-plan-hero">
         <div className="health-plan-hero-orb health-plan-hero-orb-left" aria-hidden="true" />
         <div className="health-plan-hero-orb health-plan-hero-orb-right" aria-hidden="true" />
@@ -396,6 +394,6 @@ export function PatientHealthPlanStage({ onOpenCheckInRecords }: { onOpenCheckIn
           setGoalModalOpen(false);
         }}
       />
-    </section>
+    </PatientTabPageFrame>
   );
 }

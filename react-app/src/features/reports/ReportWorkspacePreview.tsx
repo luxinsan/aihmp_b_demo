@@ -1,9 +1,10 @@
 import { useEffect, useEffectEvent, useState } from "react";
+import { PatientTabPageFrame } from "../../components/layout/PatientTabPageFrame";
 import type { DraftState } from "../../types/draftState";
 import type { GenerationSession } from "../../types/generationSession";
 import type { ConfirmActionKind } from "../../types/modal";
 import type { ReportRecord } from "../../types/report";
-import { ReportPanelHeader } from "./components/ReportPanelHeader";
+import { ReportPanelHeaderActions } from "./components/ReportPanelHeader";
 import { ReportListPanel } from "./components/ReportListPanel";
 
 type ReportWorkspacePreviewProps = {
@@ -74,14 +75,18 @@ export function ReportWorkspacePreview({
 
   return (
     <section className="report-workspace">
-      <section className="document-panel panel">
-        <ReportPanelHeader
-          generationSession={generationSession}
-          onOpenGenerate={onOpenGenerate}
-          onOpenGenerateForService={onOpenGenerateForService}
-          onOpenGenerationStage={onOpenGenerationStage}
-        />
-
+      <PatientTabPageFrame
+        actions={
+          <ReportPanelHeaderActions
+            generationSession={generationSession}
+            onOpenGenerate={onOpenGenerate}
+            onOpenGenerateForService={onOpenGenerateForService}
+            onOpenGenerationStage={onOpenGenerationStage}
+          />
+        }
+        bodyClassName="report-page-frame"
+        title="报告文档"
+      >
         <ReportListPanel
           draftStates={draftStates}
           generationSessions={generationSessions}
@@ -98,7 +103,7 @@ export function ReportWorkspacePreview({
           }}
           onToggleMenu={(reportId) => setOpenMenuId((current) => (current === reportId ? null : reportId))}
         />
-      </section>
+      </PatientTabPageFrame>
     </section>
   );
 }

@@ -1,5 +1,6 @@
 import { lazy, startTransition, Suspense, useEffect, useState } from "react";
 import { ParityHydratedApp } from "./components/ParityHydratedApp";
+import { PatientTabPageFrame } from "./components/layout/PatientTabPageFrame";
 import { WorkspaceSidebar } from "./components/WorkspaceSidebar";
 import { WorkspaceTopbar } from "./components/WorkspaceTopbar";
 import { patientContactItems, patientProfile, patientTabs } from "./data/patientProfile";
@@ -16,7 +17,7 @@ import { PatientHealthPlanStage } from "./features/patient/components/PatientHea
 import { PatientCheckInRecordsStage } from "./features/patient/components/PatientCheckInRecordsStage";
 import { PatientProfileCard } from "./features/patient/components/PatientProfileCard";
 import { PatientTabsCard } from "./features/patient/components/PatientTabsCard";
-import { ReportPanelHeader } from "./features/reports/components/ReportPanelHeader";
+import { ReportPanelHeaderActions } from "./features/reports/components/ReportPanelHeader";
 import { ReportListPanel } from "./features/reports/components/ReportListPanel";
 import { useDocumentDraftWorkspace } from "./hooks/useDocumentDraftWorkspace";
 import { useDraftConfigState } from "./hooks/useDraftConfigState";
@@ -279,14 +280,18 @@ export default function App() {
                 <PatientHealthPlanStage onOpenCheckInRecords={() => setHealthPlanSubview("checkin-records")} />
               )
             ) : (
-              <section className="document-panel panel">
-                <ReportPanelHeader
-                  generationSession={generationSession}
-                  onOpenGenerate={() => setActiveModal({ kind: "config" })}
-                  onOpenGenerateForService={openConfigForService}
-                  onOpenGenerationStage={handleShowGeneration}
-                />
-
+              <PatientTabPageFrame
+                actions={
+                  <ReportPanelHeaderActions
+                    generationSession={generationSession}
+                    onOpenGenerate={() => setActiveModal({ kind: "config" })}
+                    onOpenGenerateForService={openConfigForService}
+                    onOpenGenerationStage={handleShowGeneration}
+                  />
+                }
+                className="report-page-frame"
+                title="报告文档"
+              >
                 <ReportListPanel
                   draftStates={draftStates}
                   generationSessions={generationSessions}
@@ -302,7 +307,7 @@ export default function App() {
                     setOpenMenuId((current) => (current === reportId ? null : reportId))
                   }
                 />
-              </section>
+              </PatientTabPageFrame>
             )}
           </section>
         </main>
