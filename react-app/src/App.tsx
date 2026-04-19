@@ -1,10 +1,14 @@
 import { lazy, startTransition, Suspense, useEffect, useState } from "react";
+import {
+  initialReports,
+  patientContactItems,
+  patientProfile,
+  patientTabs,
+} from "../../shared/adapters/admin";
 import { ParityHydratedApp } from "./components/ParityHydratedApp";
 import { PatientTabPageFrame } from "./components/layout/PatientTabPageFrame";
 import { WorkspaceSidebar } from "./components/WorkspaceSidebar";
 import { WorkspaceTopbar } from "./components/WorkspaceTopbar";
-import { patientContactItems, patientProfile, patientTabs } from "./data/patientProfile";
-import { initialReports } from "./data/reports";
 import {
   workspaceBreadcrumb,
   workspaceConnectionLabel,
@@ -23,6 +27,7 @@ import { useDocumentDraftWorkspace } from "./hooks/useDocumentDraftWorkspace";
 import { useDraftConfigState } from "./hooks/useDraftConfigState";
 import { useGenerationWorkspace } from "./hooks/useGenerationWorkspace";
 import type { ActiveModal } from "./types/modal";
+import type { ReportRecord } from "./types/report";
 import { createDocumentDraft } from "./utils/documentDraft";
 import { removeReport, toggleReportPublishState } from "./utils/migrationWorkspace";
 
@@ -42,7 +47,7 @@ function getMode() {
 
 export default function App() {
   const mode = getMode();
-  const [reports, setReports] = useState(initialReports);
+  const [reports, setReports] = useState<ReportRecord[]>(initialReports);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(initialReports[0]?.id ?? null);
   const [activePatientTab, setActivePatientTab] = useState("健康计划");
   const [healthPlanSubview, setHealthPlanSubview] = useState<"overview" | "checkin-records">("overview");
@@ -147,7 +152,7 @@ export default function App() {
     );
   }
 
-  if (mode !== "lab") {
+  if (mode === "parity") {
     return <ParityHydratedApp />;
   }
 

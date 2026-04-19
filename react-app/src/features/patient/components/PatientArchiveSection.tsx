@@ -1,4 +1,4 @@
-import type { PatientArchiveSection as PatientArchiveSectionType } from "../../../types/patient";
+import type { PatientArchiveSection as PatientArchiveSectionType } from "../../../../../shared/types/patient";
 
 type PatientArchiveSectionProps = {
   section: PatientArchiveSectionType;

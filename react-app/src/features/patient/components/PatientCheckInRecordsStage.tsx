@@ -1,7 +1,8 @@
 import { startTransition, useMemo, useState } from "react";
 import { ArrowLeftOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
 import Button from "antd/es/button";
-import { checkInRecords, type CheckInRecord } from "../../../data/checkInRecords";
+import { checkInRecords } from "../../../../../shared/mock/checkIn";
+import type { CheckInRecord } from "../../../../../shared/types/checkIn";
 import { CheckInRecordDetail } from "./CheckInRecordDetail";
 import {
   QUICK_FILTERS,

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { patientProfile } from "../../../data/patientProfile";
+import { patientProfile } from "../../../../../shared/mock/patient";
 import type { ContentWidget } from "../../../types/contentWidget";
 import type {
   ReportDocumentDraft,

@@ -1,268 +1,28 @@
-const patientProfile = {
-  identity: {
-    name: "陈小楠",
-    maskedName: "陈*",
-    avatar: "陈",
-    gender: "女",
-    age: 60,
-    code: "SZ2410010001",
-    phone: "130 0000 0000",
-    idCard: "440522********0002",
-  },
-  archive: {
-    maritalStatus: "已婚",
-    fertilityStatus: "已育",
-    education: "/",
-    birthplace: "/",
-    residence: "深圳",
-    currentIllness: "桥本甲状腺炎",
-    medicationHistory:
-      "氯雷他定（偶尔，晚上咳嗽不舒服时）、乙酰天麻素片（偶尔，替代谷维素片）、谷维素片（100mg/片，偶尔，帮助睡眠）、褪黑素（4 月份开始每日）、免疫细胞、干细胞、中药、生物同源性荷尔蒙等（零期）",
-    supplementHistory:
-      "综合消化酶（1 片/次）、甘氨酸、胆汁流动支持（1 片/次）、氨糖（1500mg）、硫酸软骨素钠、椰皮素（1 片/次）、N-乙酰半胱氨酸 NAC（8 克，1000mg/片）、NMN、L-谷氨酰胺、锌硒维生素（每 2 片含锌 15mg，硒 200mcg，另含多种维生素与植物成分）、维生素 C（100mg/片，2 片/次）",
-    medicalHistory: "疱疹",
-    familyHistory: "父亲肝癌",
-    diet: "规律用餐，每餐 8 成饱；蔬菜较少；常用油为土榨菜籽油",
-    sleep: "睡眠 6-7 小时，偶有失眠",
-    exercise: "散步：每周 5 次以上，平均每天 6000 步以上；高尔夫：每周 5 次以上，每次 60 分钟以上",
-    smokingHistory: "已戒烟 5 年",
-    drinkingHistory: "/",
-    mentalHealth: "曾确诊轻度抑郁、焦虑症",
-    otherNotes: "自诉咽部长期不适影响睡眠",
-    height: "181.4cm",
-    weight: "71.2kg",
-    bmi: "21.6",
-    heartRate: "67 次/min",
-    waist: "85cm",
-    hip: "98cm",
-    waistHipRatio: "0.87",
-    bloodPressure: "129/78mmHg",
-  },
-};
+const patientProfile = await fetch("./patient-profile.json", { cache: "no-store" }).then((response) =>
+  response.json(),
+);
+const staticWorkspaceData = await fetch("./static-workspace.json", { cache: "no-store" }).then((response) =>
+  response.json(),
+);
 
 const patientIdentity = patientProfile.identity;
 const patientArchive = patientProfile.archive;
+const {
+  services,
+  sourceReports,
+  riskAdviceAttachmentTemplate: riskAdviceAttachmentBase,
+  referenceMetricsByService,
+  stageDefinitions,
+  baseAgents,
+  reportSeeds,
+} = staticWorkspaceData;
 
 function getPatientMetaText() {
   return `${patientIdentity.gender} ${patientIdentity.age}岁`;
 }
 
-const services = {
-  "risk-basic": {
-    label: "健康风险评估",
-    category: "健康风险评估",
-    description: "识别患者当前健康风险、异常指标与重点危险因素，输出结构化的风险评估文档。",
-    brief: "面向健康档案解读与慢病管理场景，聚焦患者体检异常与风险判断，输出正式可交付的健康风险评估文档。",
-    coverLine: "春意盎然的健康人生",
-    coverEn: "HEALTHY LIFE",
-    bodyIntro:
-      "本报告围绕患者近期病历资料、随访记录与体检指标进行综合研判，帮助医护团队快速识别主要风险暴露点，并形成结构化评估结论。",
-    blocks: [
-      {
-        title: "前言",
-        paragraphs: [
-          "当前患者存在体重管理、代谢异常与生活方式不规律等叠加风险。通过对近期体检报告、随访记录和既往干预方案的交叉分析，可见其心血管代谢负担正处于需要尽早干预的阶段。",
-        ],
-      },
-      {
-        title: "重要信息",
-        paragraphs: ["1. 当前主要风险识别"],
-        bullets: [
-          "空腹血糖与甘油三酯持续偏高，提示代谢综合征风险正在增加。",
-          "BMI 超出理想范围，伴随久坐与睡眠不足，长期会进一步推高心血管风险。",
-          "近期随访中出现间歇性胸闷主诉，建议结合心电检查进一步排查。",
-        ],
-      },
-      {
-        title: "风险等级与依据",
-        paragraphs: [
-          "综合评估结果显示：代谢风险等级为中高，心血管事件风险等级为中。主要依据包括血脂谱异常、腰围超标、运动不足以及近期症状反馈。",
-        ],
-      },
-      {
-        title: "后续随访安排",
-        paragraphs: [
-          "建议第 2 周复核关键实验室指标，第 4 周回顾生活方式执行情况，第 8 周输出阶段性风险复评结果，并根据新数据动态调整管理动作。",
-        ],
-      },
-    ],
-  },
-  risk: {
-    label: "健康风险评估报告及建议",
-    category: "健康风险评估报告及建议",
-    description: "识别患者当前健康风险、异常指标与重点危险因素，输出正式交付版评估与建议文档。",
-    brief: "面向健康档案解读与慢病管理场景，聚焦患者体检异常、风险判断与后续干预建议，输出正式可交付的健康风险评估文档。",
-    coverLine: "春意盎然的健康人生",
-    coverEn: "HEALTHY LIFE",
-    bodyIntro:
-      "本报告围绕患者近期病历资料、随访记录与体检指标进行综合研判，帮助医护团队快速识别主要风险暴露点，并形成可执行的管理建议。",
-    blocks: [
-      {
-        title: "前言",
-        paragraphs: [
-          "当前患者存在体重管理、代谢异常与生活方式不规律等叠加风险。通过对近期体检报告、随访记录和既往干预方案的交叉分析，可见其心血管代谢负担正处于需要尽早干预的阶段。",
-        ],
-      },
-      {
-        title: "重要信息",
-        paragraphs: ["1. 当前主要风险识别"],
-        bullets: [
-          "空腹血糖与甘油三酯持续偏高，提示代谢综合征风险正在增加。",
-          "BMI 超出理想范围，伴随久坐与睡眠不足，长期会进一步推高心血管风险。",
-          "近期随访中出现间歇性胸闷主诉，建议结合心电检查进一步排查。",
-        ],
-      },
-      {
-        title: "风险等级与依据",
-        paragraphs: [
-          "综合评估结果显示：代谢风险等级为中高，心血管事件风险等级为中。主要依据包括血脂谱异常、腰围超标、运动不足以及近期症状反馈。",
-        ],
-      },
-      {
-        title: "管理建议",
-        bullets: [
-          "建议 2 周内完成空腹血糖、糖化血红蛋白及血脂四项复查。",
-          "启动 6 周体重与睡眠联合干预，优先建立规律作息和稳定运动节奏。",
-          "如胸闷症状持续或频次增加，应尽快安排心电图及专科评估。",
-        ],
-      },
-      {
-        title: "后续随访安排",
-        paragraphs: [
-          "建议第 2 周复核关键实验室指标，第 4 周回顾生活方式执行情况，第 8 周输出阶段性风险复评结果，并根据新数据动态调整管理动作。",
-        ],
-      },
-    ],
-  },
-  plan: {
-    label: "健康管理方案",
-    category: "健康管理方案",
-    description: "围绕患者当前风险等级、依从性和既往随访结果，生成阶段性健康管理方案。",
-    brief: "以患者随访和体检结果为基础，整理阶段性干预目标、执行动作与复盘节点，形成医护可直接交付的健康管理方案。",
-    coverLine: "春意盎然的健康人生",
-    coverEn: "HEALTHY LIFE",
-    bodyIntro:
-      "本方案将患者当前健康风险、依从性表现与近期随访结果统一纳入评估，形成一份可执行、可追踪、可复盘的阶段性健康管理计划。",
-    blocks: [
-      {
-        title: "前言",
-        paragraphs: [
-          "本次方案聚焦体重控制、代谢改善和睡眠节律建立三项核心目标，强调在可执行的日常场景中逐步改善长期指标暴露与干预依从性。",
-        ],
-      },
-      {
-        title: "阶段目标",
-        paragraphs: ["1. 未来 8 周管理重点"],
-        bullets: [
-          "第 1-2 周完成基线评估补齐，建立饮食、睡眠与运动记录。",
-          "第 3-5 周强化生活方式干预，观察体重、睡眠和主诉变化。",
-          "第 6-8 周根据复查结果优化管理强度，形成阶段总结。",
-        ],
-      },
-      {
-        title: "执行建议",
-        bullets: [
-          "每周至少 4 次 30 分钟中等强度运动，优先快走或固定自行车。",
-          "建立 23:00 前入睡目标，减少晚间高糖或高脂加餐。",
-          "每周固定一次线上随访，重点追踪胸闷、睡眠、体重和用药依从性。",
-        ],
-      },
-      {
-        title: "风险提醒",
-        paragraphs: [
-          "如出现持续胸闷、心悸或血糖异常波动，应及时暂停当前强化运动计划，并安排医生复评。医护团队在每轮随访中应主动追问上述异常信号。",
-        ],
-      },
-      {
-        title: "效果评估方式",
-        paragraphs: [
-          "建议以体重变化、血脂复查结果、睡眠时长稳定性与随访执行率作为本轮方案的主要评估指标，用于判断方案是否达成阶段目标。",
-        ],
-      },
-    ],
-  },
-  exam: {
-    label: "体检报告解读",
-    category: "体检报告解读",
-    description: "根据患者当前体检结果与健康档案，生成正式的体检报告解读文档。",
-    brief: "结合体检报告、病历资料与随访情况，对本次体检结果进行结构化解读，形成贴近患者交付场景的正式文档。",
-    coverLine: "春意盎然的健康人生",
-    coverEn: "HEALTHY LIFE",
-    bodyIntro:
-      "本报告基于患者本次体检结果及既往健康档案进行解读，帮助医护团队快速归纳异常指标含义、风险方向与后续建议，形成可对外交付的正式文档。",
-    blocks: [
-      {
-        title: "前言",
-        paragraphs: [
-          "体检报告不仅用于识别单项异常，更重要的是帮助患者理解这些数据背后的健康趋势。本次解读将围绕代谢、心血管与生活方式相关指标展开，帮助明确下一步重点关注方向。",
-        ],
-      },
-      {
-        title: "重点信息",
-        paragraphs: ["1. 主要异常指标解读"],
-        bullets: [
-          "空腹血糖偏高，提示糖代谢负担增加，建议结合饮食、运动和复查进一步判断是否存在持续异常。",
-          "甘油三酯及总胆固醇处于偏高区间，提示血脂管理需要尽快纳入日常健康计划。",
-          "腰围及 BMI 超出理想范围，说明当前体重控制仍是后续干预重点。",
-        ],
-      },
-      {
-        title: "风险提示",
-        paragraphs: [
-          "如长期不控制体重、血脂和血糖，上述异常可能进一步增加心脑血管事件风险。现阶段虽然尚未见到严重器质性结论，但已具备需要尽早干预的典型特征。",
-        ],
-      },
-      {
-        title: "建议措施",
-        bullets: [
-          "建议 2-4 周内复查空腹血糖、糖化血红蛋白与血脂四项。",
-          "近期以减盐、控制精制糖摄入、规律运动和保证睡眠时长为核心干预动作。",
-          "如伴随胸闷、心悸等主诉，建议同步安排心电图等进一步检查。",
-        ],
-      },
-      {
-        title: "医护随访建议",
-        paragraphs: [
-          "建议在后续随访中重点追踪患者体重变化、运动执行率、饮食结构调整情况以及复查结果，用于判断本次体检异常是否得到有效控制。",
-        ],
-      },
-    ],
-  },
-};
-
-const sourceReports = [
-  { id: "exam-2026-q1", name: "2026 Q1 入院体检报告", meta: "2026/03/28 · 128 项指标 · 入院体检" },
-  { id: "review-2026-followup", name: "2026/03 随访复查摘要", meta: "2026/03/23 · 线上随访 · 复查摘要" },
-  { id: "exam-2025-annual", name: "2025 年度体检报告", meta: "2025/12/19 · 年度归档 · 常规体检" },
-  { id: "exam-2025-cardiac", name: "2025 心血管专项检查", meta: "2025/11/06 · 专项检查 · 心电与血脂" },
-  { id: "exam-2025-metabolism", name: "2025 代谢复查报告", meta: "2025/09/14 · 复查报告 · 血糖与肝肾" },
-  { id: "exam-2025-physical", name: "2025 入职体检报告", meta: "2025/08/03 · 入职体检 · 常规项目" },
-  { id: "exam-2024-q4", name: "2024 Q4 慢病随访体检", meta: "2024/12/08 · 随访体检 · 慢病管理" },
-];
-
 const riskAdviceAttachmentTemplate = {
-  coverTitle: "健康风险评估报告及建议",
-  coverCode: "SZ2504010001",
-  coverDate: "2025年5月19日",
-  tocItems: [
-    { text: "一、前言", page: "1" },
-    { text: "二、健康档案信息", page: "2" },
-    { text: "三、体检报告解读及建议", page: "4" },
-    { text: "四、历年体检异常指标对比", page: "6" },
-    { text: "五、体检异常项解读", page: "9" },
-    { text: "5.1 血脂异常", page: "9", depth: 1 },
-    { text: "5.2 桥本甲状腺炎、甲状腺多发结节", page: "9", depth: 1 },
-    { text: "5.3 糖化血红蛋白 5.7%", page: "10", depth: 1 },
-    { text: "5.4 血抗β糖蛋白1抗体偏高", page: "10", depth: 1 },
-    { text: "5.5 EB病毒阳性", page: "11", depth: 1 },
-    { text: "六、健康风险评估及建议", page: "12" },
-    { text: "6.1 重大疾病风险评估", page: "12", depth: 1 },
-    { text: "6.2 生活方式指数评估", page: "12", depth: 1 },
-    { text: "七、生活方式改善建议", page: "14" },
-    { text: "7.1 饮食建议", page: "14", depth: 1 },
-    { text: "7.2 环境重金属管理建议", page: "17", depth: 1 },
-    { text: "八、免责声明", page: "18" },
-  ],
+  ...riskAdviceAttachmentBase,
   profileItems: [
     ["姓名", patientIdentity.name],
     ["性别", patientIdentity.gender],
@@ -313,77 +73,11 @@ const riskAdviceAttachmentTemplate = {
       [["腰围", patientArchive.waist], ["臀围", patientArchive.hip], ["腰臀比", patientArchive.waistHipRatio], ["血压", patientArchive.bloodPressure]],
     ],
   },
-  comparisonHeaders: ["指标", "2023", "2024", "2025", "趋势"],
-  comparisonRows: [
-    ["空腹血糖", "5.5", "5.6", "5.7", "持续升高"],
-    ["总胆固醇", "5.38", "5.62", "5.79", "偏高"],
-    ["甘油三酯", "1.64", "1.88", "2.06", "波动升高"],
-    ["TSH", "2.61", "3.44", "4.12", "升高"],
-    ["糖化血红蛋白", "5.5%", "5.6%", "5.7%", "临界偏高"],
-    ["抗β糖蛋白1抗体", "阴性", "轻度升高", "偏高", "需随访"],
-  ],
 };
-
-const referenceMetricsByService = {
-  risk: [
-    { label: "空腹血糖", value: "6.9 mmol/L", flag: "偏高", abnormal: true },
-    { label: "甘油三酯", value: "2.41 mmol/L", flag: "偏高", abnormal: true },
-    { label: "BMI", value: "27.3", flag: "超重", abnormal: true },
-    { label: "收缩压", value: "148 mmHg", flag: "偏高", abnormal: true },
-    { label: "睡眠时长", value: "5.8 小时", flag: "不足", abnormal: true },
-    { label: "每周运动", value: "1 次", flag: "偏低", abnormal: true },
-  ],
-  plan: [
-    { label: "体重", value: "81 kg", flag: "需控制", abnormal: true },
-    { label: "腰围", value: "96 cm", flag: "偏高", abnormal: true },
-    { label: "睡眠节律", value: "23:50-06:00", flag: "不稳定", abnormal: true },
-    { label: "运动依从性", value: "42%", flag: "待提升", abnormal: true },
-    { label: "饮食记录", value: "最近 7 天", flag: "已同步", abnormal: false },
-  ],
-  exam: [
-    { label: "空腹血糖", value: "6.9 mmol/L", flag: "偏高", abnormal: true },
-    { label: "总胆固醇", value: "5.92 mmol/L", flag: "偏高", abnormal: true },
-    { label: "甘油三酯", value: "2.41 mmol/L", flag: "偏高", abnormal: true },
-    { label: "腰围", value: "96 cm", flag: "超标", abnormal: true },
-    { label: "心电图", value: "窦性心律", flag: "建议结合主诉复核", abnormal: false },
-  ],
-};
-
-const stageDefinitions = [
-  { id: "read", label: "读取健康档案", desc: "汇总患者基础资料" },
-  { id: "parse", label: "数据解析", desc: "解析体检指标与病历" },
-  { id: "validate", label: "检验数据完整性", desc: "核验场景必需信息" },
-  { id: "retrieve", label: "检索知识库", desc: "匹配干预知识与模板" },
-  { id: "generate", label: "内容生成", desc: "组织报告草稿内容" },
-  { id: "layout", label: "文档排版", desc: "生成正式文档版式" },
-  { id: "complete", label: "完成输出", desc: "进入可视化编辑" },
-];
-
-const baseAgents = [
-  { id: "requirement", name: "需求理解 Agent", note: "等待任务", status: "pending" },
-  { id: "archive-read", name: "档案数据读取 Agent", note: "等待任务", status: "pending" },
-  { id: "archive-parse", name: "档案数据解析 Agent", note: "等待任务", status: "pending" },
-  { id: "data-validate", name: "必要数据校验 Agent", note: "等待任务", status: "pending" },
-  { id: "knowledge", name: "知识库检索 Agent", note: "等待任务", status: "pending" },
-  { id: "risk", name: "健康风险评估 Agent", note: "等待任务", status: "pending" },
-  { id: "lifestyle", name: "生活方式评估 Agent", note: "等待任务", status: "pending" },
-  { id: "essential8", name: "生命八要素评估 Agent", note: "等待任务", status: "pending" },
-  { id: "advice", name: "健康建议 Agent", note: "等待任务", status: "pending" },
-  { id: "compose", name: "文档内容编排 Agent", note: "等待任务", status: "pending" },
-  { id: "quality", name: "内容质量检验 Agent", note: "等待任务", status: "pending" },
-];
-
-let reports = [
-  { id: "seed-1", title: `${patientIdentity.maskedName} · 90天健康管理方案`, subtitle: "90天健康管理方案", serviceId: "plan", status: "未发布", tone: "unpublished", date: "2026/03/31", content: "" },
-  { id: "seed-2", title: `${patientIdentity.maskedName} · 90天健康管理方案`, subtitle: "90天健康管理方案", serviceId: "plan", status: "已发布", tone: "published", date: "2026/03/28", content: "" },
-  { id: "seed-3", title: `${patientIdentity.maskedName} · 健康风险评估报告`, subtitle: "健康风险评估报告", serviceId: "risk", status: "未发布", tone: "unpublished", date: "2026/03/31", content: "" },
-  { id: "seed-4", title: `${patientIdentity.maskedName} · 健康风险评估报告与建议`, subtitle: "健康风险评估报告与建议", serviceId: "risk", status: "已发布", tone: "published", date: "2026/03/27", content: "" },
-  { id: "seed-5", title: `${patientIdentity.maskedName} · 体检方案`, subtitle: "体检方案", serviceId: "exam", status: "未发布", tone: "unpublished", date: "2026/03/26", content: "" },
-  { id: "seed-6", title: `${patientIdentity.maskedName} · 健康风险评估报告`, subtitle: "健康风险评估报告", serviceId: "risk", status: "未发布", tone: "unpublished", date: "2026/03/24", content: "" },
-  { id: "seed-7", title: `${patientIdentity.maskedName} · 体检方案`, subtitle: "体检方案", serviceId: "exam", status: "已发布", tone: "published", date: "2026/03/20", content: "" },
-  { id: "seed-8", title: `${patientIdentity.maskedName} · 健康风险评估报告与建议`, subtitle: "健康风险评估报告与建议", serviceId: "risk", status: "未发布", tone: "unpublished", date: "2026/03/18", content: "" },
-  { id: "seed-9", title: `${patientIdentity.maskedName} · 健康风险评估报告`, subtitle: "健康风险评估报告", serviceId: "risk", status: "已发布", tone: "published", date: "2025/04/10", content: "" },
-];
+let reports = reportSeeds.map((seed) => ({
+  ...seed,
+  title: seed.titleTemplate.replaceAll("{{maskedName}}", patientIdentity.maskedName),
+}));
 
 let backgroundJobs = [];
 let currentServiceId = null;

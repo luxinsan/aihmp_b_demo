@@ -1,7 +1,7 @@
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useEffect, useMemo, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
+import { patientProfile } from "../../../shared/mock/patient";
 import { generationSnapshots } from "../data/generationFlow";
-import { patientProfile } from "../data/patientProfile";
 import type { ReportDocumentDraft } from "../types/documentDraft";
 import type { DraftConfig } from "../types/generation";
 import type { GenerationSession } from "../types/generationSession";
@@ -36,6 +36,66 @@ function getPatientMeta() {
   return `${patientProfile.identity.gender} ${patientProfile.identity.age}岁`;
 }
 
+function getNextSnapshot(progress: number) {
+  return generationSnapshots.find((snapshot) => snapshot.progress > progress) ?? null;
+}
+
+function mergeSessionLogs(
+  currentLogs: GenerationSession["logs"],
+  nextLogs: GenerationSession["logs"],
+  createdAt: number,
+  updatedAt: number,
+) {
+  const existingIds = new Set(currentLogs.map((entry) => entry.id));
+  const mergedLogs = [...currentLogs];
+
+  nextLogs.forEach((entry, index) => {
+    if (existingIds.has(entry.id)) {
+      return;
+    }
+
+    mergedLogs.push({
+      ...entry,
+      time:
+        entry.time ||
+        new Intl.DateTimeFormat("zh-CN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        }).format(new Date(Math.max(updatedAt + index * 1000, createdAt))),
+    });
+  });
+
+  return mergedLogs;
+}
+
+function advanceGenerationSessions(current: GenerationSession[]) {
+  let changed = false;
+
+  const nextSessions = current.map((session) => {
+    if (session.status !== "processing") {
+      return session;
+    }
+
+    const nextSnapshot = getNextSnapshot(session.progress);
+    if (!nextSnapshot) {
+      return session;
+    }
+
+    changed = true;
+    const updatedAt = Date.now();
+    return {
+      ...session,
+      ...nextSnapshot,
+      logs: mergeSessionLogs(session.logs, nextSnapshot.logs, session.createdAt, updatedAt),
+      updatedAt,
+      status: (nextSnapshot.progress === 100 ? "completed" : "processing") as GenerationSession["status"],
+    };
+  });
+
+  return changed ? nextSessions : current;
+}
+
 export function useGenerationWorkspace({
   draftConfig,
   setActionMessage,
@@ -47,11 +107,14 @@ export function useGenerationWorkspace({
   const [generationSessions, setGenerationSessions] = useState<GenerationSession[]>([]);
   const [activeGenerationReportId, setActiveGenerationReportId] = useState<string | null>(null);
   const [generationVisible, setGenerationVisible] = useState(false);
-  const generationSession =
-    generationSessions.find((session) => session.reportId === activeGenerationReportId) ??
-    generationSessions.find((session) => session.status === "processing") ??
-    generationSessions[0] ??
-    null;
+  const generationSession = useMemo(
+    () =>
+      generationSessions.find((session) => session.reportId === activeGenerationReportId) ??
+      generationSessions.find((session) => session.status === "processing") ??
+      generationSessions[0] ??
+      null,
+    [activeGenerationReportId, generationSessions],
+  );
 
   useEffect(() => {
     if (!generationSessions.length) {
@@ -77,26 +140,7 @@ export function useGenerationWorkspace({
     }
 
     const timer = window.setTimeout(() => {
-      setGenerationSessions((current) =>
-        current.map((session) => {
-          if (session.status !== "processing") {
-            return session;
-          }
-
-          const nextSnapshot = generationSnapshots.find((snapshot) => snapshot.progress > session.progress);
-
-          if (!nextSnapshot) {
-            return session;
-          }
-
-          return {
-            ...session,
-            ...nextSnapshot,
-            updatedAt: Date.now(),
-            status: nextSnapshot.progress === 100 ? "completed" : "processing",
-          };
-        }),
-      );
+      setGenerationSessions((current) => advanceGenerationSessions(current));
     }, 900);
 
     return () => {
@@ -135,6 +179,7 @@ export function useGenerationWorkspace({
         patientMeta: getPatientMeta(),
         patientAvatar: patientProfile.identity.avatar,
         selectedSources: buildSelectedSources(draftConfig),
+        retrievedGuides: firstSnapshot.retrievedGuides,
         status: "processing",
         modeLabel: firstSnapshot.modeLabel,
         briefTitle: firstSnapshot.briefTitle,
@@ -227,6 +272,7 @@ export function useGenerationWorkspace({
               .replaceAll("-", "/"),
             content: contentHtml ?? "",
             trace: targetSession.logs.map((item) => ({ ...item })),
+            retrievedGuides: targetSession.retrievedGuides,
             savedDraft:
               typeof structuredClone === "function"
                 ? structuredClone(draft)
@@ -238,6 +284,7 @@ export function useGenerationWorkspace({
               briefText: targetSession.briefText,
               overallStatus: targetSession.overallStatus,
               progress: targetSession.progress,
+              retrievedGuides: targetSession.retrievedGuides,
               stages: targetSession.stages.map((stage) => ({ ...stage })),
             },
           }),
@@ -305,6 +352,7 @@ export function useGenerationWorkspace({
             briefText: restoredState.briefText,
             overallStatus: restoredState.overallStatus,
             progress: restoredState.progress,
+            retrievedGuides: restoredState.retrievedGuides ?? completedSnapshot.retrievedGuides,
             stages: restoredState.stages,
           }
         : {
@@ -314,6 +362,7 @@ export function useGenerationWorkspace({
             briefText: completedSnapshot.briefText,
             overallStatus: "文档已生成完成，可继续编辑或保存",
             progress: 100,
+            retrievedGuides: completedSnapshot.retrievedGuides,
             stages: completedSnapshot.stages,
           };
 
@@ -326,6 +375,7 @@ export function useGenerationWorkspace({
                 reportDate: report.date,
                 serviceId: report.serviceId,
                 selectedSources: report.selectedSources ?? session.selectedSources,
+                retrievedGuides: report.retrievedGuides ?? session.retrievedGuides,
                 ...(session.status === "processing"
                   ? {}
                   : {
@@ -351,6 +401,7 @@ export function useGenerationWorkspace({
           patientAvatar: patientProfile.identity.avatar,
           selectedSources: report.selectedSources ?? [],
           ...nextState,
+          retrievedGuides: report.retrievedGuides ?? nextState.retrievedGuides,
           logs: restoredLogs,
         },
         ...current,

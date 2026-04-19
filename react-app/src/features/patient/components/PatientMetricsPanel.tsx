@@ -1,4 +1,4 @@
-import type { PatientMetric } from "../../../types/patient";
+import type { PatientMetric } from "../../../../../shared/types/patient";
 
 type PatientMetricsPanelProps = {
   metrics: PatientMetric[];

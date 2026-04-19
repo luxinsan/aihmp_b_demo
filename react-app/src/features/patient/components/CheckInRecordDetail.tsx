@@ -1,5 +1,5 @@
 import Image from "antd/es/image";
-import type { CheckInRecord } from "../../../data/checkInRecords";
+import type { CheckInRecord } from "../../../../../shared/types/checkIn";
 
 function DietCheckInDetail({ record }: { record: Extract<CheckInRecord, { type: "饮食打卡" }> }) {
   return (

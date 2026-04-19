@@ -1,0 +1,13 @@
+{
+  "miniprogramRoot": "dist",
+  "projectname": "aihmp-patient-miniapp",
+  "description": "AI HMP 患者端微信小程序",
+  "appid": "touristappid",
+  "compileType": "miniprogram",
+  "setting": {
+    "es6": false,
+    "minified": false,
+    "enhance": true,
+    "postcss": true
+  }
+}

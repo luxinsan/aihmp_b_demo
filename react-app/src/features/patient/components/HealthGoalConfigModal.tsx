@@ -175,10 +175,18 @@ export function HealthGoalConfigModal({
 
   const treeData = groupedTemplates.map((group) => ({
     key: group.dimensionId,
-    title: <span className="health-goal-tree-dimension">{dimensionLabelMap[group.dimensionId] ?? group.dimensionLabel}</span>,
+    className: "health-goal-tree-group-node",
+    title: (
+      <div className="health-goal-tree-dimension-row">
+        <span className="health-goal-tree-dimension">
+          {dimensionLabelMap[group.dimensionId] ?? group.dimensionLabel}
+        </span>
+      </div>
+    ),
     selectable: false,
     children: group.items.map((item) => ({
       key: item.id,
+      className: "health-goal-tree-metric-node",
       title: (
         <div className="health-goal-tree-metric-row">
           <Checkbox
@@ -456,14 +464,14 @@ export function HealthGoalConfigModal({
               )}
             </section>
           </div>
-
-          <footer className="health-goal-modal-footer">
-            <Button onClick={onClose}>取消</Button>
-            <Button type="primary" onClick={() => onSave(draftConfigs, draftOverview)}>
-              保存
-            </Button>
-          </footer>
         </div>
+
+        <footer className="health-goal-modal-footer">
+          <Button onClick={onClose}>取消</Button>
+          <Button type="primary" onClick={() => onSave(draftConfigs, draftOverview)}>
+            保存
+          </Button>
+        </footer>
       </section>
     </Modal>
   );

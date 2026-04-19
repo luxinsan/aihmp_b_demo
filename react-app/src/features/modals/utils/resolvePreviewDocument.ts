@@ -1,4 +1,4 @@
-import { patientProfile } from "../../../data/patientProfile";
+import { patientProfile } from "../../../../../shared/mock/patient";
 import { services } from "../../../data/services";
 import type { ReportDocumentDraft, SectionContentItem } from "../../../types/documentDraft";
 import type { ReportRecord } from "../../../types/report";

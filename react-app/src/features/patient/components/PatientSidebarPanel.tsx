@@ -1,4 +1,4 @@
-import { patientContactItems, patientProfile, patientTabs } from "../../../data/patientProfile";
+import { patientContactItems, patientProfile, patientTabs } from "../../../../../shared/adapters/admin";
 import { PatientProfileCard } from "./PatientProfileCard";
 import { PatientTabsCard } from "./PatientTabsCard";
 

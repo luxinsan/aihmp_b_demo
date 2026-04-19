@@ -1,0 +1,80 @@
+name: Deploy Admin And Patient Previews To GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Install Admin Dependencies
+        working-directory: react-app
+        run: npm ci
+
+      - name: Install Patient Preview Dependencies
+        working-directory: patient-web-preview
+        run: npm ci
+
+      - name: Build Admin Pages Bundle
+        working-directory: react-app
+        run: npm run build:pages:admin
+
+      - name: Build Patient Pages Bundle
+        working-directory: patient-web-preview
+        run: npm run build:pages:patient
+
+      - name: Assemble Pages Artifact
+        run: |
+          mkdir -p pages-out/admin
+          mkdir -p pages-out/patient
+          cp -R react-app/dist/. pages-out/admin/
+          cp -R patient-web-preview/dist/. pages-out/patient/
+          cat > pages-out/index.html <<'EOF'
+          <!doctype html>
+          <html lang="zh-CN">
+            <head>
+              <meta charset="utf-8" />
+              <meta http-equiv="refresh" content="0; url=./admin/" />
+              <title>AI HMP Demo</title>
+            </head>
+            <body>
+              <p>Redirecting to <a href="./admin/">admin preview</a>...</p>
+            </body>
+          </html>
+          EOF
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: pages-out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy To GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

@@ -32,6 +32,7 @@ export type GenerationSession = {
   patientMeta: string;
   patientAvatar: string;
   selectedSources: string[];
+  retrievedGuides: string[];
   status: GenerationStatus;
   modeLabel: string;
   briefTitle: string;

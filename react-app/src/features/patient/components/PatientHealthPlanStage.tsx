@@ -4,13 +4,13 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import Button from "antd/es/button";
-import { PatientTabPageFrame } from "../../../components/layout/PatientTabPageFrame";
-import { goalMetricTemplates, initialPatientGoalConfigs } from "../../../data/goalMetricTemplates";
 import {
   healthPlanCheckIns,
   healthPlanHeader,
   healthPlanTasks,
-} from "../../../data/healthPlan";
+} from "../../../../../shared/adapters/admin";
+import { PatientTabPageFrame } from "../../../components/layout/PatientTabPageFrame";
+import { goalMetricTemplates, initialPatientGoalConfigs } from "../../../data/goalMetricTemplates";
 import { HealthGoalConfigModal } from "./HealthGoalConfigModal";
 import type {
   HealthPlanCheckInStatus,

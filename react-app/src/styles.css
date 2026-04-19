@@ -1894,6 +1894,7 @@ body,
 .health-goal-modal {
   display: grid;
   gap: 24px;
+  flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
   scrollbar-width: none;
@@ -1967,7 +1968,7 @@ body,
 
 .health-goal-dimension-tree.ant-tree {
   height: 100%;
-  padding: 8px 8px 10px;
+  padding: 6px 8px 8px;
   background: transparent;
 }
 
@@ -1980,24 +1981,16 @@ body,
   padding: 0;
 }
 
-.health-goal-dimension-tree .ant-tree-list-holder-inner > .ant-tree-treenode {
-  margin-bottom: 8px;
-  padding: 4px 0 2px;
+.health-goal-dimension-tree .ant-tree-node-content-wrapper {
+  width: 100%;
+  min-height: 28px;
+  padding: 0;
+  border-radius: 0;
   background: transparent;
 }
 
-.health-goal-dimension-tree .ant-tree-node-content-wrapper {
-  min-height: 30px;
-  padding: 3px 12px;
-  border-radius: 0;
-}
-
+.health-goal-dimension-tree .ant-tree-node-content-wrapper:hover,
 .health-goal-dimension-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
-  background: rgba(230, 239, 255, 0.68);
-}
-
-.health-goal-dimension-tree .ant-tree-list-holder-inner > .ant-tree-treenode > .ant-tree-node-content-wrapper.ant-tree-node-selected,
-.health-goal-dimension-tree .ant-tree-list-holder-inner > .ant-tree-treenode > .ant-tree-node-content-wrapper:hover {
   background: transparent;
 }
 
@@ -2024,15 +2017,35 @@ body,
   font-weight: 700;
 }
 
+.health-goal-tree-dimension-row {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 2px 12px;
+}
+
 .health-goal-tree-metric {
   font-size: 13px;
+  line-height: 16px;
+}
+
+.health-goal-tree-group-node {
+  margin-bottom: 8px;
+  padding: 3px 0 2px;
+  background: transparent;
+}
+
+.health-goal-tree-metric-node {
+  padding: 0;
 }
 
 .health-goal-tree-metric-row {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   width: 100%;
+  min-height: 20px;
+  padding: 0 8px 0 12px;
   cursor: pointer;
 }
 
@@ -2041,37 +2054,18 @@ body,
   flex: 0 0 auto;
 }
 
-.health-goal-dimension-tree .ant-tree-treenode-switcher-open .health-goal-tree-dimension,
-.health-goal-dimension-tree .ant-tree-treenode-switcher-close .health-goal-tree-dimension {
-  color: #1f2f4e;
-}
-
-.health-goal-dimension-tree .ant-tree-list-holder-inner > .ant-tree-treenode > .ant-tree-node-content-wrapper {
-  padding-left: 12px;
-  margin-bottom: 4px;
-}
-
-.health-goal-dimension-tree .ant-tree-child-tree .ant-tree-node-content-wrapper {
-  min-height: 28px;
-  padding: 2px 10px 2px 14px;
-  border: 1px solid rgba(214, 225, 241, 0.98);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.96);
-}
-
 .health-goal-dimension-tree .ant-tree-child-tree .ant-tree-indent-unit {
-  width: 8px;
+  width: 6px;
 }
 
-.health-goal-dimension-tree .ant-tree-child-tree .ant-tree-treenode {
-  padding: 0 0 4px;
+.health-goal-tree-metric-node .ant-tree-node-content-wrapper {
+  margin-bottom: 2px;
+  padding-left: 12px;
 }
 
-.health-goal-dimension-tree .ant-tree-child-tree .ant-tree-node-content-wrapper.ant-tree-node-selected,
-.health-goal-dimension-tree .ant-tree-child-tree .ant-tree-node-content-wrapper:hover {
-  border-color: rgba(190, 208, 235, 0.98);
-  background: rgba(235, 242, 255, 0.92);
+.health-goal-tree-metric-node .ant-tree-node-content-wrapper:hover .health-goal-tree-metric-row,
+.health-goal-tree-metric-node .ant-tree-node-content-wrapper.ant-tree-node-selected .health-goal-tree-metric-row {
+  background: transparent;
 }
 
 .health-goal-config-detail {
@@ -2270,6 +2264,10 @@ body,
   display: flex;
   justify-content: flex-end;
   gap: 12px;
+  flex: 0 0 auto;
+  padding: 16px 28px 24px;
+  border-top: 1px solid rgba(232, 238, 246, 0.96);
+  background: rgba(255, 255, 255, 0.98);
 }
 
 .health-checkin-grid {
@@ -2682,6 +2680,10 @@ body,
     padding: 20px;
   }
 
+  .health-goal-modal-footer {
+    padding: 14px 20px 20px;
+  }
+
   .health-goal-config-detail {
     padding: 16px;
   }
@@ -2823,8 +2825,8 @@ body,
 }
 
 .health-goal-modal-shell {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-height: min(88vh, 720px);
   overflow: hidden;
@@ -2835,6 +2837,7 @@ body,
 }
 
 .health-goal-modal-shell-header {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;

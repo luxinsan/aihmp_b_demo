@@ -1,15 +1,15 @@
 import Empty from "antd/es/empty";
 import { lazy, Suspense, useMemo, useState } from "react";
-import { SearchField } from "../../components/design/SearchField";
-import { SelectField } from "../../components/design/SelectField";
-import { PatientTabPageFrame } from "../../components/layout/PatientTabPageFrame";
-import { patientProfile } from "../../data/patientProfile";
 import {
   getQuestionnaireHistory,
   getQuestionnaireSummaries,
-} from "../../data/questionnaireRecords";
-import {
+  patientProfile,
   questionnaireSceneOptions,
+} from "../../../../shared/adapters/admin";
+import { SearchField } from "../../components/design/SearchField";
+import { SelectField } from "../../components/design/SelectField";
+import { PatientTabPageFrame } from "../../components/layout/PatientTabPageFrame";
+import {
   type QuestionnaireRecord,
   type QuestionnaireSceneLabel,
 } from "../../types/questionnaire";

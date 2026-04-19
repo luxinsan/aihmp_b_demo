@@ -14,6 +14,7 @@ export type ReportRecord = {
   date: string;
   content: string;
   selectedSources?: string[];
+  retrievedGuides?: string[];
   trace?: Array<{
     id: string;
     text: string;
@@ -30,6 +31,7 @@ export type ReportRecord = {
     briefText: string;
     overallStatus: string;
     progress: number;
+    retrievedGuides?: string[];
     stages: Array<{
       id: string;
       label: string;

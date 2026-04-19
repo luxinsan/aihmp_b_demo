@@ -4,7 +4,7 @@ import Input from "antd/es/input";
 import Radio from "antd/es/radio";
 import Upload from "antd/es/upload";
 import type { UploadFile, UploadProps } from "antd";
-import { patientProfile } from "../../../data/patientProfile";
+import { patientProfile } from "../../../../../shared/mock/patient";
 import { ModalFrame } from "../../../components/design/ModalFrame";
 import { configTemplateOptions } from "../../../data/configOptions";
 import { services } from "../../../data/services";

@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { initialReports } from "../../../shared/adapters/admin";
 import { serviceOptions } from "../data/configOptions";
-import { initialReports } from "../data/reports";
+import type { ReportRecord } from "../types/report";
 import { getSelectedReport } from "../utils/migrationWorkspace";
 import { useDocumentDraftWorkspace } from "./useDocumentDraftWorkspace";
 import { useDraftConfigState } from "./useDraftConfigState";
@@ -9,7 +10,7 @@ import { useModalSelectionState } from "./useModalSelectionState";
 import { useReportConfirmActions } from "./useReportConfirmActions";
 
 export function useMigrationWorkspace() {
-  const [reports, setReports] = useState(initialReports);
+  const [reports, setReports] = useState<ReportRecord[]>(initialReports);
   const {
     activeModal,
     closeModal,

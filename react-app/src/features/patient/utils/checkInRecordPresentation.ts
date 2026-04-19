@@ -1,4 +1,4 @@
-import type { CheckInRecord } from "../../../data/checkInRecords";
+import type { CheckInRecord } from "../../../../../shared/types/checkIn";
 
 export const WEEKDAY_LABELS = ["日", "一", "二", "三", "四", "五", "六"];
 export const MONTH_LABELS = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"];

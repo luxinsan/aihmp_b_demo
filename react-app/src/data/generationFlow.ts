@@ -6,6 +6,7 @@ type GenerationSnapshot = {
   briefTitle: string;
   briefText: string;
   overallStatus: string;
+  retrievedGuides: string[];
   stages: GenerationStageItem[];
   logs: GenerationLogEntry[];
 };
@@ -17,6 +18,7 @@ export const generationSnapshots: GenerationSnapshot[] = [
     briefTitle: "需求理解",
     briefText: "正在整理本次文档生成任务的目标、患者情况和模板约束。",
     overallStatus: "已完成目标拆解，准备读取相关档案资料",
+    retrievedGuides: [],
     stages: [
       { id: "read", label: "读取健康档案", desc: "汇总患者基础资料", status: "running" },
       { id: "parse", label: "数据解析", desc: "解析体检指标与病历", status: "pending" },
@@ -27,9 +29,10 @@ export const generationSnapshots: GenerationSnapshot[] = [
       { id: "complete", label: "完成输出", desc: "进入可视化编辑", status: "pending" },
     ],
     logs: [
-      { id: "log-1", text: "接收本次生成请求，明确报告类型、输出格式与交付目标。", tone: "agent", source: "需求理解 Agent", stage: "任务理解", status: "running" },
-      { id: "log-2", text: "识别本次需聚焦的风险评估、建议输出与文档结构要求。", tone: "agent", source: "需求理解 Agent", stage: "任务理解", status: "running" },
-      { id: "log-3", text: "正在汇总患者基础资料，并锁定需要优先参考的病历、体检和随访信息。", tone: "normal", source: "AI 思考" },
+      { id: "log-1", text: "接收生成请求，拆解为档案调阅、异常提取、指南检索、证据核验和文档编排 5 个子任务。", tone: "agent", source: "任务编排 Agent", stage: "任务理解", status: "running" },
+      { id: "log-2", text: "已锁定本轮需调阅的患者主档案、近 3 次体检、最近随访记录和生活方式问卷。", tone: "agent", source: "档案调阅 Agent", stage: "读取健康档案", status: "running" },
+      { id: "log-3", text: "[↻] 正在读取客户健康档案：主诉、既往史、体检异常项、最近 90 天随访记录。", tone: "normal", source: "AI 思考" },
+      { id: "log-4", text: "[等待] 尚未进入指南检索阶段，先完成档案字段校验和异常项归并。", tone: "normal", source: "AI 思考" },
     ],
   },
   {
@@ -38,6 +41,12 @@ export const generationSnapshots: GenerationSnapshot[] = [
     briefTitle: "档案读取与知识检索",
     briefText: "正在归纳患者档案异常点，并召回对应解释与干预建议。",
     overallStatus: "档案与知识素材已汇总，准备进入文档编排",
+    retrievedGuides: [
+      "guidelines/慢病共管/2型糖尿病防治指南-2024.md",
+      "guidelines/心血管/中国高血压防治指南-2023.pdf",
+      "playbooks/nutrition/糖脂代谢异常饮食干预卡片库.yaml",
+      "templates/followup/血脂异常随访建议模板-v2.docx",
+    ],
     stages: [
       { id: "read", label: "读取健康档案", desc: "汇总患者基础资料", status: "done" },
       { id: "parse", label: "数据解析", desc: "解析体检指标与病历", status: "done" },
@@ -48,11 +57,18 @@ export const generationSnapshots: GenerationSnapshot[] = [
       { id: "complete", label: "完成输出", desc: "进入可视化编辑", status: "pending" },
     ],
     logs: [
-      { id: "log-1", text: "档案数据读取完成，已汇总患者基础资料。", tone: "agent", source: "档案数据读取 Agent", stage: "读取健康档案", status: "done" },
-      { id: "log-2", text: "体检指标与病历数据解析完成，已提取重点异常项。", tone: "agent", source: "档案数据解析 Agent", stage: "数据解析", status: "done" },
-      { id: "log-3", text: "必要数据校验完成，可进入知识检索与评估环节。", tone: "agent", source: "必要数据校验 Agent", stage: "检验数据完整性", status: "done" },
-      { id: "log-4", text: "已抽取关键异常指标，并开始检索对应风险说明与建议模板。", tone: "agent", source: "知识库检索 Agent", stage: "检索知识库", status: "running" },
-      { id: "log-5", text: "正在比对不同报告类型所需的段落结构和重点表述。", tone: "normal", source: "AI 思考" },
+      { id: "log-1", text: "客户健康档案调阅完成，已整理既往史、家族史、当前用药和近期随访摘要。", tone: "agent", source: "档案调阅 Agent", stage: "读取健康档案", status: "done" },
+      { id: "log-2", text: "体检指标解析完成，识别出空腹血糖偏高、BMI 超重、腰围偏高和血压波动。", tone: "agent", source: "异常提取 Agent", stage: "数据解析", status: "done" },
+      { id: "log-3", text: "字段完整性校验通过，当前信息足以支持风险评估与干预建议生成。", tone: "agent", source: "完整性校验 Agent", stage: "检验数据完整性", status: "done" },
+      { id: "log-4", text: "已按异常项组合发起并行检索：糖代谢、血压管理、饮食干预、随访模板。", tone: "agent", source: "检索路由 Agent", stage: "检索知识库", status: "running" },
+      { id: "log-5", text: "[↻] 调阅客户档案片段：最近两次随访均提到夜间加餐频繁、日均步数不足、体重控制不稳定。", tone: "normal", source: "AI 思考" },
+      { id: "log-6", text: "[↻] 检索文件 guidelines/慢病共管/2型糖尿病防治指南-2024.md，定位糖代谢异常分层干预段落。", tone: "normal", source: "AI 思考" },
+      { id: "log-7", text: "命中内容：2型糖尿病防治指南建议空腹血糖异常且合并超重时优先执行饮食控制、规律运动和体重管理，并设置阶段性复查周期。", tone: "normal", source: "AI 思考" },
+      { id: "log-8", text: "[↻] 检索文件 guidelines/心血管/中国高血压防治指南-2023.pdf，提取血压管理与并发风险提示。", tone: "normal", source: "AI 思考" },
+      { id: "log-9", text: "命中内容：中国高血压防治指南提示血压升高伴代谢异常时，应同步评估心血管总体风险，并持续跟踪家庭血压。", tone: "normal", source: "AI 思考" },
+      { id: "log-10", text: "[↻] 检索文件 playbooks/nutrition/糖脂代谢异常饮食干预卡片库.yaml，匹配饮食结构调整与执行反馈模板。", tone: "normal", source: "AI 思考" },
+      { id: "log-11", text: "命中内容：饮食干预卡片建议减少精制碳水、控制晚餐总能量，并以每周体重变化和腰围变化作为执行反馈。", tone: "normal", source: "AI 思考" },
+      { id: "log-12", text: "首轮并行检索完成，已召回 4 份证据文件并建立患者异常项到建议模板的映射。", tone: "agent", source: "检索路由 Agent", stage: "检索知识库", status: "running" },
     ],
   },
   {
@@ -61,6 +77,13 @@ export const generationSnapshots: GenerationSnapshot[] = [
     briefTitle: "内容生成",
     briefText: "正在输出封面、目录和正文结构，并同步整理重点结论。",
     overallStatus: "正文结构已成型，正在做版式和内容一致性检查",
+    retrievedGuides: [
+      "guidelines/慢病共管/2型糖尿病防治指南-2024.md",
+      "guidelines/心血管/中国高血压防治指南-2023.pdf",
+      "playbooks/nutrition/糖脂代谢异常饮食干预卡片库.yaml",
+      "templates/followup/血脂异常随访建议模板-v2.docx",
+      "knowledgebase/lifestyle/运动处方推荐规则-v1.8.json",
+    ],
     stages: [
       { id: "read", label: "读取健康档案", desc: "汇总患者基础资料", status: "done" },
       { id: "parse", label: "数据解析", desc: "解析体检指标与病历", status: "done" },
@@ -71,11 +94,15 @@ export const generationSnapshots: GenerationSnapshot[] = [
       { id: "complete", label: "完成输出", desc: "进入可视化编辑", status: "pending" },
     ],
     logs: [
-      { id: "log-1", text: "结合患者健康数据执行健康风险评估，识别高风险与重点关注项。", tone: "agent", source: "健康风险评估 Agent", stage: "内容生成", status: "running" },
-      { id: "log-2", text: "依据生活方式评估标准对饮食、运动、睡眠与心理维度进行评分。", tone: "agent", source: "生活方式评估 Agent", stage: "内容生成", status: "running" },
-      { id: "log-3", text: "按生命八要素评估公式整合患者关键指标并完成综合评估。", tone: "agent", source: "生命八要素评估 Agent", stage: "内容生成", status: "running" },
-      { id: "log-4", text: "将评估结果与建议组织为正式报告章节结构。", tone: "agent", source: "文档内容编排 Agent", stage: "内容生成", status: "running" },
-      { id: "log-5", text: "[等待] 正在构建报告大纲，准备生成正式内容" },
+      { id: "log-0", text: "证据检索完成，当前可用证据包括指南、饮食干预卡片和随访模板。", tone: "agent", source: "证据整合 Agent", stage: "检索知识库", status: "done" },
+      { id: "log-1", text: "根据客户健康档案与检索证据生成风险画像，识别当前主要矛盾为糖代谢异常伴体重管理失衡。", tone: "agent", source: "风险评估 Agent", stage: "内容生成", status: "running" },
+      { id: "log-2", text: "对生活方式维度进行拆解，重点评估饮食结构、运动量、睡眠时长和行为依从性。", tone: "agent", source: "生活方式评估 Agent", stage: "内容生成", status: "running" },
+      { id: "log-3", text: "将风险等级、关键指标和可执行建议映射到报告章节结构。", tone: "agent", source: "文档编排 Agent", stage: "内容生成", status: "running" },
+      { id: "log-4", text: "[*] 正在核对指南片段与患者异常项的适配关系，避免建议越界。", tone: "normal", source: "AI 思考" },
+      { id: "log-5", text: "调阅档案结论：患者近两次随访均未形成稳定运动习惯，且晚餐后加餐频率较高。", tone: "normal", source: "AI 思考" },
+      { id: "log-6", text: "引用依据：knowledgebase/lifestyle/运动处方推荐规则-v1.8.json 建议从中等强度有氧运动起步，每周累计 150 分钟，并根据依从性逐步增加抗阻训练。", tone: "normal", source: "AI 思考" },
+      { id: "log-7", text: "引用依据：templates/followup/血脂异常随访建议模板-v2.docx 要求在建议部分明确复查时间、关键指标和未达标时的升级处理路径。", tone: "normal", source: "AI 思考" },
+      { id: "log-8", text: "[等待] 正在构建报告大纲，准备生成正式内容。", tone: "normal", source: "AI 思考" },
     ],
   },
   {
@@ -84,6 +111,13 @@ export const generationSnapshots: GenerationSnapshot[] = [
     briefTitle: "文档排版",
     briefText: "正在整理封面、目录和正文的分页顺序，并统一章节层级与重点标识。",
     overallStatus: "正在进行文档排版",
+    retrievedGuides: [
+      "guidelines/慢病共管/2型糖尿病防治指南-2024.md",
+      "guidelines/心血管/中国高血压防治指南-2023.pdf",
+      "playbooks/nutrition/糖脂代谢异常饮食干预卡片库.yaml",
+      "templates/followup/血脂异常随访建议模板-v2.docx",
+      "knowledgebase/lifestyle/运动处方推荐规则-v1.8.json",
+    ],
     stages: [
       { id: "read", label: "读取健康档案", desc: "汇总患者基础资料", status: "done" },
       { id: "parse", label: "数据解析", desc: "解析体检指标与病历", status: "done" },
@@ -94,11 +128,11 @@ export const generationSnapshots: GenerationSnapshot[] = [
       { id: "complete", label: "完成输出", desc: "进入可视化编辑", status: "pending" },
     ],
     logs: [
-      { id: "log-1", text: "文档内容编排完成，已形成正式输出草稿。", tone: "agent", source: "文档内容编排 Agent", stage: "内容生成", status: "done" },
-      { id: "log-2", text: "整理封面字段、目录结构与正文分页顺序。", tone: "agent", source: "文档内容编排 Agent", stage: "文档排版", status: "running" },
-      { id: "log-3", text: "统一章节层级、重点标识和版式规范。", tone: "agent", source: "文档内容编排 Agent", stage: "文档排版", status: "running" },
-      { id: "log-4", text: "对整体文档内容进行完整性、逻辑性与格式一致性质检。", tone: "agent", source: "内容质量检验 Agent", stage: "文档排版", status: "running" },
-      { id: "log-5", text: "[√] 正在排版正式文档，封面、目录和正文结构已就绪" },
+      { id: "log-1", text: "报告正文草稿已完成，当前进入版式整理与证据表述收敛阶段。", tone: "agent", source: "文档编排 Agent", stage: "内容生成", status: "done" },
+      { id: "log-2", text: "整理封面字段、目录结构与正文分页顺序。", tone: "agent", source: "排版 Agent", stage: "文档排版", status: "running" },
+      { id: "log-3", text: "对建议语句进行证据一致性质检，避免与客户档案结论冲突。", tone: "agent", source: "证据核验 Agent", stage: "文档排版", status: "running" },
+      { id: "log-4", text: "[√] 已将客户档案结论、指南依据和建议动作逐条对齐。", tone: "normal", source: "AI 思考" },
+      { id: "log-5", text: "[√] 排版已完成，封面、目录和正文层级结构已稳定。", tone: "normal", source: "AI 思考" },
     ],
   },
   {
@@ -107,6 +141,13 @@ export const generationSnapshots: GenerationSnapshot[] = [
     briefTitle: "文档输出",
     briefText: "文档内容正在进入可视化画布，生成过程会同步收纳到左侧面板。",
     overallStatus: "正在流式输出已生成内容",
+    retrievedGuides: [
+      "guidelines/慢病共管/2型糖尿病防治指南-2024.md",
+      "guidelines/心血管/中国高血压防治指南-2023.pdf",
+      "playbooks/nutrition/糖脂代谢异常饮食干预卡片库.yaml",
+      "templates/followup/血脂异常随访建议模板-v2.docx",
+      "knowledgebase/lifestyle/运动处方推荐规则-v1.8.json",
+    ],
     stages: [
       { id: "read", label: "读取健康档案", desc: "汇总患者基础资料", status: "done" },
       { id: "parse", label: "数据解析", desc: "解析体检指标与病历", status: "done" },
@@ -117,7 +158,8 @@ export const generationSnapshots: GenerationSnapshot[] = [
       { id: "complete", label: "完成输出", desc: "进入可视化编辑", status: "pending" },
     ],
     logs: [
-      { id: "log-1", text: "文档内容开始输出，生成过程已同步收纳到侧边面板。", tone: "accent", source: "系统" },
+      { id: "log-1", text: "文档内容开始输出，生成信息链继续保留本轮多智能体处理轨迹。", tone: "accent", source: "系统" },
+      { id: "log-2", text: "[√] 已输出客户画像、风险结论、干预建议和随访计划四个核心章节。", tone: "normal", source: "AI 思考" },
     ],
   },
   {
@@ -126,6 +168,13 @@ export const generationSnapshots: GenerationSnapshot[] = [
     briefTitle: "解锁编辑",
     briefText: "正在切换到可视化编辑模式，即将开放页面内直接修改。",
     overallStatus: "正在解锁在线编辑",
+    retrievedGuides: [
+      "guidelines/慢病共管/2型糖尿病防治指南-2024.md",
+      "guidelines/心血管/中国高血压防治指南-2023.pdf",
+      "playbooks/nutrition/糖脂代谢异常饮食干预卡片库.yaml",
+      "templates/followup/血脂异常随访建议模板-v2.docx",
+      "knowledgebase/lifestyle/运动处方推荐规则-v1.8.json",
+    ],
     stages: [
       { id: "read", label: "读取健康档案", desc: "汇总患者基础资料", status: "done" },
       { id: "parse", label: "数据解析", desc: "解析体检指标与病历", status: "done" },
@@ -137,6 +186,7 @@ export const generationSnapshots: GenerationSnapshot[] = [
     ],
     logs: [
       { id: "log-1", text: "正在切换到可视化编辑模式，即将开放页面内直接修改。", tone: "normal", source: "AI 思考" },
+      { id: "log-2", text: "[√] 已保留档案调阅、指南检索和证据核验轨迹，便于继续补充说明。", tone: "normal", source: "AI 思考" },
     ],
   },
   {
@@ -145,6 +195,13 @@ export const generationSnapshots: GenerationSnapshot[] = [
     briefTitle: "完成",
     briefText: "本次文档已完成生成与初步质检，可以直接继续编辑或保存。",
     overallStatus: "文档已生成完成，可直接编辑或保存",
+    retrievedGuides: [
+      "guidelines/慢病共管/2型糖尿病防治指南-2024.md",
+      "guidelines/心血管/中国高血压防治指南-2023.pdf",
+      "playbooks/nutrition/糖脂代谢异常饮食干预卡片库.yaml",
+      "templates/followup/血脂异常随访建议模板-v2.docx",
+      "knowledgebase/lifestyle/运动处方推荐规则-v1.8.json",
+    ],
     stages: [
       { id: "read", label: "读取健康档案", desc: "汇总患者基础资料", status: "done" },
       { id: "parse", label: "数据解析", desc: "解析体检指标与病历", status: "done" },
@@ -155,11 +212,9 @@ export const generationSnapshots: GenerationSnapshot[] = [
       { id: "complete", label: "完成输出", desc: "进入可视化编辑", status: "done" },
     ],
     logs: [
-      { id: "log-1", text: "文档内容编排完成，已形成正式输出草稿。", tone: "agent", source: "文档内容编排 Agent", stage: "内容生成", status: "done" },
-      { id: "log-2", text: "整理封面字段、目录结构与正文分页顺序。", tone: "agent", source: "文档内容编排 Agent", stage: "文档排版", status: "running" },
-      { id: "log-3", text: "对整体文档内容进行完整性、逻辑性与格式一致性质检。", tone: "agent", source: "内容质量检验 Agent", stage: "文档排版", status: "running" },
-      { id: "log-4", text: "文档内容开始输出，生成过程已同步收纳到侧边面板。", tone: "accent", source: "系统" },
-      { id: "log-5", text: "AI 生成流程完成，当前页面已进入所见即所得编辑状态。", tone: "accent", source: "系统" },
+      { id: "log-1", text: "文档编排、证据核验和排版流程已全部完成。", tone: "agent", source: "系统编排 Agent", stage: "完成输出", status: "done" },
+      { id: "log-2", text: "AI 生成流程完成，当前页面已进入所见即所得编辑状态。", tone: "accent", source: "系统" },
+      { id: "log-3", text: "本轮过程已完整记录客户档案调阅、指南检索、证据引用和建议编排轨迹，便于复核。", tone: "accent", source: "系统" },
     ],
   },
 ];

@@ -1,0 +1,35 @@
+{
+  "name": "aihmp-b-demo-patient-miniapp",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev:weapp": "taro build --type weapp --watch",
+    "build:weapp": "taro build --type weapp",
+    "dev:h5": "taro build --type h5 --watch",
+    "build:h5": "taro build --type h5"
+  },
+  "dependencies": {
+    "@tarojs/components": "4.1.6",
+    "@tarojs/plugin-framework-react": "4.1.6",
+    "@tarojs/react": "4.1.6",
+    "@tarojs/runtime": "4.1.6",
+    "@tarojs/shared": "4.1.6",
+    "@tarojs/taro": "4.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/preset-react": "^7.28.5",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
+    "@tarojs/cli": "4.1.6",
+    "@tarojs/plugin-platform-h5": "4.1.6",
+    "@tarojs/plugin-platform-weapp": "4.1.6",
+    "@tarojs/webpack5-runner": "4.1.6",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "babel-preset-taro": "4.1.6",
+    "sass": "^1.89.0",
+    "typescript": "^5.8.3"
+  }
+}

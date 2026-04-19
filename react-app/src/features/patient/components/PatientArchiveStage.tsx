@@ -1,5 +1,5 @@
 import { PageSectionHeader } from "../../../components/layout/PageSectionHeader";
-import { archiveSections, vitalMetrics } from "../../../data/patientProfile";
+import { archiveSections, vitalMetrics } from "../../../../../shared/adapters/admin";
 import { PatientArchiveSection } from "./PatientArchiveSection";
 import { PatientMetricsPanel } from "./PatientMetricsPanel";
 

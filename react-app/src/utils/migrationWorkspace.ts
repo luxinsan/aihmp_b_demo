@@ -153,7 +153,7 @@ export function updateReportTitle(
 export function updateReportArtifacts(
   reports: ReportRecord[],
   reportId: string,
-  patch: Partial<Pick<ReportRecord, "title" | "date" | "content" | "trace" | "generationState" | "savedDraft">>,
+  patch: Partial<Pick<ReportRecord, "title" | "date" | "content" | "trace" | "generationState" | "savedDraft" | "retrievedGuides">>,
 ) {
   return reports.map((report) =>
     report.id === reportId
