@@ -2,7 +2,8 @@ export default defineAppConfig({
   pages: [
     "pages/home/index",
     "pages/health-plan/index",
-    "pages/mine/index"
+    "pages/mine/index",
+    "pages/patient-profile/index"
   ],
   window: {
     navigationStyle: "custom",

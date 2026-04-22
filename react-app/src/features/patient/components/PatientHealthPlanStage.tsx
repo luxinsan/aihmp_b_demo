@@ -247,7 +247,13 @@ function TaskCard({ task }: { task: HealthPlanTask }) {
   );
 }
 
-export function PatientHealthPlanStage({ onOpenCheckInRecords }: { onOpenCheckInRecords: () => void }) {
+export function PatientHealthPlanStage({
+  onEditPlan,
+  onOpenCheckInRecords,
+}: {
+  onEditPlan: () => void;
+  onOpenCheckInRecords: () => void;
+}) {
   const [goalConfigs, setGoalConfigs] = useState(initialPatientGoalConfigs);
   const [goalOverview, setGoalOverview] = useState(
     "围绕体重控制、代谢改善和生活方式稳定三项重点，设置重点监测指标并持续追踪患者阶段变化。",
@@ -288,7 +294,7 @@ export function PatientHealthPlanStage({ onOpenCheckInRecords }: { onOpenCheckIn
         <div className="health-plan-hero-orb health-plan-hero-orb-right" aria-hidden="true" />
 
         <div className="health-plan-head-actions">
-          <Button className="ds-antd-health-action-button" icon={<EditOutlined />} type="default">
+          <Button className="ds-antd-health-action-button" icon={<EditOutlined />} type="default" onClick={onEditPlan}>
             编辑当前计划
           </Button>
         </div>

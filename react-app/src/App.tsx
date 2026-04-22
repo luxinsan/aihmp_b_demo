@@ -18,6 +18,7 @@ import { GenerationFloatingJobs } from "./features/generation/components/Generat
 import { GenerationWorkspace } from "./features/generation/GenerationWorkspace";
 import { ModalHost } from "./features/modals/ModalHost";
 import { PatientHealthPlanStage } from "./features/patient/components/PatientHealthPlanStage";
+import { PatientHealthPlanEditorStage } from "./features/patient/components/PatientHealthPlanEditorStage";
 import { PatientCheckInRecordsStage } from "./features/patient/components/PatientCheckInRecordsStage";
 import { PatientProfileCard } from "./features/patient/components/PatientProfileCard";
 import { PatientTabsCard } from "./features/patient/components/PatientTabsCard";
@@ -30,6 +31,8 @@ import type { ActiveModal } from "./types/modal";
 import type { ReportRecord } from "./types/report";
 import { createDocumentDraft } from "./utils/documentDraft";
 import { removeReport, toggleReportPublishState } from "./utils/migrationWorkspace";
+import { initialHealthPlanEditorDraft } from "./data/healthPlanEditor";
+import type { HealthPlanEditorDraft } from "./types/healthPlanEditor";
 
 const QuestionnaireWorkspace = lazy(() =>
   import("./features/questionnaires/QuestionnaireWorkspace").then((module) => ({
@@ -50,7 +53,8 @@ export default function App() {
   const [reports, setReports] = useState<ReportRecord[]>(initialReports);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(initialReports[0]?.id ?? null);
   const [activePatientTab, setActivePatientTab] = useState("健康计划");
-  const [healthPlanSubview, setHealthPlanSubview] = useState<"overview" | "checkin-records">("overview");
+  const [healthPlanSubview, setHealthPlanSubview] = useState<"overview" | "checkin-records" | "editor">("overview");
+  const [healthPlanEditorDraft, setHealthPlanEditorDraft] = useState<HealthPlanEditorDraft>(initialHealthPlanEditorDraft);
   const [activeModal, setActiveModal] = useState<ActiveModal>(null);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [jobsOpen, setJobsOpen] = useState(false);
@@ -245,6 +249,42 @@ export default function App() {
     );
   }
 
+  if (activePatientTab === "健康计划" && healthPlanSubview === "editor") {
+    return (
+      <>
+        <section className="app-shell" id="listScreen">
+          <WorkspaceSidebar items={workspaceNavItems} />
+
+          <main className="workspace">
+            <WorkspaceTopbar
+              breadcrumb={workspaceBreadcrumb}
+              connectionLabel={workspaceConnectionLabel}
+            />
+
+            <section className="content-shell health-plan-editor-screen">
+              <PatientHealthPlanEditorStage
+                draft={healthPlanEditorDraft}
+                onBack={() => setHealthPlanSubview("overview")}
+                onPreview={(nextDraft) => {
+                  setHealthPlanEditorDraft(nextDraft);
+                  setHealthPlanSubview("overview");
+                  setActionMessage("已返回计划预览，当前编排内容已同步到草稿。");
+                }}
+                onSave={(nextDraft) => {
+                  setHealthPlanEditorDraft(nextDraft);
+                  setHealthPlanSubview("overview");
+                  setActionMessage("健康管理计划已保存。");
+                }}
+              />
+            </section>
+          </main>
+        </section>
+
+        {toast}
+      </>
+    );
+  }
+
   return (
     <>
       <section className="app-shell" id="listScreen">
@@ -282,7 +322,10 @@ export default function App() {
               healthPlanSubview === "checkin-records" ? (
                 <PatientCheckInRecordsStage onBack={() => setHealthPlanSubview("overview")} />
               ) : (
-                <PatientHealthPlanStage onOpenCheckInRecords={() => setHealthPlanSubview("checkin-records")} />
+                <PatientHealthPlanStage
+                  onEditPlan={() => setHealthPlanSubview("editor")}
+                  onOpenCheckInRecords={() => setHealthPlanSubview("checkin-records")}
+                />
               )
             ) : (
               <PatientTabPageFrame

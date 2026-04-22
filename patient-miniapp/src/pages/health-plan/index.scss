@@ -1,3 +1,39 @@
 .health-plan-page {
   min-height: 1px;
 }
+
+.health-plan-page-summary {
+  min-height: 220px;
+}
+
+.health-plan-page-overview-row {
+  align-items: stretch;
+}
+
+.health-plan-page-overview-cell {
+  min-height: 170px;
+}
+
+.health-plan-page-timeline {
+  min-height: 360px;
+}
+
+.health-plan-page-task-group {
+  min-height: 280px;
+}
+
+.health-plan-page-dock {
+  min-height: 96px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.health-plan-page-dock::after {
+  display: none;
+}
+
+.health-plan-page-dock-section {
+  min-height: 96px;
+}
