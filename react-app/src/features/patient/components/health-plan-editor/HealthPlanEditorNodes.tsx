@@ -3,7 +3,6 @@ import {
   DeleteOutlined,
   DeploymentUnitOutlined,
   FileTextOutlined,
-  MedicineBoxOutlined,
   PhoneOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
@@ -14,6 +13,8 @@ import Input from "antd/es/input";
 import InputNumber from "antd/es/input-number";
 import Select from "antd/es/select";
 import Switch from "antd/es/switch";
+import TimePicker from "antd/es/time-picker";
+import dayjs from "dayjs";
 import type {
   HealthPlanEditorConditionNodeData,
   HealthPlanEditorTaskCategory,
@@ -48,8 +49,6 @@ function getTaskCategoryIcon(category: HealthPlanEditorTaskCategory) {
     case "education":
     case "summary-report":
       return <FileTextOutlined />;
-    case "medication-checkin":
-      return <MedicineBoxOutlined />;
     case "follow-up":
       return <PhoneOutlined />;
     case "return-visit":
@@ -86,6 +85,8 @@ export function HealthPlanTaskNode({ data, selected }: NodeProps<Node>) {
   const [taskNameDraft, setTaskNameDraft] = useState(runtimeData.taskName);
   const [isTaskNameComposing, setIsTaskNameComposing] = useState(false);
   const isSummaryReport = runtimeData.category === "summary-report";
+  const supportsPush = !isSummaryReport;
+  const isPushEnabled = runtimeData.pushEnabled ?? false;
   const supportsRepeat = !isSummaryReport;
   const taskNamePlaceholder = runtimeData.category === "summary-report" ? "如“健康管理周报”" : "请输入任务名称";
 
@@ -303,6 +304,35 @@ export function HealthPlanTaskNode({ data, selected }: NodeProps<Node>) {
                   />
                   次
                 </div>
+              </div>
+            ) : null}
+
+            {supportsPush ? (
+              <div className="health-plan-node-push-config">
+                <div className="health-plan-node-repeat-head">
+                  <span>消息推送</span>
+                  <Switch
+                    checked={isPushEnabled}
+                    className="nodrag"
+                    size="small"
+                    onChange={(checked) => runtimeData.onChange({ pushEnabled: checked })}
+                  />
+                </div>
+                {isPushEnabled ? (
+                  <div className="health-plan-node-period-line">
+                    任务开始当天
+                    <TimePicker
+                      className="health-plan-node-time-picker nodrag nowheel"
+                      format="HH:mm"
+                      minuteStep={5}
+                      placeholder="--:--"
+                      size="small"
+                      value={runtimeData.pushTime ? dayjs(runtimeData.pushTime, "HH:mm") : null}
+                      onChange={(value) => runtimeData.onChange({ pushTime: value?.format("HH:mm") ?? null })}
+                    />
+                    进行消息推送
+                  </div>
+                ) : null}
               </div>
             ) : null}
           </section>

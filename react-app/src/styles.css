@@ -141,6 +141,10 @@ body,
   flex-shrink: 0;
 }
 
+.health-plan-more-menu .ant-dropdown-menu {
+  min-width: 148px;
+}
+
 .patient-tab-page-body {
   display: flex;
   flex-direction: column;
@@ -210,7 +214,7 @@ body,
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   width: 100%;
-  max-height: min(88vh, 960px);
+  max-height: min(88vh, 720px);
   overflow: hidden;
   border: 1px solid rgba(216, 226, 239, 0.98);
   border-radius: var(--radius-panel);
@@ -219,6 +223,8 @@ body,
 }
 
 .modal-960-body {
+  min-height: min(480px, calc(100vh - 180px));
+  max-height: min(640px, calc(100vh - 180px));
   overflow: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -262,6 +268,18 @@ body,
   padding: 0 !important;
   background: transparent !important;
   border: 0 !important;
+}
+
+.ds-modal-content-viewport .ant-modal-body {
+  min-height: min(480px, calc(100vh - 180px));
+  max-height: min(640px, calc(100vh - 180px));
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.ds-modal-content-viewport .ant-modal-body::-webkit-scrollbar {
+  display: none;
 }
 
 .ds-antd-modal-root .rc-dialog-container,
@@ -1643,6 +1661,160 @@ body,
   justify-content: start;
 }
 
+.health-plan-create-modal {
+  padding: 0 24px 28px;
+}
+
+.health-plan-create-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.health-plan-create-entry,
+.health-plan-create-template {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid #dce6f5;
+  border-radius: 14px;
+  background: #fdfefe;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+}
+
+.health-plan-create-entry {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.health-plan-create-entry.is-ai {
+  border-color: #e7d5ff;
+  background: linear-gradient(180deg, rgba(251, 248, 255, 0.92) 0%, rgba(248, 244, 255, 0.82) 100%);
+}
+
+.health-plan-create-entry-center {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 10px;
+  min-height: 140px;
+  text-align: center;
+}
+
+.health-plan-create-entry-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  color: #8da0be;
+  background: #edf3fc;
+  font-size: 30px;
+}
+
+.health-plan-create-entry.is-ai .health-plan-create-entry-icon {
+  color: #9c4fff;
+  background: #f3e9ff;
+}
+
+.health-plan-create-entry-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.health-plan-create-entry-center strong {
+  color: #1f2f4a;
+  font-size: 22px;
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.health-plan-create-entry-center p {
+  margin: 0;
+  color: #996dd8;
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 600;
+}
+
+.health-plan-create-entry:hover {
+  border-color: #cfdbf0;
+  background: #f9fbff;
+}
+
+.health-plan-create-template header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.health-plan-create-template header strong {
+  color: #1f2f49;
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.health-plan-create-template header span {
+  flex: 0 0 auto;
+  min-height: 24px;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: #ebf1ff;
+  color: #235fd7;
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.health-plan-create-template p {
+  margin: 0;
+  color: #5d7397;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.health-plan-create-template-meta {
+  display: grid;
+  gap: 6px;
+}
+
+.health-plan-create-template-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #60789d;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.health-plan-create-template footer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.health-plan-create-template footer button {
+  min-height: 34px;
+  border-radius: 10px;
+  border: 1px solid #d0dcef;
+  background: #fff;
+  color: #5f7190;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.health-plan-create-template footer button:last-child {
+  border-color: rgba(214, 225, 243, 0.98);
+  background: #ecf3ff;
+  color: #2261da;
+}
+
 .health-goal-card {
   position: relative;
   display: grid;
@@ -1910,43 +2082,23 @@ body,
   padding: 18px;
 }
 
-.health-plan-editor-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+.health-plan-editor-page-header {
+  margin-bottom: 0;
   padding: 12px 18px;
+  min-height: 64px;
   border-bottom: 1px solid rgba(223, 232, 246, 0.96);
   background: rgba(255, 255, 255, 0.96);
 }
 
-.health-plan-editor-topbar-main,
-.health-plan-editor-topbar-actions,
-.health-plan-editor-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.health-plan-editor-page-header .patient-tab-page-title-row {
+  gap: 10px;
 }
 
-.health-plan-editor-title-wrap {
-  gap: 4px;
-  align-items: flex-start;
-  flex-direction: column;
-}
-
-.health-plan-editor-title-wrap h2 {
-  margin: 0;
+.health-plan-editor-page-header .patient-tab-page-title {
   color: #1a2740;
-  font-size: 24px;
-  line-height: 1.35;
+  font-size: 22px;
+  line-height: 1.4;
   font-weight: 800;
-}
-
-.health-plan-editor-title-wrap p {
-  margin: 0;
-  color: #7b8daa;
-  font-size: 13px;
-  line-height: 1.6;
 }
 
 .health-plan-editor-back-button {
@@ -1964,15 +2116,26 @@ body,
 
 .health-plan-editor-shell {
   display: grid;
-  grid-template-columns: 288px minmax(0, 1fr);
+  grid-template-columns: 400px minmax(0, 1fr);
   min-height: calc(100vh - 236px);
+}
+
+.health-plan-editor-shell.is-sidebar-collapsed {
+  grid-template-columns: 0 minmax(0, 1fr);
 }
 
 .health-plan-editor-sidebar {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  overflow: hidden;
   border-right: 1px solid rgba(223, 232, 246, 0.98);
   background: rgba(255, 255, 255, 0.92);
+}
+
+.health-plan-editor-shell.is-sidebar-collapsed .health-plan-editor-sidebar {
+  visibility: hidden;
+  border-right: 0;
 }
 
 .health-plan-editor-sidebar-tabs {
@@ -2016,7 +2179,7 @@ body,
   display: grid;
   align-content: start;
   gap: 14px;
-  padding: 18px 16px 20px;
+  padding: 18px 24px 20px;
   overflow: auto;
 }
 
@@ -2026,10 +2189,19 @@ body,
 }
 
 .health-plan-editor-form-group label {
+  display: grid;
+  gap: 3px;
   color: #445a7d;
   font-size: 13px;
   line-height: 1.5;
   font-weight: 700;
+}
+
+.health-plan-editor-form-group label small {
+  color: rgba(95, 112, 138, 0.58);
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 400;
 }
 
 .health-plan-editor-library-card {
@@ -2075,6 +2247,461 @@ body,
   cursor: pointer;
 }
 
+.health-plan-editor-library-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 2px;
+  padding: 12px;
+  border: 1px solid rgba(220, 229, 243, 0.98);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.health-plan-editor-library-list header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.health-plan-editor-library-list header strong {
+  color: #1c2f4d;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 800;
+}
+
+.health-plan-editor-library-list header span {
+  color: #6f84a2;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.health-plan-editor-library-list-items {
+  display: grid;
+  gap: 8px;
+}
+
+.health-plan-editor-library-list-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid rgba(227, 235, 247, 0.98);
+  border-radius: 10px;
+  background: rgba(247, 250, 255, 0.95);
+}
+
+.health-plan-editor-library-list-item strong {
+  display: block;
+  color: #1d2f4a;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.health-plan-editor-library-list-item p {
+  margin: 2px 0 0;
+  color: #70819d;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.health-plan-editor-library-list-item button {
+  flex: 0 0 auto;
+  min-height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(210, 223, 244, 0.98);
+  border-radius: 8px;
+  background: #fff;
+  color: #577299;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.health-plan-editor-library-empty {
+  margin: 0;
+  color: #7f8fa9;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.health-plan-checkin-config {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 18px 24px 20px;
+  overflow: auto;
+}
+
+.health-plan-checkin-config-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.health-plan-checkin-config-title-wrap {
+  display: grid;
+  gap: 2px;
+}
+
+.health-plan-checkin-config-title-wrap h3 {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.health-plan-checkin-config-title-wrap p {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.health-plan-checkin-config-head button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 28px;
+  border: 0;
+  background: transparent;
+  color: #1677ff;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.health-plan-checkin-config-head button .anticon {
+  font-size: 16px;
+}
+
+.health-plan-checkin-config-list {
+  display: grid;
+  gap: 16px;
+}
+
+.health-plan-checkin-config-card {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  padding: 16px 58px 16px 16px;
+  border: 1px solid rgba(220, 229, 243, 0.98);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.health-plan-checkin-config-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.health-plan-checkin-config-card-title,
+.health-plan-checkin-config-card-actions {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.health-plan-checkin-config-card-actions {
+  position: absolute;
+  top: 15px;
+  right: 14px;
+  align-items: center;
+  gap: 4px;
+}
+
+.health-plan-checkin-config-card-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.health-plan-checkin-config-card-actions button:hover,
+.health-plan-checkin-config-card-actions button:focus-visible {
+  background: rgba(0, 0, 0, 0.04);
+  color: rgba(0, 0, 0, 0.88);
+}
+
+.health-plan-checkin-config-card-icon {
+  flex: 0 0 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.health-plan-checkin-config-card-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.health-plan-checkin-config-card-icon.type-diet {
+  background: rgba(255, 241, 224, 0.98);
+  color: #d48806;
+}
+
+.health-plan-checkin-config-card-icon.type-water,
+.health-plan-checkin-config-card-icon.type-sleep {
+  background: rgba(230, 244, 255, 0.98);
+  color: #1677ff;
+}
+
+.health-plan-checkin-config-card-icon.type-exercise {
+  background: rgba(225, 246, 237, 0.98);
+  color: #389e0d;
+}
+
+.health-plan-checkin-config-card-icon.type-psychology,
+.health-plan-checkin-config-card-icon.type-nutrition {
+  background: rgba(233, 241, 255, 0.98);
+  color: #2f54eb;
+}
+
+.health-plan-checkin-config-card-icon.type-weight,
+.health-plan-checkin-config-card-icon.type-waist,
+.health-plan-checkin-config-card-icon.type-hip,
+.health-plan-checkin-config-card-icon.type-bodyFat,
+.health-plan-checkin-config-card-icon.type-bloodPressure {
+  background: rgba(236, 239, 246, 0.98);
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.health-plan-checkin-config-card-icon.type-default {
+  background: rgba(236, 239, 246, 0.98);
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.health-plan-checkin-config-card-copy {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.health-plan-checkin-config-card-copy strong {
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.health-plan-checkin-config-card-copy p {
+  overflow: hidden;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  line-height: 1.7;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.health-plan-checkin-config-card-foot {
+  display: grid;
+  gap: 4px;
+}
+
+.health-plan-checkin-config-card-foot span {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.health-plan-checkin-config-empty {
+  padding: 14px 12px;
+  border: 1px dashed rgba(200, 213, 235, 0.98);
+  border-radius: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 13px;
+  line-height: 1.7;
+  background: rgba(249, 252, 255, 0.8);
+}
+
+.health-plan-checkin-modal .ant-modal-header {
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(232, 238, 247, 0.98);
+}
+
+.health-plan-checkin-modal-body {
+  display: grid;
+  gap: 22px;
+}
+
+.health-plan-checkin-modal-section {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+}
+
+.health-plan-checkin-modal-section label {
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  font-weight: 400;
+  text-align: right;
+}
+
+.health-plan-checkin-modal-section label em {
+  margin-right: 2px;
+  color: #ff4d4f;
+  font-style: normal;
+}
+
+.health-plan-checkin-modal-type-section {
+  align-items: start;
+}
+
+.health-plan-checkin-modal-type-section > label {
+  padding-top: 5px;
+}
+
+.health-plan-checkin-type-field {
+  display: grid;
+  gap: 6px;
+}
+
+.health-plan-checkin-tag-copy {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.health-plan-checkin-modal-strategy {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+}
+
+.health-plan-checkin-modal-strategy-section {
+  align-items: start;
+}
+
+.health-plan-checkin-modal-strategy-section > label {
+  padding-top: 1px;
+}
+
+.health-plan-checkin-modal-strategy h4 {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.health-plan-checkin-modal-strategy-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.health-plan-checkin-modal-sub-label {
+  width: 96px;
+  flex: 0 0 96px;
+  color: rgba(0, 0, 0, 0.65);
+  text-align: right;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.health-plan-checkin-modal-strategy-row .ant-input-number {
+  width: 60px;
+}
+
+.health-plan-checkin-modal-strategy-row .ant-radio-wrapper {
+  font-weight: 400;
+}
+
+.health-plan-checkin-push-strategy {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+}
+
+.health-plan-checkin-push-time-list {
+  display: grid;
+  gap: 10px;
+}
+
+.health-plan-checkin-push-switch-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+}
+
+.health-plan-checkin-push-divider {
+  height: 1px;
+  background: #f0f0f0;
+}
+
+.health-plan-checkin-push-hint {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.health-plan-checkin-push-time-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+}
+
+.health-plan-checkin-push-time-row > span {
+  min-width: 126px;
+}
+
+.health-plan-checkin-modal-summary {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: rgba(245, 247, 250, 0.98);
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
 .health-plan-editor-canvas-shell {
   position: relative;
   min-width: 0;
@@ -2082,6 +2709,45 @@ body,
   background:
     radial-gradient(circle at top right, rgba(112, 161, 255, 0.08) 0%, rgba(112, 161, 255, 0) 26%),
     linear-gradient(180deg, #f9fbff 0%, #f6f9ff 100%);
+}
+
+.health-plan-editor-canvas-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  border: 1px solid rgba(18, 36, 70, 0.92);
+}
+
+.health-plan-editor-sidebar-toggle {
+  position: absolute;
+  top: 18px;
+  left: -17px;
+  z-index: 9;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid rgba(201, 215, 238, 0.98);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.98);
+  color: #416080;
+  box-shadow: 0 10px 24px rgba(70, 93, 128, 0.14);
+  cursor: pointer;
+}
+
+.health-plan-editor-sidebar-toggle:hover,
+.health-plan-editor-sidebar-toggle:focus-visible {
+  color: #1f6feb;
+  border-color: rgba(120, 166, 255, 0.98);
+  background: #fff;
+}
+
+.health-plan-editor-shell.is-sidebar-collapsed .health-plan-editor-sidebar-toggle {
+  left: 14px;
 }
 
 .health-plan-editor-canvas-shell .react-flow {
@@ -2580,6 +3246,16 @@ body,
   padding: 0 2px;
 }
 
+.health-plan-node-time-picker.ant-picker {
+  width: 92px;
+  height: 28px;
+  border-radius: 6px;
+}
+
+.health-plan-node-time-picker .ant-picker-input > input {
+  font-size: 13px;
+}
+
 .health-plan-node-repeat-head .ant-switch {
   min-width: 32px;
   height: 18px;
@@ -2633,6 +3309,13 @@ body,
 .health-plan-node-repeat-body {
   display: grid;
   gap: 10px;
+}
+
+.health-plan-node-push-config {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(232, 237, 244, 0.96);
 }
 
 .health-plan-condition-list {
@@ -2791,6 +3474,8 @@ body,
   gap: 24px;
   flex: 1 1 auto;
   min-height: 0;
+  height: min(480px, calc(100vh - 180px));
+  max-height: min(640px, calc(100vh - 180px));
   overflow: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -3173,12 +3858,13 @@ body,
 }
 
 .health-checkin-card {
+  position: relative;
   display: grid;
-  gap: 14px;
+  gap: 12px;
   width: 100%;
   max-width: 260px;
-  min-height: 108px;
-  padding: 14px 14px 12px;
+  min-height: 124px;
+  padding: 16px 16px 14px;
   border: 1px solid rgba(229, 236, 246, 0.96);
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.38);
@@ -3186,40 +3872,51 @@ body,
 }
 
 .health-checkin-card-head {
-  display: flex;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
+  padding-right: 62px;
+}
+
+.health-checkin-card > .health-plan-status-tag {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.health-checkin-card-copy {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
 }
 
 .health-checkin-card-head h4 {
-  margin: 0 0 6px;
-  color: #1d2a43;
-  font-size: 14px;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 15px;
   line-height: 1.5;
   font-weight: 700;
 }
 
 .health-checkin-card-head p {
+  overflow: hidden;
   margin: 0;
-  color: #627593;
-  font-size: 12px;
-  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  line-height: 1.7;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.health-checkin-schedule {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #97a8c1;
+.health-checkin-empty {
+  grid-column: 1 / -1;
+  padding: 14px 12px;
+  border: 1px dashed rgba(200, 213, 235, 0.98);
+  border-radius: 12px;
+  color: rgba(0, 0, 0, 0.45);
   font-size: 13px;
-  line-height: 1.4;
-  font-weight: 600;
-}
-
-.health-checkin-schedule svg {
-  width: 16px;
-  height: 16px;
+  line-height: 1.6;
 }
 
 .health-plan-status-tag {
@@ -3506,6 +4203,10 @@ body,
   .health-plan-goals {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .health-plan-create-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 1100px) {
@@ -3558,6 +4259,10 @@ body,
 
   .health-checkin-grid,
   .health-plan-goals {
+    grid-template-columns: 1fr;
+  }
+
+  .health-plan-create-grid {
     grid-template-columns: 1fr;
   }
 
@@ -3948,19 +4653,28 @@ body,
     border-right: 0;
   }
 
-  .health-plan-editor-topbar,
-  .health-plan-editor-topbar-main,
-  .health-plan-editor-topbar-actions {
+  .health-plan-editor-page-header,
+  .health-plan-editor-page-header .patient-tab-page-header-main,
+  .health-plan-editor-page-actions {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .health-plan-editor-topbar-actions .ant-btn {
+  .health-plan-editor-page-actions .ant-btn {
     width: 100%;
   }
 
   .health-plan-editor-shell {
     grid-template-columns: 1fr;
+  }
+
+  .health-plan-checkin-modal-body {
+    gap: 18px;
+  }
+
+  .health-plan-checkin-modal-section {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
 
   .health-plan-editor-sidebar {

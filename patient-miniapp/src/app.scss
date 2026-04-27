@@ -50,6 +50,30 @@ page {
   letter-spacing: 0.02em;
 }
 
+.page-shell-nav-back {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  z-index: 2;
+  width: 64px;
+  height: 64px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: #17233d;
+}
+
+.page-shell-nav-back-icon {
+  display: block;
+  margin-top: -4px;
+  color: inherit;
+  font-size: 54px;
+  line-height: 1;
+  font-weight: 300;
+}
+
 .page-shell-nav-placeholder {
   position: absolute;
   right: 24px;

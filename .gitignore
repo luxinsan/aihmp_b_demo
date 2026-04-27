@@ -4,3 +4,6 @@ react-app/dist
 react-app/*.tsbuildinfo
 react-app/vite.config.js
 react-app/vite.config.d.ts
+patient-web-preview/node_modules
+patient-web-preview/dist
+patient-web-preview/*.tsbuildinfo

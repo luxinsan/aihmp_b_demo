@@ -1,6 +1,35 @@
 import type { Edge, Node, XYPosition } from "@xyflow/react";
 
-export type HealthPlanEditorSidebarTab = "plan-info" | "task-components" | "daily-checkins";
+export type HealthPlanEditorSidebarTab = "basic-info" | "health-checkins" | "summary-report";
+
+export type HealthPlanEditorCheckInType =
+  | "diet"
+  | "water"
+  | "exercise"
+  | "sleep"
+  | "psychology"
+  | "nutrition"
+  | "weight"
+  | "waist"
+  | "hip"
+  | "bodyFat"
+  | "bloodPressure";
+
+export type HealthPlanEditorCheckInFrequency = "daily" | "weekly";
+
+export type HealthPlanEditorCheckInPlanItem = {
+  id: string;
+  name: string;
+  type: HealthPlanEditorCheckInType;
+  description: string;
+  startDay: number;
+  endDay: number;
+  frequency: HealthPlanEditorCheckInFrequency;
+  timesPerPeriod: number;
+  pushEnabled: boolean;
+  pushDays: number[];
+  pushTimes: string[];
+};
 
 export type HealthPlanEditorPlanMeta = {
   name: string;
@@ -13,7 +42,6 @@ export type HealthPlanEditorPlanMeta = {
 
 export type HealthPlanEditorTaskCategory =
   | "education"
-  | "medication-checkin"
   | "summary-report"
   | "return-visit"
   | "follow-up";
@@ -36,6 +64,8 @@ export type HealthPlanEditorTaskNodeData = {
   repeatEnabled: boolean;
   repeatEveryDays: number | null;
   repeatCount: number | null;
+  pushEnabled?: boolean;
+  pushTime?: string | null;
   accent: "violet" | "blue" | "green" | "orange";
 };
 
@@ -61,6 +91,7 @@ export type HealthPlanEditorDraft = {
   meta: HealthPlanEditorPlanMeta;
   nodes: HealthPlanEditorNode[];
   edges: HealthPlanEditorEdge[];
+  checkInPlanItems: HealthPlanEditorCheckInPlanItem[];
 };
 
 export type HealthPlanEditorLibraryItem = {

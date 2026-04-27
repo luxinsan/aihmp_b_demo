@@ -89,4 +89,13 @@ export const healthPlanTasks: HealthPlanTask[] = [
     dateRange: "2025/04/15 至 2025/04/16",
     status: "未开始",
   },
+  {
+    id: "weekly-summary",
+    category: "阶段总结",
+    categoryTone: "purple",
+    title: "每周总结",
+    dateRange: "每周日 18:00 前",
+    status: "待查看",
+    detail: "查看本周阶段总结与执行建议",
+  },
 ];

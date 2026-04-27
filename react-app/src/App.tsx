@@ -31,7 +31,7 @@ import type { ActiveModal } from "./types/modal";
 import type { ReportRecord } from "./types/report";
 import { createDocumentDraft } from "./utils/documentDraft";
 import { removeReport, toggleReportPublishState } from "./utils/migrationWorkspace";
-import { initialHealthPlanEditorDraft } from "./data/healthPlanEditor";
+import { createDirectNewHealthPlanEditorDraft, initialHealthPlanEditorDraft } from "./data/healthPlanEditor";
 import type { HealthPlanEditorDraft } from "./types/healthPlanEditor";
 
 const QuestionnaireWorkspace = lazy(() =>
@@ -265,11 +265,6 @@ export default function App() {
               <PatientHealthPlanEditorStage
                 draft={healthPlanEditorDraft}
                 onBack={() => setHealthPlanSubview("overview")}
-                onPreview={(nextDraft) => {
-                  setHealthPlanEditorDraft(nextDraft);
-                  setHealthPlanSubview("overview");
-                  setActionMessage("已返回计划预览，当前编排内容已同步到草稿。");
-                }}
                 onSave={(nextDraft) => {
                   setHealthPlanEditorDraft(nextDraft);
                   setHealthPlanSubview("overview");
@@ -323,7 +318,16 @@ export default function App() {
                 <PatientCheckInRecordsStage onBack={() => setHealthPlanSubview("overview")} />
               ) : (
                 <PatientHealthPlanStage
+                  draft={healthPlanEditorDraft}
                   onEditPlan={() => setHealthPlanSubview("editor")}
+                  onCreateAiPlan={() => {
+                    setHealthPlanEditorDraft(initialHealthPlanEditorDraft);
+                    setHealthPlanSubview("editor");
+                  }}
+                  onCreateDirectPlan={() => {
+                    setHealthPlanEditorDraft(createDirectNewHealthPlanEditorDraft());
+                    setHealthPlanSubview("editor");
+                  }}
                   onOpenCheckInRecords={() => setHealthPlanSubview("checkin-records")}
                 />
               )

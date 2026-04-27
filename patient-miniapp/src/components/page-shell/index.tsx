@@ -8,6 +8,8 @@ type PageShellProps = {
   bottomSlot?: ReactNode;
   bodyClassName?: string;
   overlaySlot?: ReactNode;
+  showBack?: boolean;
+  onBack?: () => void;
 };
 
 function getNavigationMetrics() {
@@ -56,7 +58,26 @@ function joinClassNames(...classNames: Array<string | undefined>) {
   return classNames.filter(Boolean).join(" ");
 }
 
-export function PageShell({ children, title, bottomSlot, bodyClassName, overlaySlot }: PageShellProps) {
+function handleDefaultBack() {
+  const pages = typeof Taro.getCurrentPages === "function" ? Taro.getCurrentPages() : [];
+
+  if (pages.length > 1) {
+    Taro.navigateBack({ delta: 1 });
+    return;
+  }
+
+  Taro.switchTab({ url: "/pages/home/index" });
+}
+
+export function PageShell({
+  children,
+  title,
+  bottomSlot,
+  bodyClassName,
+  overlaySlot,
+  showBack,
+  onBack,
+}: PageShellProps) {
   const metrics = getNavigationMetrics();
   const navHeight = metrics.statusBarHeight + metrics.navBarHeight;
   const bottomHeight = bottomSlot ? 96 : 0;
@@ -72,6 +93,11 @@ export function PageShell({ children, title, bottomSlot, bodyClassName, overlayS
       <View className="page-shell-nav">
         <View className="page-shell-status-spacer" style={{ height: `${metrics.statusBarHeight}px` }} />
         <View className="page-shell-nav-bar" style={{ height: `${metrics.navBarHeight}px` }}>
+          {showBack ? (
+            <View className="page-shell-nav-back" onClick={onBack ?? handleDefaultBack}>
+              <Text className="page-shell-nav-back-icon">‹</Text>
+            </View>
+          ) : null}
           <Text className="page-shell-nav-title">{title}</Text>
           <View
             className="page-shell-nav-placeholder"

@@ -2,7 +2,7 @@ export type HealthPlanStatus = "执行中" | "已结束" | "未开始";
 
 export type HealthPlanCheckInStatus = "执行中" | "已结束" | "未开始";
 
-export type HealthPlanTaskStatus = "已完成" | "已终止" | "进行中" | "未开始";
+export type HealthPlanTaskStatus = "已完成" | "已终止" | "进行中" | "未开始" | "待查看";
 
 export type HealthPlanHeader = {
   title: string;
