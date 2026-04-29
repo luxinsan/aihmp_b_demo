@@ -491,6 +491,9 @@ svg {
 .actions {
   position: relative;
   z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .ai-button,
@@ -585,6 +588,76 @@ svg {
     0 26px 56px rgba(64, 94, 146, 0.18),
     0 8px 24px rgba(95, 118, 154, 0.08);
   backdrop-filter: blur(14px);
+}
+
+.report-header-action-button.ant-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--button-height);
+  padding-inline: 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.report-header-action-button.ant-btn-default {
+  border-color: #bfd4ff;
+  background: #f7faff;
+  color: #356dff;
+}
+
+.report-header-action-button.ant-btn-default:hover,
+.report-header-action-button.ant-btn-default:focus {
+  border-color: #91b5ff !important;
+  background: #f0f6ff !important;
+  color: #2458df !important;
+}
+
+.report-header-action-button-primary.ant-btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, #4b7dff 100%);
+  box-shadow:
+    0 8px 18px rgba(53, 109, 255, 0.18),
+    0 2px 6px rgba(53, 109, 255, 0.12);
+}
+
+.report-header-action-button-primary.ant-btn-primary:hover,
+.report-header-action-button-primary.ant-btn-primary:focus {
+  background: linear-gradient(135deg, #245eff 0%, #3f73ff 100%) !important;
+  box-shadow:
+    0 10px 20px rgba(53, 109, 255, 0.22),
+    0 3px 8px rgba(53, 109, 255, 0.14);
+}
+
+.report-header-action-button .spark-icon {
+  display: inline-flex;
+  color: currentColor;
+}
+
+.report-header-action-button .spark-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.report-header-action-menu .ant-dropdown-menu {
+  min-width: 220px;
+  padding: 8px;
+  border-radius: 10px;
+}
+
+.report-header-action-menu .ant-dropdown-menu-item {
+  min-height: 40px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.report-header-action-menu .ant-dropdown-menu-item-icon {
+  margin-inline-end: 10px;
 }
 
 .ai-menu-title {
@@ -4702,36 +4775,27 @@ body.loaded .document-panel {
 
 .toast-stack {
   position: fixed;
-  top: 22px;
-  right: 22px;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
   z-index: 40;
   display: grid;
-  gap: 12px;
+  justify-items: center;
+  pointer-events: none;
 }
 
 .toast {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  min-width: 240px;
-  padding: 14px 16px;
-  border: 1px solid rgba(216, 226, 239, 0.96);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: var(--shadow-md);
-  color: #2c3d5a;
-}
-
-.toast strong {
-  display: block;
-  margin-bottom: 6px;
-}
-
-.toast p {
-  margin: 0;
-  color: var(--text-muted);
+  min-width: 76px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.88);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
+  color: #fff;
   font-size: 13px;
+  line-height: 1.4;
+  font-weight: 600;
+  text-align: center;
+  backdrop-filter: blur(12px);
 }
 
 @keyframes marquee-slide {

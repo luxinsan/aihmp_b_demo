@@ -33,6 +33,10 @@ import { createDocumentDraft } from "./utils/documentDraft";
 import { removeReport, toggleReportPublishState } from "./utils/migrationWorkspace";
 import { createDirectNewHealthPlanEditorDraft, initialHealthPlanEditorDraft } from "./data/healthPlanEditor";
 import type { HealthPlanEditorDraft } from "./types/healthPlanEditor";
+import {
+  createManagementPlanReport,
+  type ManagementPlanReportKind,
+} from "./data/managementPlanReports";
 
 const QuestionnaireWorkspace = lazy(() =>
   import("./features/questionnaires/QuestionnaireWorkspace").then((module) => ({
@@ -138,6 +142,38 @@ export default function App() {
     }
   }, [activePatientTab, healthPlanSubview]);
 
+  useEffect(() => {
+    if (!actionMessage) {
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setActionMessage("");
+    }, 1800);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [actionMessage]);
+
+  function handleCreateManagementPlanReport(kind: ManagementPlanReportKind) {
+    const { draft, report } = createManagementPlanReport(kind);
+    const existingReport = reports.find((item) => item.id === report.id);
+    const existingDraftState = draftStates[report.id];
+
+    if (!existingReport || !existingDraftState?.dirty) {
+      registerGeneratedDraft(report.id, draft);
+      setReports((currentReports) => {
+        if (!existingReport) {
+          return [report, ...currentReports];
+        }
+
+        return currentReports.map((item) => (item.id === report.id ? report : item));
+      });
+    }
+
+    setSelectedReportId(report.id);
+    setOpenMenuId(null);
+  }
+
   const questionnaireWorkspace = (
     <Suspense fallback={<div className="questionnaire-loading-state">量表记录加载中...</div>}>
       <QuestionnaireWorkspace />
@@ -211,6 +247,7 @@ export default function App() {
       setReports((currentReports) =>
         toggleReportPublishState(currentReports, activeModal.reportId, nextStatus),
       );
+      setActionMessage(nextStatus === "已发布" ? "已发布" : "已撤销");
       setActiveModal(null);
       return;
     }
@@ -218,12 +255,13 @@ export default function App() {
     setReports((currentReports) => removeReport(currentReports, activeModal.reportId));
     handleRemoveDraftArtifacts(activeModal.reportId);
     handleRemoveGenerationArtifacts(activeModal.reportId);
+    setActionMessage("已删除");
     setActiveModal(null);
   }
 
   const toast = actionMessage ? (
     <div className="toast-stack" aria-live="polite">
-      <div className="toast-item">{actionMessage}</div>
+      <div className="toast">{actionMessage}</div>
     </div>
   ) : null;
 
@@ -268,7 +306,7 @@ export default function App() {
                 onSave={(nextDraft) => {
                   setHealthPlanEditorDraft(nextDraft);
                   setHealthPlanSubview("overview");
-                  setActionMessage("健康管理计划已保存。");
+                  setActionMessage("已保存");
                 }}
               />
             </section>
@@ -336,6 +374,7 @@ export default function App() {
                 actions={
                   <ReportPanelHeaderActions
                     generationSession={generationSession}
+                    onCreateManagementPlanReport={handleCreateManagementPlanReport}
                     onOpenGenerate={() => setActiveModal({ kind: "config" })}
                     onOpenGenerateForService={openConfigForService}
                     onOpenGenerationStage={handleShowGeneration}

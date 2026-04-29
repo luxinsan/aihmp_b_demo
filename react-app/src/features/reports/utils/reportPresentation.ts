@@ -185,5 +185,6 @@ export function getLockedActionLabel(action: "toggle-publish" | "delete") {
 }
 
 export function getLockedActionMessage(action: "toggle-publish" | "delete") {
-  return `当前后台生成仍在进行中，已阻止本次${action === "delete" ? "删除" : "发布状态切换"}操作。`;
+  void action;
+  return "生成中暂不可操作";
 }

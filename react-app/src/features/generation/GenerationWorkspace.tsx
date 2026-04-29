@@ -1766,7 +1766,7 @@ export function GenerationWorkspace({
           <header className="save-confirm-header">
             <div className="save-confirm-copy">
               <h2 id="saveConfirmTitle">确认保存</h2>
-              <p>确认保存当前编辑内容，并返回报告文档列表？</p>
+              <p>确认保存当前编辑内容？</p>
             </div>
             <button
               className="modal-close"
@@ -1783,7 +1783,7 @@ export function GenerationWorkspace({
           </header>
 
           <div className="save-confirm-body">
-            <p>保存后将同步更新当前文档，并退出编辑页返回列表。</p>
+            <p>保存后将同步更新当前文档。</p>
           </div>
 
           <footer className="save-confirm-footer">

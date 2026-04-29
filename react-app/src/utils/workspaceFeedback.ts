@@ -1,61 +1,73 @@
 type ConfirmAction = "toggle-publish" | "delete";
 
 export function getGenerationCompletedMessage(reportTitle: string) {
-  return `${reportTitle} 已生成完成，可继续审阅和编辑。`;
+  void reportTitle;
+  return "已完成";
 }
 
 export function getGenerationStartedMessage(reportTitle: string) {
-  return `${reportTitle} 已进入生成流程。`;
+  void reportTitle;
+  return "已开始";
 }
 
 export function getGenerationStoppedMessage() {
-  return "当前生成流程已停止。";
+  return "已停止";
 }
 
 export function getGenerationReturnedMessage(reportTitle: string, completed: boolean) {
-  return completed
-    ? `${reportTitle} 已保存并返回报告文档列表。`
-    : `${reportTitle} 已返回报告文档列表，当前草稿仍然保留。`;
+  void reportTitle;
+  return completed ? "已保存" : "已返回";
 }
 
 export function getGenerationBackgroundedMessage(reportTitle: string) {
-  return `${reportTitle} 已转入后台生成。`;
+  void reportTitle;
+  return "已转后台";
 }
 
 export function getGenerationDismissedMessage(reportTitle: string) {
-  return `${reportTitle} 的任务记录已移除。`;
+  void reportTitle;
+  return "已移除";
 }
 
 export function getGenerationClearedMessage(count: number) {
-  return `已清理 ${count} 条已完成或已终止的任务记录。`;
+  void count;
+  return "已清理";
 }
 
 export function getEnteredEditMessage(reportTitle: string) {
-  return `${reportTitle} 已进入编辑。`;
+  void reportTitle;
+  return "已进入编辑";
 }
 
 export function getSavedEditMessage(reportTitle: string) {
-  return `${reportTitle} 已保存，并已返回报告文档列表。`;
+  void reportTitle;
+  return "已保存";
 }
 
 export function getClosedEditMessage(reportTitle: string) {
-  return `${reportTitle} 已退出编辑，当前改动仍保留在草稿中。`;
+  void reportTitle;
+  return "已退出";
 }
 
 export function getDiscardedEditMessage(reportTitle: string) {
-  return `${reportTitle} 的未保存改动已放弃，并返回报告列表。`;
+  void reportTitle;
+  return "已放弃";
 }
 
 export function getLockedConfirmMessage(reportTitle: string, action: ConfirmAction) {
-  return `${reportTitle} 当前后台生成仍在进行中，已阻止本次${action === "delete" ? "删除" : "发布状态切换"}操作。`;
+  void reportTitle;
+  void action;
+  return "操作受限";
 }
 
 export function getPublishedMessage(reportTitle: string, nextStatus: string) {
-  return `${reportTitle} 状态已更新为 ${nextStatus}。`;
+  void reportTitle;
+  return nextStatus === "已发布" ? "已发布" : "已撤销";
 }
 
 export function getDeletedMessage(reportTitle: string, hasDirtyDraft: boolean, hasGenerationRecord: boolean) {
-  return `${reportTitle} 已移除${hasDirtyDraft ? "，关联草稿也已同步清理" : ""}${
-    hasGenerationRecord ? "，任务记录也已一并移除" : ""
-  }。`;
+  void reportTitle;
+  void hasDirtyDraft;
+  void hasGenerationRecord;
+  return "已删除";
 }

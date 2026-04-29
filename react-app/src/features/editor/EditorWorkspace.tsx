@@ -370,7 +370,7 @@ export function EditorWorkspace({
                 <h2 id="editorConfirmTitle">{pendingAction === "save" ? "确认保存" : "确认退出"}</h2>
                 <p>
                   {pendingAction === "save"
-                    ? "确认保存当前编辑内容，并返回报告文档列表？"
+                    ? "确认保存当前编辑内容？"
                     : "当前仍有未保存改动，确认退出编辑吗？"}
                 </p>
               </div>
@@ -385,7 +385,7 @@ export function EditorWorkspace({
             <div className="save-confirm-body">
               <p>
                 {pendingAction === "save"
-                  ? "保存后将同步更新当前文档，并退出编辑页返回列表。"
+                  ? "保存后将同步更新当前文档。"
                   : "退出后当前未保存改动仍会保留，你可以稍后回来继续编辑。"}
               </p>
             </div>
