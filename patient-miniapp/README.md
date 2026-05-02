@@ -11,7 +11,8 @@ patient-miniapp/
     app.tsx               小程序入口
     app.config.ts         路由与 tabBar
     components/           小程序侧页面组件
-    pages/                首页 / 健康计划 / 打卡记录
+    docs/                 组件使用规范
+    pages/                首页 / 健康计划占位页 / 我的
     shared/               对 shared/ 的单一桥接层
 ```
 
@@ -33,8 +34,19 @@ patient-miniapp/
 ## 当前页面
 
 - `pages/home`：首页
-- `pages/health-plan`：健康计划
-- `pages/check-ins`：打卡记录
+- `pages/health-plan`：健康计划 tab 占位页，当前仅保留路由与 tabBar 入口，业务页面待重建
+- `pages/mine`：我的
+
+## 组件使用规范
+
+后续新页面和页面整改必须先阅读 [`docs/component-guidelines.md`](./docs/component-guidelines.md)。
+
+核心原则：
+
+- 页面必须从 `PageShell` 开始，不得自行实现顶栏、状态栏、安全区和滚动壳。
+- 页面优先组合 `PageContainer`、`PageSection`、`PageSectionHeader`、`PageListItem`、`PageMetricCard`、`PageTaskCard` 等组件。
+- 字号、间距、圆角和颜色优先使用 `src/styles/_tokens.scss`，不要在页面内重新写一套大字号和卡片规范。
+- 已有组件不能满足时，先扩展 `src/components/`，再改页面。
 
 ## 脚本
 
@@ -50,7 +62,7 @@ npm run dev:weapp
 
 ## 浏览器预览
 
-患者端也支持通过 `Taro H5` 在浏览器中预览，仍然继续复用仓库根目录的 `shared/` 数据层。
+患者端也支持通过 `Taro H5` 在浏览器中预览，仍然继续复用仓库根目录的 `shared/` 数据层。这个 H5 预览是 C 端小程序的唯一浏览器预览来源，实际页面、路由、顶栏、tabBar、样式和交互都来自小程序源码。
 
 ```bash
 cd patient-miniapp
@@ -58,7 +70,11 @@ npm install
 npm run dev:h5
 ```
 
-启动后使用 Taro H5 本地地址在浏览器打开。
+固定本地地址：
+
+```text
+http://localhost:5175/
+```
 
 如果只做构建校验，可执行：
 
@@ -67,7 +83,21 @@ cd patient-miniapp
 npm run build:h5
 ```
 
-这个 H5 预览链路仅用于开发和演示，正式运行目标仍然是微信小程序。
+如果需要确认没有历史构建残留，使用 clean 构建：
+
+```bash
+cd patient-miniapp
+npm run build:h5:clean
+npm run build:weapp:clean
+```
+
+这个 H5 预览链路仅用于开发和演示，正式运行目标仍然是微信小程序。不要再把 C 端页面复制到 `patient-web-preview` 里维护第二套交互。
+
+## 和外部预览壳的边界
+
+`patient-miniapp` 负责生产小程序。所有患者端页面、组件、样式、路由、tabBar、自定义顶栏、数据消费和业务交互都只在这个目录内构建。
+
+`../patient-web-preview` 只负责外部入口和 iframe 承载小程序 H5 预览。它可以模拟手机桌面、微信入口和演示容器，但不得 import `patient-miniapp/src`，不得复刻小程序页面 DOM，不得覆盖小程序 CSS，也不得决定小程序字号、导航高度或安全区。
 
 ## 版本说明
 

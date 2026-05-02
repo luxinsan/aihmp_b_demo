@@ -12,9 +12,14 @@ export default defineConfig<"webpack5">(async (merge, { mode }) => {
       375: 2
     },
     sourceRoot: "src",
-    outputRoot: "dist",
+    outputRoot: process.env.TARO_ENV === "h5" ? "dist-h5" : "dist",
     framework: "react",
-    compiler: "webpack5",
+    compiler: {
+      type: "webpack5",
+      prebundle: {
+        enable: false
+      }
+    },
     plugins: ["@tarojs/plugin-platform-weapp"],
     alias: {
       "@": resolve(__dirname, "..", "src")
@@ -46,6 +51,14 @@ export default defineConfig<"webpack5">(async (merge, { mode }) => {
     h5: {
       publicPath: "/",
       staticDirectory: "static",
+      devServer: {
+        host: "0.0.0.0",
+        port: 5175,
+        hot: false,
+        client: {
+          overlay: false
+        }
+      },
       compile: {
         include: [resolve(__dirname, "..", "..", "shared")]
       }

@@ -7,3 +7,4 @@ react-app/vite.config.d.ts
 patient-web-preview/node_modules
 patient-web-preview/dist
 patient-web-preview/*.tsbuildinfo
+patient-miniapp/dist-h5

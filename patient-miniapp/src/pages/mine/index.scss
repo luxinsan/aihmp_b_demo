@@ -1,9 +1,75 @@
+@use "../../styles/tokens" as *;
+
 .mine-page {
   min-height: 1px;
 }
 
-.mine-page-profile {
-  min-height: 220px;
+.mine-page-profile-main {
+  display: flex;
+  align-items: center;
+  gap: $mini-space-xl;
+}
+
+.mine-page-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: $mini-radius-lg;
+  background: linear-gradient(135deg, #1f6feb 0%, #7db4ff 100%);
+  color: #ffffff;
+  font-size: $mini-font-display;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.mine-page-profile-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: $mini-space-xs;
+}
+
+.mine-page-profile-name {
+  display: block;
+  color: $mini-color-text;
+  font-size: $mini-font-title;
+  line-height: $mini-line-normal;
+  font-weight: 700;
+}
+
+.mine-page-profile-meta,
+.mine-page-profile-code {
+  display: block;
+  color: $mini-color-text-secondary;
+  font-size: $mini-font-sm;
+  line-height: $mini-line-normal;
+}
+
+.mine-page-profile-phone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $mini-space-lg;
+  margin-top: $mini-space-2xl;
+  padding-top: $mini-space-xl;
+  border-top: 1px solid rgba(214, 222, 233, 0.72);
+}
+
+.mine-page-profile-phone-label {
+  color: $mini-color-text-tertiary;
+  font-size: $mini-font-sm;
+  line-height: $mini-line-normal;
+}
+
+.mine-page-profile-phone-value {
+  color: $mini-color-text;
+  font-size: $mini-font-sm;
+  line-height: $mini-line-normal;
+  font-weight: 600;
 }
 
 .mine-page-shortcut-row {
@@ -11,13 +77,31 @@
 }
 
 .mine-page-shortcut-cell {
-  min-height: 164px;
+  display: flex;
+  min-width: 0;
+  min-height: 80px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $mini-space-sm;
+  padding: $mini-space-xl $mini-space-md;
+  box-sizing: border-box;
 }
 
-.mine-page-list {
-  min-height: 360px;
+.mine-page-shortcut-value {
+  color: $mini-color-text;
+  font-size: $mini-font-xl;
+  line-height: $mini-line-tight;
+  font-weight: 700;
 }
 
-.mine-page-support {
-  min-height: 220px;
+.mine-page-shortcut-label {
+  color: $mini-color-text-tertiary;
+  font-size: $mini-font-sm;
+  line-height: $mini-line-normal;
+  text-align: center;
+}
+
+.mine-page-support-action {
+  min-width: 108px;
 }

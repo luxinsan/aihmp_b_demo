@@ -1,13 +1,73 @@
 import {
   checkInRecords,
-  healthPlanCheckIns,
-  healthPlanHeader,
-  healthPlanTasks,
-  initialReports,
   patientProfile,
+  vitalMetrics,
 } from "../mock";
 
-export const patientMiniappProfile = {
+type PatientMiniappProfile = {
+  name: string;
+  maskedName: string;
+  avatar: string;
+  gender: string;
+  age: number;
+  patientCode: string;
+  phone: string;
+};
+
+type PatientMiniappPatient = {
+  id: string;
+  name: string;
+  gender: string;
+  age: number;
+  relation: string;
+};
+
+type PatientMiniappNameValueItem = {
+  id: string;
+  label: string;
+  value: string;
+};
+
+type PatientMiniappHomePageData = {
+  teams: Array<{
+    id: string;
+    name: string;
+  }>;
+  patients: PatientMiniappPatient[];
+  services: Array<{
+    id: string;
+    name: string;
+    icon: string;
+  }>;
+  metrics: Array<{
+    id: string;
+    name: string;
+    value: string;
+    unit: string;
+  }>;
+  tasksByPatientId: Record<
+    string,
+    Array<{
+      id: string;
+      title: string;
+      desc: string;
+      status: string;
+    }>
+  >;
+};
+
+type PatientMiniappMinePageData = {
+  profile: PatientMiniappProfile;
+  shortcuts: PatientMiniappNameValueItem[];
+  accountItems: PatientMiniappNameValueItem[];
+  support: {
+    title: string;
+    description: string;
+    actionText: string;
+  };
+};
+
+const patientMiniappProfile = {
   name: patientProfile.identity.name,
   maskedName: patientProfile.identity.maskedName,
   avatar: patientProfile.identity.avatar,
@@ -15,106 +75,123 @@ export const patientMiniappProfile = {
   age: patientProfile.identity.age,
   patientCode: patientProfile.identity.code,
   phone: patientProfile.identity.phone,
-};
+} satisfies PatientMiniappProfile;
+
+const patientMiniappPatients = [
+  {
+    id: "p-001",
+    name: patientProfile.identity.name,
+    gender: patientProfile.identity.gender,
+    age: patientProfile.identity.age,
+    relation: "本人",
+  },
+  {
+    id: "p-002",
+    name: "李四",
+    gender: "女",
+    age: 63,
+    relation: "配偶",
+  },
+  {
+    id: "p-003",
+    name: "王五",
+    gender: "男",
+    age: 71,
+    relation: "父亲",
+  },
+] satisfies PatientMiniappPatient[];
 
 export const patientMiniappHomePageData = {
-  profile: patientMiniappProfile,
-  welcomeTitle: "患者健康空间",
-  welcomeSummary: "查看最近健康计划、打卡执行情况和健康提醒。",
-  stats: [
+  teams: [
+    { id: "team-chronic", name: "瑞宁慢病管理团队" },
+    { id: "team-follow-up", name: "康衡随访管理团队" },
+    { id: "team-rehab", name: "嘉和术后康复团队" },
+  ],
+  patients: patientMiniappPatients,
+  services: [
+    { id: "pre-consult", name: "预问诊", icon: "问" },
+    { id: "priority", name: "精准加号", icon: "号" },
+    { id: "package", name: "健康服务包", icon: "包" },
+    { id: "assessment", name: "健康评估", icon: "评" },
+  ],
+  metrics: [
     {
-      id: "plan-progress",
-      label: "计划进度",
-      value: `${healthPlanTasks.filter((task) => task.status === "已完成").length}/${healthPlanTasks.length}`,
-      helper: "已完成任务",
+      id: "weight",
+      name: "体重",
+      value: vitalMetrics.find((metric) => metric.label === "体重")?.value.replace("kg", "") ?? "--",
+      unit: "kg",
     },
     {
-      id: "active-checkins",
-      label: "执行中打卡",
-      value: String(healthPlanCheckIns.filter((item) => item.status === "执行中").length),
-      helper: "当前进行中",
+      id: "glucose",
+      name: "血糖",
+      value: "5.8",
+      unit: "mmol/L",
     },
     {
-      id: "recent-records",
-      label: "最近打卡",
-      value: String(checkInRecords.length),
-      helper: "累计 mock 记录",
+      id: "pressure",
+      name: "血压",
+      value: vitalMetrics.find((metric) => metric.label === "血压")?.value.replace("mmHg", "") ?? "--",
+      unit: "mmHg",
     },
   ],
-  upcomingCheckIns: healthPlanCheckIns.slice(0, 3).map((item) => ({
-    id: item.id,
-    title: item.title,
-    schedule: item.schedule,
-    status: item.status,
-  })),
-  latestCheckIn: checkInRecords[0]
-    ? {
-        id: checkInRecords[0].id,
-        title: checkInRecords[0].title,
-        type: checkInRecords[0].type,
-        submittedAt: checkInRecords[0].submittedAt,
-        summary: checkInRecords[0].summary,
-      }
-    : null,
-  latestReports: initialReports.slice(0, 2).map((report) => ({
-    id: report.id,
-    title: report.title,
-    date: report.date,
-    status: report.status,
-  })),
-};
-
-export const patientMiniappHealthPlanPageData = {
-  profile: patientMiniappProfile,
-  overview: {
-    title: healthPlanHeader.title,
-    status: healthPlanHeader.status,
-    manager: healthPlanHeader.manager,
-    description: healthPlanHeader.description,
-    summary: healthPlanHeader.summary,
-    progressText: `已完成 ${healthPlanTasks.filter((task) => task.status === "已完成").length} / ${healthPlanTasks.length}`,
+  tasksByPatientId: {
+    "p-001": [
+      { id: "task-001", title: "早餐后血糖记录", desc: "今日 09:30 前完成一次录入", status: "待完成" },
+      { id: "task-002", title: "降压药服药确认", desc: "午间用药后确认服药状态", status: "进行中" },
+      { id: "task-003", title: "本周随访问卷", desc: "还剩 4 个问题待填写", status: "未开始" },
+    ],
+    "p-002": [
+      { id: "task-004", title: "晨起血压打卡", desc: "今日需补充晨间血压数据", status: "待完成" },
+      { id: "task-005", title: "饮食记录上传", desc: "晚餐后补充今日饮食照片", status: "进行中" },
+      { id: "task-006", title: "步行训练提醒", desc: "建议完成 20 分钟轻量步行", status: "未开始" },
+    ],
+    "p-003": [
+      { id: "task-007", title: "空腹血糖复测", desc: "明早 08:00 前完成并上传", status: "待完成" },
+      { id: "task-008", title: "睡前血压确认", desc: "睡前补充一次血压测量", status: "未开始" },
+      { id: "task-009", title: "康复训练反馈", desc: "今日训练后记录体感反馈", status: "进行中" },
+    ],
   },
-  checkIns: healthPlanCheckIns.map((item) => ({
-    id: item.id,
-    title: item.title,
-    description: item.description,
-    schedule: item.schedule,
-    status: item.status,
-  })),
-  tasks: healthPlanTasks.map((task) => ({
-    id: task.id,
-    category: task.category,
-    categoryTone: task.categoryTone,
-    title: task.title,
-    dateRange: task.dateRange,
-    status: task.status,
-    detail: task.detail ?? "",
-  })),
-};
+} satisfies PatientMiniappHomePageData;
 
-export const patientMiniappCheckInPageData = {
+export const patientMiniappMinePageData = {
   profile: patientMiniappProfile,
-  summary: {
-    total: checkInRecords.length,
-    dietCount: checkInRecords.filter((record) => record.type === "饮食打卡").length,
-    exerciseCount: checkInRecords.filter((record) => record.type === "运动打卡").length,
-    medicationCount: checkInRecords.filter((record) => record.type === "用药打卡").length,
-    vitalsCount: checkInRecords.filter((record) => record.type === "体征打卡").length,
+  shortcuts: [
+    {
+      id: "plan",
+      label: "我的计划",
+      value: "--",
+    },
+    {
+      id: "checkin",
+      label: "打卡记录",
+      value: `${checkInRecords.length} 条`,
+    },
+    {
+      id: "service",
+      label: "服务记录",
+      value: `${checkInRecords.length} 次`,
+    },
+  ],
+  accountItems: [
+    {
+      id: "patient",
+      label: "就诊人管理",
+      value: `${patientMiniappPatients.length} 人`,
+    },
+    {
+      id: "notification",
+      label: "消息通知",
+      value: "已开启",
+    },
+    {
+      id: "privacy",
+      label: "隐私与授权",
+      value: "查看",
+    },
+  ],
+  support: {
+    title: "服务支持",
+    description: "有打卡执行或服务订单问题时，可联系专属健康管家。",
+    actionText: "联系健康管家",
   },
-  records: checkInRecords.map((record) => ({
-    id: record.id,
-    date: record.date,
-    submittedAt: record.submittedAt,
-    title: record.title,
-    type: record.type,
-    summary: record.summary,
-    detail:
-      record.type === "饮食打卡"
-        ? record.doctorComment
-        : record.type === "运动打卡"
-          ? record.coachComment
-          : record.type === "用药打卡"
-            ? record.effectFeedback
-            : record.note,
-  })),
-};
+} satisfies PatientMiniappMinePageData;

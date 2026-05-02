@@ -1,6 +1,4 @@
 export {
-  patientMiniappCheckInPageData,
-  patientMiniappHealthPlanPageData,
   patientMiniappHomePageData,
-  patientMiniappProfile,
+  patientMiniappMinePageData,
 } from "../../../shared/adapters/patient-miniapp";

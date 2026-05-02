@@ -4,9 +4,12 @@
   "version": "0.1.0",
   "scripts": {
     "dev:weapp": "taro build --type weapp --watch",
+    "clean": "node -e \"const fs=require('fs'); for (const dir of ['dist','dist-h5']) fs.rmSync(dir,{recursive:true,force:true});\"",
     "build:weapp": "taro build --type weapp",
+    "build:weapp:clean": "npm run clean && npm run build:weapp",
     "dev:h5": "taro build --type h5 --watch",
-    "build:h5": "taro build --type h5"
+    "build:h5": "taro build --type h5",
+    "build:h5:clean": "npm run clean && npm run build:h5"
   },
   "dependencies": {
     "@tarojs/components": "4.1.6",

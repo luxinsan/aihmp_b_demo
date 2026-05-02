@@ -2,14 +2,14 @@ export default defineAppConfig({
   pages: [
     "pages/home/index",
     "pages/health-plan/index",
-    "pages/mine/index",
-    "pages/patient-profile/index"
+    "pages/mine/index"
   ],
   window: {
     navigationStyle: "custom",
     backgroundColor: "#f4f7fb",
     backgroundTextStyle: "light"
   },
+  lazyCodeLoading: "requiredComponents",
   tabBar: {
     color: "#7a8699",
     selectedColor: "#1f6feb",

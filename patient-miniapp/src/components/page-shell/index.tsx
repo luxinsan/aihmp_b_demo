@@ -8,19 +8,21 @@ type PageShellProps = {
   bottomSlot?: ReactNode;
   bodyClassName?: string;
   overlaySlot?: ReactNode;
-  showBack?: boolean;
-  onBack?: () => void;
 };
 
 function getNavigationMetrics() {
-  const systemInfo = Taro.getSystemInfoSync();
-  const statusBarHeight = systemInfo.statusBarHeight ?? 20;
+  if (process.env.TARO_ENV === "h5") {
+    return {
+      navBarHeight: 44,
+      statusBarHeight: 0,
+    };
+  }
+
+  const statusBarHeight = Taro.getWindowInfo().statusBarHeight ?? 20;
   const fallbackNavHeight = 44;
 
   if (typeof Taro.getMenuButtonBoundingClientRect !== "function") {
     return {
-      capsuleHeight: 32,
-      capsuleWidth: 88,
       navBarHeight: fallbackNavHeight,
       statusBarHeight,
     };
@@ -30,8 +32,6 @@ function getNavigationMetrics() {
     const capsuleRect = Taro.getMenuButtonBoundingClientRect();
     if (!capsuleRect?.height) {
       return {
-        capsuleHeight: 32,
-        capsuleWidth: 88,
         navBarHeight: fallbackNavHeight,
         statusBarHeight,
       };
@@ -39,15 +39,11 @@ function getNavigationMetrics() {
 
     const topGap = capsuleRect.top - statusBarHeight;
     return {
-      capsuleHeight: capsuleRect.height,
-      capsuleWidth: capsuleRect.width,
       navBarHeight: capsuleRect.height + topGap * 2,
       statusBarHeight,
     };
   } catch {
     return {
-      capsuleHeight: 32,
-      capsuleWidth: 88,
       navBarHeight: fallbackNavHeight,
       statusBarHeight,
     };
@@ -58,16 +54,7 @@ function joinClassNames(...classNames: Array<string | undefined>) {
   return classNames.filter(Boolean).join(" ");
 }
 
-function handleDefaultBack() {
-  const pages = typeof Taro.getCurrentPages === "function" ? Taro.getCurrentPages() : [];
-
-  if (pages.length > 1) {
-    Taro.navigateBack({ delta: 1 });
-    return;
-  }
-
-  Taro.switchTab({ url: "/pages/home/index" });
-}
+const BOTTOM_SLOT_RESERVE_HEIGHT = 72;
 
 export function PageShell({
   children,
@@ -75,47 +62,32 @@ export function PageShell({
   bottomSlot,
   bodyClassName,
   overlaySlot,
-  showBack,
-  onBack,
 }: PageShellProps) {
   const metrics = getNavigationMetrics();
   const navHeight = metrics.statusBarHeight + metrics.navBarHeight;
-  const bottomHeight = bottomSlot ? 96 : 0;
 
   return (
     <View
-      className="page-shell"
+      className={joinClassNames(
+        "page-shell",
+        bottomSlot ? "has-bottom-slot" : undefined,
+      )}
       style={{
         paddingTop: `${navHeight}px`,
-        paddingBottom: bottomSlot ? `${bottomHeight}px` : undefined,
+        paddingBottom: bottomSlot ? `calc(env(safe-area-inset-bottom) + ${BOTTOM_SLOT_RESERVE_HEIGHT}px)` : undefined,
       }}
     >
       <View className="page-shell-nav">
         <View className="page-shell-status-spacer" style={{ height: `${metrics.statusBarHeight}px` }} />
         <View className="page-shell-nav-bar" style={{ height: `${metrics.navBarHeight}px` }}>
-          {showBack ? (
-            <View className="page-shell-nav-back" onClick={onBack ?? handleDefaultBack}>
-              <Text className="page-shell-nav-back-icon">‹</Text>
-            </View>
-          ) : null}
           <Text className="page-shell-nav-title">{title}</Text>
-          <View
-            className="page-shell-nav-placeholder"
-            style={{
-              height: `${metrics.capsuleHeight}px`,
-              width: `${metrics.capsuleWidth}px`,
-            }}
-          />
         </View>
       </View>
       <View className={joinClassNames("page-shell-body", bodyClassName)}>
         <View className="page-shell-scroll">
-          {children ?? (
-            <View className="page-shell-empty-state">
-              <Text className="page-shell-empty-title">{title}</Text>
-              <Text className="page-shell-empty-text">当前页面内容区已预留，后续模块在这个容器内继续构建。</Text>
-            </View>
-          )}
+          <View className="page-shell-scroll-content">
+            {children}
+          </View>
         </View>
       </View>
       {overlaySlot ? <View className="page-shell-overlay">{overlaySlot}</View> : null}
