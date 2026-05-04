@@ -9,8 +9,8 @@ patient-web-preview -> patient-mobile-h5
 
 ## 当前主链路
 
-- `patient-mobile-h5`：C 端移动 H5 主实现，负责患者端页面、tab、组件、样式、mock 和页面交互。
-- `patient-web-preview`：外部预览壳，只负责手机桌面、微信入口、容器 chrome 和 iframe 承载。
+- `patient-mobile-h5`：C 端移动 H5 主实现，负责患者端页面、状态栏、标题栏、微信胶囊、tab、组件、样式、mock 和页面交互。
+- `patient-web-preview`：外部预览壳，只负责手机桌面、微信入口、真机外壳和 iframe 承载。
 - `react-app`：管理端，不参与 C 端移动页面渲染。
 
 ## 已删除的旧链路
@@ -21,13 +21,13 @@ patient-web-preview -> patient-mobile-h5
 
 ## 改动归属
 
-改 C 端页面、tabBar、页面组件、页面 mock：
+改 C 端页面、状态栏、标题栏、微信胶囊、tabBar、页面组件、页面 mock：
 
 ```text
 patient-mobile-h5
 ```
 
-改手机桌面入口、微信入口、胶囊按钮、iframe 地址、加载失败提示：
+改手机桌面入口、微信入口、真机外壳、iframe 地址、加载失败提示：
 
 ```text
 patient-web-preview

@@ -20,8 +20,6 @@
   --mobile-page-gap: 14px;
   --mobile-page-x: 16px;
   --van-primary-color: var(--mobile-color-primary);
-  --van-nav-bar-title-font-size: 17px;
-  --van-nav-bar-title-text-color: var(--mobile-color-text);
   --van-tabbar-item-active-color: var(--mobile-color-primary);
   --van-action-sheet-item-font-size: 16px;
   --van-cell-font-size: 15px;

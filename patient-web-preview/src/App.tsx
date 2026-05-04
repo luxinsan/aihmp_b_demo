@@ -36,19 +36,52 @@ function getPatientPreviewUrl() {
   return queryUrl?.trim() || defaultPatientPreviewUrl;
 }
 
+function formatBeijingTime() {
+  return new Intl.DateTimeFormat("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    hourCycle: "h23",
+  }).format(new Date());
+}
+
 function PreviewStatusBar({ tone = "dark" }: { tone?: "dark" | "light" }) {
+  const [beijingTime, setBeijingTime] = useState(formatBeijingTime);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setBeijingTime(formatBeijingTime());
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
   return (
     <div className={`preview-status ${tone === "light" ? "is-light" : "is-dark"}`}>
-      <span>09:41</span>
+      <span>{beijingTime}</span>
       <span className="preview-status-indicators" aria-label="系统状态">
-        <i className="preview-status-signal" aria-hidden="true">
-          <b />
-          <b />
-          <b />
-          <b />
-        </i>
-        <i className="preview-status-wifi" aria-hidden="true" />
-        <i className="preview-status-battery" aria-hidden="true" />
+        <svg className="preview-status-icon preview-status-signal" viewBox="0 0 18 12" aria-hidden="true" focusable="false">
+          <rect x="0" y="7" width="3" height="5" rx="1.5" />
+          <rect x="5" y="5" width="3" height="7" rx="1.5" />
+          <rect x="10" y="2.5" width="3" height="9.5" rx="1.5" />
+          <rect x="15" y="0" width="3" height="12" rx="1.5" />
+        </svg>
+        <svg className="preview-status-icon preview-status-wifi" viewBox="0 0 18 12" aria-hidden="true" focusable="false">
+          <path
+            d="M1.4 3.7C5.5.3 12.5.3 16.6 3.7M4.5 6.5c2.5-2 6.5-2 9 0M7.4 9.2c.9-.7 2.3-.7 3.2 0"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+          />
+          <circle cx="9" cy="11" r="1.1" />
+        </svg>
+        <svg className="preview-status-icon preview-status-battery" viewBox="0 0 26 12" aria-hidden="true" focusable="false">
+          <rect x="1" y="1.5" width="21" height="9" rx="2.5" fill="none" stroke="currentColor" strokeWidth="2" />
+          <rect x="4" y="4" width="15" height="4" rx="1.4" />
+          <path d="M24 4.2v3.6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
+        </svg>
       </span>
     </div>
   );
@@ -56,14 +89,12 @@ function PreviewStatusBar({ tone = "dark" }: { tone?: "dark" | "light" }) {
 
 export default function App() {
   const [surface, setSurface] = useState<PreviewSurface>(getInitialSurface);
-  const [isCapsuleMenuOpen, setIsCapsuleMenuOpen] = useState(false);
   const [isPatientFrameLoaded, setIsPatientFrameLoaded] = useState(false);
   const [patientFrameAvailability, setPatientFrameAvailability] = useState<PatientFrameAvailability>("idle");
   const patientPreviewUrl = useMemo(getPatientPreviewUrl, []);
 
   function selectSurface(nextSurface: PreviewSurface) {
     setSurface(nextSurface);
-    setIsCapsuleMenuOpen(false);
 
     if (nextSurface === "patient") {
       setIsPatientFrameLoaded(false);
@@ -103,6 +134,17 @@ export default function App() {
       controller.abort();
     };
   }, [patientPreviewUrl, surface]);
+
+  useEffect(() => {
+    function handlePatientMessage(event: MessageEvent) {
+      if (event.data?.type === "aihmp:patient-close") {
+        selectSurface("wechat");
+      }
+    }
+
+    window.addEventListener("message", handlePatientMessage);
+    return () => window.removeEventListener("message", handlePatientMessage);
+  }, []);
 
   return (
     <main className="preview-shell">
@@ -188,7 +230,6 @@ export default function App() {
                   className="preview-patient-frame"
                   title="patient mobile h5 preview"
                   src={patientPreviewUrl}
-                  scrolling="no"
                   onLoad={() => setIsPatientFrameLoaded(true)}
                   onError={() => setPatientFrameAvailability("unavailable")}
                 />
@@ -205,50 +246,6 @@ export default function App() {
                       </span>
                     </div>
                   </div>
-                ) : null}
-                <PreviewStatusBar />
-                <div className="preview-native-capsule" aria-label="微信容器胶囊模拟">
-                  <button
-                    className="preview-native-capsule-more"
-                    type="button"
-                    aria-label="更多"
-                    aria-expanded={isCapsuleMenuOpen}
-                    onClick={() => setIsCapsuleMenuOpen((current) => !current)}
-                  >
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <circle cx="6" cy="12" r="1.7" />
-                      <circle cx="12" cy="12" r="1.7" />
-                      <circle cx="18" cy="12" r="1.7" />
-                    </svg>
-                  </button>
-                  <span className="preview-native-capsule-divider" />
-                  <button
-                    className="preview-native-capsule-close"
-                    type="button"
-                    aria-label="关闭患者端"
-                    onClick={() => selectSurface("wechat")}
-                  />
-                </div>
-                {isCapsuleMenuOpen ? (
-                  <>
-                    <button
-                      className="preview-native-capsule-mask"
-                      type="button"
-                      aria-label="关闭更多菜单"
-                      onClick={() => setIsCapsuleMenuOpen(false)}
-                    />
-                    <div className="preview-native-menu" role="menu" aria-label="患者端更多菜单模拟">
-                      <button type="button" role="menuitem" onClick={() => setIsCapsuleMenuOpen(false)}>
-                        转发给朋友
-                      </button>
-                      <button type="button" role="menuitem" onClick={() => setIsCapsuleMenuOpen(false)}>
-                        添加到我的服务
-                      </button>
-                      <button type="button" role="menuitem" onClick={() => setIsCapsuleMenuOpen(false)}>
-                        设置
-                      </button>
-                    </div>
-                  </>
                 ) : null}
               </div>
             ) : null}

@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  scrollbar-width: none;
 }
 
 html,
@@ -10,8 +11,19 @@ body,
   margin: 0;
 }
 
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+#app::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 body {
   background: var(--mobile-color-bg);
+  overflow-x: hidden;
+  -ms-overflow-style: none;
 }
 
 button {
@@ -19,6 +31,8 @@ button {
 }
 
 .mobile-app {
+  --mobile-chrome-base-height: 90px;
+  --mobile-chrome-height: calc(var(--mobile-chrome-base-height) + env(safe-area-inset-top));
   min-height: 100vh;
   min-height: 100dvh;
   background: linear-gradient(180deg, rgba(251, 253, 255, 0.98) 0%, rgba(244, 247, 251, 0.98) 100%);
@@ -26,7 +40,7 @@ button {
 
 .page {
   min-height: calc(100vh - 96px);
-  padding: 14px var(--mobile-page-x) calc(80px + env(safe-area-inset-bottom));
+  padding: calc(var(--mobile-chrome-height) + 14px) var(--mobile-page-x) calc(80px + env(safe-area-inset-bottom));
 }
 
 .page-home,

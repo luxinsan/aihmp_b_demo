@@ -21,7 +21,6 @@ function handleTaskClick(title: string) {
         <h2>{{ healthPlanSummary.title }}</h2>
         <p>{{ healthPlanSummary.description }}</p>
       </div>
-      <Tag type="primary" round>重构版</Tag>
     </section>
 
     <section class="plan-progress-card">

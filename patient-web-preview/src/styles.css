@@ -180,15 +180,16 @@ button {
 
 .preview-status {
   position: absolute;
-  top: 18px;
+  top: 0;
   right: 22px;
   left: 22px;
   display: flex;
+  height: 32px;
   align-items: center;
   justify-content: space-between;
   color: rgba(255, 255, 255, 0.9);
   font-size: 12px;
-  line-height: 1.2;
+  line-height: 1;
   font-weight: 700;
   pointer-events: none;
 }
@@ -198,105 +199,35 @@ button {
 }
 
 .preview-status.is-dark {
-  color: rgba(23, 35, 61, 0.92);
+  color: #172033;
 }
 
 .preview-status-indicators {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+}
+
+.preview-status-icon {
+  display: block;
+  color: currentColor;
+  fill: currentColor;
+  flex-shrink: 0;
 }
 
 .preview-status-signal {
-  display: inline-flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 11px;
-}
-
-.preview-status-signal b {
-  display: block;
-  width: 3px;
-  border-radius: 999px;
-  background: currentColor;
-}
-
-.preview-status-signal b:nth-child(1) {
-  height: 4px;
-}
-
-.preview-status-signal b:nth-child(2) {
-  height: 6px;
-}
-
-.preview-status-signal b:nth-child(3) {
-  height: 8px;
-}
-
-.preview-status-signal b:nth-child(4) {
-  height: 10px;
+  width: 18px;
+  height: 12px;
 }
 
 .preview-status-wifi {
-  position: relative;
-  width: 15px;
-  height: 11px;
-  overflow: hidden;
-}
-
-.preview-status-wifi::before,
-.preview-status-wifi::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  border: 2px solid currentColor;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  border-left-color: transparent;
-  border-radius: 999px;
-  transform: translateX(-50%);
-}
-
-.preview-status-wifi::before {
-  top: 1px;
-  width: 14px;
-  height: 10px;
-}
-
-.preview-status-wifi::after {
-  top: 5px;
-  width: 7px;
-  height: 5px;
+  width: 18px;
+  height: 12px;
 }
 
 .preview-status-battery {
-  position: relative;
-  width: 22px;
-  height: 10px;
-  border: 1.5px solid currentColor;
-  border-radius: 3px;
-}
-
-.preview-status-battery::before {
-  content: "";
-  position: absolute;
-  top: 2px;
-  right: -4px;
-  width: 2px;
-  height: 4px;
-  border-radius: 0 2px 2px 0;
-  background: currentColor;
-}
-
-.preview-status-battery::after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  bottom: 2px;
-  left: 2px;
-  width: 15px;
-  border-radius: 2px;
-  background: currentColor;
+  width: 26px;
+  height: 12px;
 }
 
 .preview-app-icon {
@@ -333,18 +264,27 @@ button {
 }
 
 .preview-wechat {
-  padding: 62px 16px 22px;
+  padding: 104px 16px 22px;
   background: #f4f7fb;
 }
 
+.preview-wechat .preview-status {
+  background: #ffffff;
+}
+
 .preview-wechat-header {
+  position: absolute;
+  top: 32px;
+  right: 0;
+  left: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 46px;
-  margin: 0 -16px 16px;
-  border-bottom: 1px solid rgba(214, 222, 233, 0.86);
-  background: rgba(248, 250, 253, 0.96);
+  height: 58px;
+  margin: 0;
+  padding: 0 112px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.92);
+  background: #ffffff;
 }
 
 .preview-wechat-header button {
@@ -362,8 +302,10 @@ button {
 }
 
 .preview-wechat-header strong {
-  font-size: 17px;
+  color: #172033;
+  font-size: 18px;
   line-height: 1.3;
+  font-weight: 750;
 }
 
 .preview-patient-entry {
@@ -408,22 +350,16 @@ button {
 
 .preview-patient-frame {
   position: absolute;
-  top: 28px;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
-  height: calc(100% - 28px);
+  height: 100%;
   border: 0;
   background: #f4f7fb;
 }
 
 .preview-patient-frame-state {
   position: absolute;
-  top: 28px;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
   z-index: 19;
   display: grid;
   place-items: center;
@@ -449,114 +385,6 @@ button {
   color: #52627a;
   font-size: 13px;
   line-height: 1.6;
-}
-
-.preview-patient-surface .preview-status {
-  top: 8px;
-  z-index: 20;
-}
-
-.preview-native-capsule {
-  position: absolute;
-  top: 34px;
-  right: 12px;
-  z-index: 22;
-  display: flex;
-  align-items: center;
-  width: 88px;
-  height: 32px;
-  overflow: hidden;
-  border: 1px solid rgba(130, 145, 166, 0.36);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.58);
-  backdrop-filter: blur(10px);
-}
-
-.preview-native-capsule button {
-  display: grid;
-  place-items: center;
-  height: 100%;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: #1f2937;
-  cursor: pointer;
-}
-
-.preview-native-capsule-more {
-  width: 48px;
-}
-
-.preview-native-capsule-more svg {
-  width: 24px;
-  height: 24px;
-  fill: currentColor;
-}
-
-.preview-native-capsule-divider {
-  width: 1px;
-  height: 17px;
-  background: rgba(130, 145, 166, 0.34);
-}
-
-.preview-native-capsule-close {
-  position: relative;
-  width: 39px;
-}
-
-.preview-native-capsule-close::before {
-  content: "";
-  width: 11px;
-  height: 11px;
-  border: 2px solid currentColor;
-  border-radius: 999px;
-}
-
-.preview-native-capsule-mask {
-  position: absolute;
-  inset: 0;
-  z-index: 18;
-  padding: 0;
-  border: 0;
-  background: transparent;
-}
-
-.preview-native-menu {
-  position: absolute;
-  top: 74px;
-  right: 12px;
-  z-index: 23;
-  width: 184px;
-  overflow: hidden;
-  border: 1px solid rgba(214, 222, 233, 0.9);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 16px 34px rgba(15, 23, 42, 0.18);
-  backdrop-filter: blur(18px);
-}
-
-.preview-native-menu button {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  min-height: 42px;
-  padding: 0 14px;
-  border: 0;
-  border-bottom: 1px solid rgba(226, 232, 240, 0.92);
-  background: transparent;
-  color: #17233d;
-  font-size: 14px;
-  line-height: 1.35;
-  text-align: left;
-  cursor: pointer;
-}
-
-.preview-native-menu button:last-child {
-  border-bottom: 0;
-}
-
-.preview-native-menu button:hover {
-  background: rgba(241, 245, 249, 0.86);
 }
 
 .preview-home-indicator {
