@@ -1,8 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-type PreviewSurface = "launcher" | "wechat" | "miniapp";
+type PreviewSurface = "launcher" | "wechat" | "patient";
+type PatientFrameAvailability = "idle" | "checking" | "available" | "unavailable";
 
-const defaultMiniappPreviewUrl = "http://localhost:5175/";
+const defaultPatientPreviewUrl = "http://localhost:5177/";
+const patientGithubPreviewUrl = "https://luxinsan.github.io/aihmp_b_demo/patient/";
 const defaultSurface: PreviewSurface = "launcher";
 
 function getInitialSurface(): PreviewSurface {
@@ -12,26 +14,26 @@ function getInitialSurface(): PreviewSurface {
 
   const surface = new URLSearchParams(window.location.search).get("surface");
 
-  if (surface === "wechat" || surface === "miniapp") {
+  if (surface === "wechat" || surface === "patient") {
     return surface;
   }
 
   return defaultSurface;
 }
 
-function getMiniappPreviewUrl() {
-  const envUrl = import.meta.env.VITE_MINIAPP_PREVIEW_URL;
+function getPatientPreviewUrl() {
+  const envUrl = import.meta.env.VITE_PATIENT_PREVIEW_URL;
 
   if (typeof envUrl === "string" && envUrl.trim()) {
     return envUrl.trim();
   }
 
   if (typeof window === "undefined") {
-    return defaultMiniappPreviewUrl;
+    return defaultPatientPreviewUrl;
   }
 
-  const queryUrl = new URLSearchParams(window.location.search).get("miniappUrl");
-  return queryUrl?.trim() || defaultMiniappPreviewUrl;
+  const queryUrl = new URLSearchParams(window.location.search).get("patientUrl");
+  return queryUrl?.trim() || defaultPatientPreviewUrl;
 }
 
 function PreviewStatusBar({ tone = "dark" }: { tone?: "dark" | "light" }) {
@@ -55,22 +57,62 @@ function PreviewStatusBar({ tone = "dark" }: { tone?: "dark" | "light" }) {
 export default function App() {
   const [surface, setSurface] = useState<PreviewSurface>(getInitialSurface);
   const [isCapsuleMenuOpen, setIsCapsuleMenuOpen] = useState(false);
-  const miniappPreviewUrl = useMemo(getMiniappPreviewUrl, []);
+  const [isPatientFrameLoaded, setIsPatientFrameLoaded] = useState(false);
+  const [patientFrameAvailability, setPatientFrameAvailability] = useState<PatientFrameAvailability>("idle");
+  const patientPreviewUrl = useMemo(getPatientPreviewUrl, []);
 
   function selectSurface(nextSurface: PreviewSurface) {
     setSurface(nextSurface);
     setIsCapsuleMenuOpen(false);
+
+    if (nextSurface === "patient") {
+      setIsPatientFrameLoaded(false);
+      setPatientFrameAvailability("checking");
+    }
   }
+
+  useEffect(() => {
+    if (surface !== "patient") {
+      return;
+    }
+
+    const controller = new AbortController();
+    let isCurrent = true;
+
+    setPatientFrameAvailability("checking");
+
+    fetch(patientPreviewUrl, {
+      cache: "no-store",
+      mode: "no-cors",
+      signal: controller.signal,
+    })
+      .then(() => {
+        if (isCurrent) {
+          setPatientFrameAvailability("available");
+        }
+      })
+      .catch(() => {
+        if (isCurrent) {
+          setIsPatientFrameLoaded(false);
+          setPatientFrameAvailability("unavailable");
+        }
+      });
+
+    return () => {
+      isCurrent = false;
+      controller.abort();
+    };
+  }, [patientPreviewUrl, surface]);
 
   return (
     <main className="preview-shell">
-      <section className="preview-workbench" aria-label="小程序外部预览入口">
+      <section className="preview-workbench" aria-label="患者端外部预览入口">
         <aside className="preview-panel">
-          <p className="preview-eyebrow">Patient Miniapp Preview Shell</p>
-          <h1>患者端小程序外部入口</h1>
+          <p className="preview-eyebrow">Patient Mobile Preview Shell</p>
+          <h1>患者端移动 H5 外部入口</h1>
           <p>
-            这个壳只负责模拟外部入口并承载小程序 H5 预览。小程序页面、顶栏、tabBar、字号和业务交互都来自
-            patient-miniapp。
+            这个壳只负责模拟外部入口并承载患者端移动 H5。页面、tabBar、字号和业务交互都来自
+            patient-mobile-h5。
           </p>
           <div className="preview-actions" role="group" aria-label="预览入口切换">
             <button type="button" className={surface === "launcher" ? "active" : ""} onClick={() => selectSurface("launcher")}>
@@ -79,8 +121,8 @@ export default function App() {
             <button type="button" className={surface === "wechat" ? "active" : ""} onClick={() => selectSurface("wechat")}>
               微信入口
             </button>
-            <button type="button" className={surface === "miniapp" ? "active" : ""} onClick={() => selectSurface("miniapp")}>
-              小程序预览
+            <button type="button" className={surface === "patient" ? "active" : ""} onClick={() => selectSurface("patient")}>
+              患者端预览
             </button>
           </div>
           <dl className="preview-contract">
@@ -89,12 +131,20 @@ export default function App() {
               <dd>{typeof window === "undefined" ? "http://localhost:5176/" : window.location.origin}</dd>
             </div>
             <div>
-              <dt>小程序来源</dt>
-              <dd>{miniappPreviewUrl}</dd>
+              <dt>患者端来源</dt>
+              <dd>{patientPreviewUrl}</dd>
+            </div>
+            <div>
+              <dt>GitHub 预览地址</dt>
+              <dd>
+                <a href={patientGithubPreviewUrl} target="_blank" rel="noreferrer">
+                  {patientGithubPreviewUrl}
+                </a>
+              </dd>
             </div>
             <div>
               <dt>代码边界</dt>
-              <dd>预览壳不 import、不复刻、不覆盖小程序代码。</dd>
+              <dd>预览壳不 import、不复刻、不覆盖患者端业务代码。</dd>
             </div>
           </dl>
         </aside>
@@ -121,27 +171,43 @@ export default function App() {
                   </button>
                   <strong>微信</strong>
                 </header>
-                <button className="preview-miniapp-entry" type="button" onClick={() => selectSurface("miniapp")}>
+                <button className="preview-patient-entry" type="button" onClick={() => selectSurface("patient")}>
                   <span>健</span>
                   <div>
                     <strong>AI HMP 患者端</strong>
-                    <em>打开小程序预览</em>
+                    <em>打开患者端预览</em>
                   </div>
                 </button>
                 <div className="preview-home-indicator" />
               </div>
             ) : null}
 
-            {surface === "miniapp" ? (
-              <div className="preview-miniapp-surface">
+            {surface === "patient" ? (
+              <div className="preview-patient-surface">
                 <iframe
-                  className="preview-miniapp-frame"
-                  title="patient-miniapp h5 preview"
-                  src={miniappPreviewUrl}
+                  className="preview-patient-frame"
+                  title="patient mobile h5 preview"
+                  src={patientPreviewUrl}
                   scrolling="no"
+                  onLoad={() => setIsPatientFrameLoaded(true)}
+                  onError={() => setPatientFrameAvailability("unavailable")}
                 />
+                {patientFrameAvailability !== "available" || !isPatientFrameLoaded ? (
+                  <div className="preview-patient-frame-state" aria-live="polite">
+                    <div>
+                      <strong>
+                        {patientFrameAvailability === "unavailable" ? "患者端来源不可用" : "正在加载患者端预览"}
+                      </strong>
+                      <span>
+                        {patientFrameAvailability === "unavailable"
+                          ? "请确认 patient-mobile-h5 已运行 npm run dev，并监听 5177。"
+                          : patientPreviewUrl}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
                 <PreviewStatusBar />
-                <div className="preview-native-capsule" aria-label="微信小程序原生胶囊模拟">
+                <div className="preview-native-capsule" aria-label="微信容器胶囊模拟">
                   <button
                     className="preview-native-capsule-more"
                     type="button"
@@ -159,7 +225,7 @@ export default function App() {
                   <button
                     className="preview-native-capsule-close"
                     type="button"
-                    aria-label="关闭小程序"
+                    aria-label="关闭患者端"
                     onClick={() => selectSurface("wechat")}
                   />
                 </div>
@@ -171,12 +237,12 @@ export default function App() {
                       aria-label="关闭更多菜单"
                       onClick={() => setIsCapsuleMenuOpen(false)}
                     />
-                    <div className="preview-native-menu" role="menu" aria-label="小程序更多菜单模拟">
+                    <div className="preview-native-menu" role="menu" aria-label="患者端更多菜单模拟">
                       <button type="button" role="menuitem" onClick={() => setIsCapsuleMenuOpen(false)}>
                         转发给朋友
                       </button>
                       <button type="button" role="menuitem" onClick={() => setIsCapsuleMenuOpen(false)}>
-                        添加到我的小程序
+                        添加到我的服务
                       </button>
                       <button type="button" role="menuitem" onClick={() => setIsCapsuleMenuOpen(false)}>
                         设置

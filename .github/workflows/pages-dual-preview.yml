@@ -35,19 +35,31 @@ jobs:
         working-directory: patient-web-preview
         run: npm ci
 
+      - name: Install Patient H5 Dependencies
+        working-directory: patient-mobile-h5
+        run: npm ci
+
       - name: Build Admin Pages Bundle
         working-directory: react-app
         run: npm run build:pages:admin
 
+      - name: Build Patient H5 Pages Bundle
+        working-directory: patient-mobile-h5
+        run: npm run build:pages:patient-h5
+
       - name: Build Patient Pages Bundle
         working-directory: patient-web-preview
+        env:
+          VITE_PATIENT_PREVIEW_URL: /aihmp_b_demo/patient-h5/
         run: npm run build:pages:patient
 
       - name: Assemble Pages Artifact
         run: |
           mkdir -p pages-out/admin
           mkdir -p pages-out/patient
+          mkdir -p pages-out/patient-h5
           cp -R react-app/dist/. pages-out/admin/
+          cp -R patient-mobile-h5/dist/. pages-out/patient-h5/
           cp -R patient-web-preview/dist/. pages-out/patient/
           cat > pages-out/index.html <<'EOF'
           <!doctype html>
@@ -62,6 +74,9 @@ jobs:
             </body>
           </html>
           EOF
+
+      - name: Verify Pages Preview Artifact
+        run: node scripts/verify-pages-preview.mjs
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v4

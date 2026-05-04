@@ -15,19 +15,6 @@ body,
   min-height: 100vh;
 }
 
-.parity-shell {
-  width: 100%;
-  min-height: 100vh;
-}
-
-.parity-frame {
-  display: block;
-  width: 100%;
-  height: 100vh;
-  border: 0;
-  background: #eef1f5;
-}
-
 .generation-screen[data-view="processing"] .thinking-brief-detail:not([hidden]) {
   display: grid !important;
 }

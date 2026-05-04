@@ -1,0 +1,53 @@
+.team-switch {
+  display: inline-flex;
+  max-width: 260px;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: var(--mobile-color-text);
+  opacity: 0.78;
+}
+
+.team-switch .van-icon {
+  flex-shrink: 0;
+}
+
+.team-switch span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.service-section,
+.plan-summary,
+.plan-progress-card,
+.task-cell-group,
+.plan-card,
+.profile-card,
+.phone-card,
+.shortcut-grid,
+.mine-cell-group,
+.mine-support-card {
+  border: 1px solid var(--mobile-color-border);
+  border-radius: var(--mobile-radius-card);
+  background: var(--mobile-color-surface);
+  box-shadow: var(--mobile-shadow-card);
+}
+
+.section-header {
+  margin-bottom: 12px;
+}
+
+.section-header h2 {
+  margin: 0;
+  color: var(--mobile-color-text);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 600;
+}

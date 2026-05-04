@@ -1,16 +1,29 @@
 # Patient Web Preview Shell
 
-这个目录只负责 C 端外部入口和小程序预览承载。
+这个目录只负责 C 端外部入口壳：手机桌面、微信入口和 iframe 承载。
 
-小程序页面、顶栏、tabBar、字号、路由和业务交互全部来自 `patient-miniapp`。这个壳只模拟手机桌面、微信入口，并通过 iframe 承载 `patient-miniapp` 的 Taro H5 预览。
+当前 iframe 默认指向新的 C 端移动 H5：
+
+```text
+http://localhost:5177/
+```
+
+GitHub Pages 构建时通过 `VITE_PATIENT_PREVIEW_URL` 指向线上移动 H5：
+
+```text
+/aihmp_b_demo/patient-h5/
+```
+
+旧 Taro H5 链路已删除，不再作为主演示入口。
 
 ## 启动
 
-先启动小程序 H5：
+先启动 C 端移动 H5：
 
 ```bash
-cd ../patient-miniapp
-npm run dev:h5
+cd ../patient-mobile-h5
+npm install
+npm run dev
 ```
 
 再启动外部预览壳：
@@ -21,28 +34,19 @@ npm install
 npm run dev
 ```
 
-小程序 H5 固定地址：
+固定地址：
 
 ```text
-http://localhost:5175/
+C 端移动 H5: http://localhost:5177/
+外部预览壳:  http://localhost:5176/
 ```
-
-外部预览壳固定地址：
-
-```text
-http://localhost:5176/
-```
-
-打开 `http://localhost:5176/` 时默认停留在手机桌面入口。只有用户点击微信图标、再点击小程序入口，才进入 iframe 中的小程序预览。
 
 调试指定状态时可显式追加参数：
 
 ```text
 http://localhost:5176/?surface=wechat
-http://localhost:5176/?surface=miniapp
+http://localhost:5176/?surface=patient
 ```
-
-不要把 `http://localhost:5175/` 当作外部预览壳；它是 `patient-miniapp` 的 H5 产物，会直接进入小程序。
 
 ## 代码边界
 
@@ -50,20 +54,23 @@ http://localhost:5176/?surface=miniapp
 
 - 手机桌面入口
 - 微信入口
-- 小程序外部原生 chrome 模拟，例如胶囊按钮、关闭回微信入口、更多菜单
+- 外部原生 chrome 模拟，例如胶囊按钮、关闭回微信入口、更多菜单
 - 外部说明面板
 - iframe 承载地址
 
 不可以改：
 
-- 小程序页面 UI
-- 小程序顶栏
-- 小程序 tabBar
-- 小程序字体体系
-- 小程序业务组件
-- 小程序页面 mock
-- 小程序页面交互
+- C 端业务页面 UI
+- C 端 tabBar
+- C 端字体体系
+- C 端业务组件
+- C 端页面 mock
+- C 端页面交互
 
-预览壳可以在 iframe 外面模拟微信原生容器能力，但不能进入 iframe 内部修改小程序页面。禁止从这里 import `patient-miniapp/src`，禁止复刻小程序页面 DOM，禁止覆盖小程序 CSS。
+后续 C 端业务开发优先修改 `patient-mobile-h5`。只有外部入口和承载方式变化时，才修改这个目录。
 
-后续 C 端业务开发只改 `patient-miniapp`。只有外部入口和承载方式变化时，才修改这个目录。
+完整联调步骤见：
+
+```text
+../docs/patient-mobile-h5-cutover.md
+```

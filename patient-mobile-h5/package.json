@@ -1,0 +1,22 @@
+{
+  "name": "aihmp-b-demo-patient-mobile-h5",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5177",
+    "build": "vue-tsc -b && vite build",
+    "build:pages:patient-h5": "vue-tsc -b && vite build --mode pages-patient-h5",
+    "preview": "vite preview --host 0.0.0.0 --port 4177"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^6.0.6",
+    "vant": "^4.9.20",
+    "vite": "^7.3.2",
+    "vue": "^3.5.13",
+    "vue-tsc": "^2.2.10"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

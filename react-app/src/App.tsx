@@ -5,7 +5,6 @@ import {
   patientProfile,
   patientTabs,
 } from "../../shared/adapters/admin";
-import { ParityHydratedApp } from "./components/ParityHydratedApp";
 import { PatientTabPageFrame } from "./components/layout/PatientTabPageFrame";
 import { WorkspaceSidebar } from "./components/WorkspaceSidebar";
 import { WorkspaceTopbar } from "./components/WorkspaceTopbar";
@@ -44,16 +43,7 @@ const QuestionnaireWorkspace = lazy(() =>
   })),
 );
 
-function getMode() {
-  if (typeof window === "undefined") {
-    return "lab";
-  }
-
-  return new URLSearchParams(window.location.search).get("mode") ?? "lab";
-}
-
 export default function App() {
-  const mode = getMode();
   const [reports, setReports] = useState<ReportRecord[]>(initialReports);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(initialReports[0]?.id ?? null);
   const [activePatientTab, setActivePatientTab] = useState("健康计划");
@@ -179,22 +169,6 @@ export default function App() {
       <QuestionnaireWorkspace />
     </Suspense>
   );
-
-  if (mode === "iframe") {
-    return (
-      <main className="parity-shell">
-        <iframe
-          className="parity-frame"
-          src="./parity/index.html"
-          title="Static parity preview"
-        />
-      </main>
-    );
-  }
-
-  if (mode === "parity") {
-    return <ParityHydratedApp />;
-  }
 
   function handleOpenPreview(reportId: string) {
     setSelectedReportId(reportId);

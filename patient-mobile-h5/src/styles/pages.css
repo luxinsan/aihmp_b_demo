@@ -1,0 +1,263 @@
+.service-section {
+  padding: 18px 12px 16px;
+}
+
+.service-grid {
+  background: transparent;
+}
+
+.service-grid .van-grid-item__content {
+  gap: 8px;
+  padding: 0;
+  background: transparent;
+}
+
+.service-icon {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(31, 111, 235, 0.12) 0%, rgba(125, 180, 255, 0.16) 100%);
+  color: var(--mobile-color-primary);
+  font-size: 22px;
+}
+
+.service-name {
+  color: var(--mobile-color-text-secondary);
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.plan-summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 16px;
+}
+
+.plan-summary h2,
+.profile-copy h2 {
+  margin: 0;
+  color: var(--mobile-color-text);
+  font-size: 18px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.plan-summary p,
+.profile-copy p,
+.plan-card-head p,
+.plan-focus {
+  margin: 0;
+  color: var(--mobile-color-text-tertiary);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.plan-summary p {
+  margin-top: 4px;
+}
+
+.plan-progress-card {
+  padding: 16px;
+}
+
+.plan-progress-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.plan-progress-main span {
+  color: var(--mobile-color-text-tertiary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.plan-progress-main strong {
+  color: var(--mobile-color-text);
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 750;
+}
+
+.plan-progress-card p {
+  margin: 10px 0 0;
+  color: var(--mobile-color-text-tertiary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.task-cell-group {
+  margin: 0;
+  overflow: hidden;
+}
+
+.task-status-icon {
+  margin-right: 10px;
+  color: var(--mobile-color-text-muted);
+  font-size: 20px;
+}
+
+.task-status-icon.is-done {
+  color: var(--mobile-color-success);
+}
+
+.plan-card {
+  padding: 16px;
+}
+
+.plan-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.plan-card-head h3 {
+  margin: 0;
+  color: var(--mobile-color-text);
+  font-size: 16px;
+  line-height: 1.45;
+  font-weight: 650;
+}
+
+.plan-focus {
+  margin-top: 14px;
+}
+
+.plan-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.plan-empty-state,
+.mine-empty-state {
+  padding: 10px 0 2px;
+}
+
+.plan-empty-state .van-empty__description,
+.mine-empty-state .van-empty__description {
+  color: var(--mobile-color-text-muted);
+  font-size: 13px;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 16px;
+}
+
+.profile-avatar {
+  display: flex;
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--mobile-color-primary) 0%, var(--mobile-color-primary-light) 100%);
+  color: #ffffff;
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.profile-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-copy span {
+  display: inline-flex;
+  margin-top: 4px;
+  color: var(--mobile-color-text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.phone-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.phone-card span {
+  color: var(--mobile-color-text-tertiary);
+  font-size: 14px;
+}
+
+.phone-card strong {
+  color: var(--mobile-color-text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.shortcut-grid {
+  overflow: hidden;
+}
+
+.shortcut-grid .van-grid-item__content {
+  gap: 4px;
+  padding: 16px 0;
+  background: transparent;
+}
+
+.shortcut-value {
+  color: var(--mobile-color-text);
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.shortcut-label {
+  color: var(--mobile-color-text-tertiary);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.mine-cell-group {
+  margin: 0;
+  overflow: hidden;
+}
+
+.mine-cell-icon {
+  margin-right: 10px;
+  color: var(--mobile-color-primary);
+  font-size: 20px;
+}
+
+.mine-support-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px;
+}
+
+.mine-support-card h3 {
+  margin: 0;
+  color: var(--mobile-color-text);
+  font-size: 16px;
+  line-height: 1.45;
+  font-weight: 650;
+}
+
+.mine-support-card p {
+  margin: 4px 0 0;
+  color: var(--mobile-color-text-tertiary);
+  font-size: 13px;
+  line-height: 1.6;
+}
