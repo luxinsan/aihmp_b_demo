@@ -1,0 +1,11 @@
+[admin-5174] 2026-05-11 21:45:09
+[admin-5174] npm run dev
+
+> aihmp-b-demo-react-migration@0.1.0 dev
+> vite
+
+
+  VITE v7.3.2  ready in 143 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: http://192.168.31.250:5174/

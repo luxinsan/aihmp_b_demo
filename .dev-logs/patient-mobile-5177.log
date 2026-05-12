@@ -1,16 +1,11 @@
-[patient-mobile-5177] 2026-05-04 19:59:16
+[patient-mobile-5177] 2026-05-11 21:45:09
 [patient-mobile-5177] npm run dev
 
 > aihmp-b-demo-patient-mobile-h5@0.1.0 dev
 > vite --host 0.0.0.0 --port 5177
 
 
-  VITE v7.3.2  ready in 211 ms
+  VITE v7.3.2  ready in 193 ms
 
   ➜  Local:   http://localhost:5177/
-  ➜  Network: http://192.168.66.33:5177/
-20:28:22 [vite] (client) hmr update /src/components/AppShell.vue
-20:32:48 [vite] (client) hmr update /src/components/AppShell.vue
-20:34:34 [vite] (client) hmr update /src/styles/components.css
-20:34:35 [vite] (client) hmr update /src/styles/components.css
-20:46:43 [vite] (client) hmr update /src/components/AppShell.vue
+  ➜  Network: http://192.168.31.250:5177/

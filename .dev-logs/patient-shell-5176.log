@@ -1,0 +1,11 @@
+[patient-shell-5176] 2026-05-11 21:45:09
+[patient-shell-5176] npm run dev
+
+> aihmp-b-demo-patient-web-preview@0.1.0 dev
+> vite
+
+
+  VITE v7.3.2  ready in 145 ms
+
+  ➜  Local:   http://localhost:5176/
+  ➜  Network: http://192.168.31.250:5176/
