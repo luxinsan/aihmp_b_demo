@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"d:\\\\Odyssey\\\\aihmp_b_demo\" log --oneline -20)",
+      "WebSearch"
+    ]
+  }
+}
