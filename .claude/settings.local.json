@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(git -C \"d:\\\\Odyssey\\\\aihmp_b_demo\" log --oneline -20)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(grep -c \"候选数据集\" \"C:\\\\\\\\Users\\\\\\\\xinsan\\\\\\\\AppData\\\\\\\\Roaming\\\\\\\\Code\\\\\\\\User\\\\\\\\History\\\\\\\\56d2239\\\\\\\\emjk.md\" 2>/dev/null)",
+      "Read(//c/Users/xinsan/AppData/Roaming/Code/User/History/56d2239/**)"
     ]
   }
 }
