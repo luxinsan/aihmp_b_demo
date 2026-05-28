@@ -183,7 +183,7 @@ jobs:
                   </a>
                   <a class="nav-card" href="./b/">
                     <span class="tag">B 端</span>
-                    <div class="name">业务管理端</div>
+                    <div class="name">医护工作站</div>
                     <div class="desc">医护工作台、患者管理和业务运营能力。</div>
                   </a>
                   <a class="nav-card" href="./c/">
