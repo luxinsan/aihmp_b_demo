@@ -21,3 +21,4 @@
 当前文档：
 
 - `health-data-center-product-solutions.md`：健康数据中心底座需求调研与目标态整理。
+- `tenant-service-configuration-prd-2.0.md`：【PRD】租户服务配置 2.0，定义租户功能能力中心、跨端生效链路和配置页面功能规则。

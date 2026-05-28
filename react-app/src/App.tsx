@@ -15,6 +15,7 @@ import {
 } from "./data/workspaceChrome";
 import { GenerationFloatingJobs } from "./features/generation/components/GenerationFloatingJobs";
 import { GenerationWorkspace } from "./features/generation/GenerationWorkspace";
+import { LoginPage } from "./features/auth/LoginPage";
 import { ModalHost } from "./features/modals/ModalHost";
 import { PatientHealthPlanStage } from "./features/patient/components/PatientHealthPlanStage";
 import { PatientHealthPlanEditorStage } from "./features/patient/components/PatientHealthPlanEditorStage";
@@ -53,6 +54,7 @@ export default function App() {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [jobsOpen, setJobsOpen] = useState(false);
   const [actionMessage, setActionMessage] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
 
   const { draftConfig, handleDraftConfigChange, openConfigForService } = useDraftConfigState({
     defaultServiceId: "risk",
@@ -98,13 +100,13 @@ export default function App() {
   });
 
   useEffect(() => {
-    document.title = "AI 健康管理系统 · 客户档案";
+    document.title = authenticated ? "AI 健康管理系统 · 客户档案" : "AI 健康管理系统 · 登录";
     document.body.classList.add("loaded");
     return () => {
       document.body.classList.remove("loaded");
       document.body.classList.remove("mode-generation");
     };
-  }, []);
+  }, [authenticated]);
 
   useEffect(() => {
     if (!reports.length) {
@@ -238,6 +240,17 @@ export default function App() {
       <div className="toast">{actionMessage}</div>
     </div>
   ) : null;
+
+  if (!authenticated) {
+    return (
+      <LoginPage
+        onLoginSuccess={() => {
+          setAuthenticated(true);
+          setActionMessage("已进入工作台");
+        }}
+      />
+    );
+  }
 
   if (generationVisible && generationSession) {
     return (

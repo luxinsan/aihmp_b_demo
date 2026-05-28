@@ -1,8 +1,8 @@
 # Patient Web Preview Shell
 
-这个目录只负责 C 端外部入口壳：手机桌面、微信入口和 iframe 承载。
+这个目录只负责患者端（C 端）外部入口壳：手机桌面、微信入口和 iframe 承载。
 
-当前 iframe 默认指向新的 C 端移动 H5：
+当前 iframe 默认指向新的患者端移动 H5：
 
 ```text
 http://localhost:5177/
@@ -18,7 +18,7 @@ GitHub Pages 构建时通过 `VITE_PATIENT_PREVIEW_URL` 指向线上移动 H5：
 
 ## 启动
 
-先启动 C 端移动 H5：
+先启动患者端移动 H5：
 
 ```bash
 cd ../patient-mobile-h5
@@ -37,7 +37,7 @@ npm run dev
 固定地址：
 
 ```text
-C 端移动 H5: http://localhost:5177/
+患者端移动 H5: http://localhost:5177/
 外部预览壳:  http://localhost:5176/
 ```
 
@@ -60,14 +60,14 @@ http://localhost:5176/?surface=patient
 
 不可以改：
 
-- C 端业务页面 UI
-- C 端 tabBar
-- C 端字体体系
-- C 端业务组件
-- C 端页面 mock
-- C 端页面交互
+- 患者端业务页面 UI
+- 患者端 tabBar
+- 患者端字体体系
+- 患者端业务组件
+- 患者端页面 mock
+- 患者端页面交互
 
-后续 C 端业务开发优先修改 `patient-mobile-h5`。只有外部入口和承载方式变化时，才修改这个目录。
+后续患者端业务开发优先修改 `patient-mobile-h5`。只有外部入口和承载方式变化时，才修改这个目录。
 
 完整联调步骤见：
 

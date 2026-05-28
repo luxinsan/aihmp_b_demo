@@ -10,4 +10,7 @@ patient-web-preview/*.tsbuildinfo
 patient-mobile-h5/node_modules
 patient-mobile-h5/dist
 patient-mobile-h5/*.tsbuildinfo
+platform-admin/node_modules
+platform-admin/dist
+platform-admin/*.tsbuildinfo
 pages-out

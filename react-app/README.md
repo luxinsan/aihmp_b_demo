@@ -1,12 +1,12 @@
-# Admin React App
+# 医护端 React App
 
-这个目录是管理端（B 端）当前主工程，使用 React + Vite 构建。
+这个目录是医护端（B 端）当前主工程，使用 React + Vite 构建。
 
 ## 工程边界
 
-- 管理端页面、组件、样式和交互都在 `react-app/` 内维护。
-- GitHub Pages 管理端入口由 `react-app` 构建产物提供，路径为 `/admin/`。
-- 管理端 legacy 样式已迁入 `react-app/src/legacy-root.css`，仓库根目录不再保留旧静态入口。
+- 医护端页面、组件、样式和交互都在 `react-app/` 内维护。
+- GitHub Pages 医护端入口由 `react-app` 构建产物提供，路径为 `/admin/`。`/admin/` 是既有技术路径，不作为产品端侧命名依据。
+- 医护端 legacy 样式已迁入 `react-app/src/legacy-root.css`，仓库根目录不再保留旧静态入口。
 
 ## 当前入口
 
@@ -33,7 +33,7 @@ npm run build
 npm run build:pages
 ```
 
-用于 GitHub Pages 管理端构建，会使用 `/aihmp_b_demo/` 作为静态资源基础路径。
+用于 GitHub Pages 医护端构建，会使用 `/aihmp_b_demo/` 作为静态资源基础路径。
 
 ```bash
 npm run verify:pages

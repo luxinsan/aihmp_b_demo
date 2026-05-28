@@ -6,6 +6,7 @@ This project now uses a single theme chain for UI color work:
 
 Rules:
 
+- Prefer Ant Design standards, components, and tokens for clinician-side (B-side) UI construction; add custom UI rules or components only when Ant Design cannot satisfy the concrete requirement.
 - Add or change semantic colors in [AppThemeProvider.tsx](/Users/luxinsan/Documents/工作/iWork/Code/AI%20HMP/aihmp_b_demo/react-app/src/theme/AppThemeProvider.tsx:1).
 - Consume `--q-*` variables in page-level or component-level CSS.
 - Use legacy workspace variables like `--text`, `--line`, `--primary` only when touching existing areas in `legacy-root.css` that still depend on them.

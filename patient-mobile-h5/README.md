@@ -1,13 +1,13 @@
 # Patient Mobile H5
 
-新的 C 端移动 H5 主实现，使用 Vue 3 + Vite + TypeScript + Vant。
+新的患者端（C 端）移动 H5 主实现，使用 Vue 3 + Vite + TypeScript + Vant。
 
 当前定位：
 
 - 服务于患者端移动演示
 - 由 `patient-web-preview` iframe 承载
 - 已替代并删除旧 Taro 主演示链路
-- 后续 C 端新功能优先在这里实现
+- 后续患者端新功能优先在这里实现
 
 ## 启动
 
