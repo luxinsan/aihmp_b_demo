@@ -14,6 +14,6 @@ export default defineConfig(function (_a) {
             port: 4175,
             strictPort: true,
         },
-        base: mode === "pages-patient" ? "/aihmp_b_demo/patient/" : "/",
+        base: mode === "pages-patient" ? "/aihmp_b_demo/c/" : "/",
     });
 });

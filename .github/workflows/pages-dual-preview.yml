@@ -63,14 +63,14 @@ jobs:
 
       - name: Assemble Pages Artifact
         run: |
-          mkdir -p pages-out/admin
-          mkdir -p pages-out/platform-admin
-          mkdir -p pages-out/patient
+          mkdir -p pages-out/b
+          mkdir -p pages-out/m
+          mkdir -p pages-out/c
           mkdir -p pages-out/patient-h5
-          cp -R react-app/dist/. pages-out/admin/
-          cp -R platform-admin/dist/. pages-out/platform-admin/
+          cp -R react-app/dist/. pages-out/b/
+          cp -R platform-admin/dist/. pages-out/m/
           cp -R patient-mobile-h5/dist/. pages-out/patient-h5/
-          cp -R patient-web-preview/dist/. pages-out/patient/
+          cp -R patient-web-preview/dist/. pages-out/c/
           cat > pages-out/index.html <<'EOF'
           <!doctype html>
           <html lang="zh-CN">
@@ -176,17 +176,17 @@ jobs:
                 <h1>健康管理平台演示入口</h1>
                 <p class="subtitle">选择要访问的端侧应用。</p>
                 <div class="nav-grid">
-                  <a class="nav-card" href="./platform-admin/">
+                  <a class="nav-card" href="./m/">
                     <span class="tag">M 端</span>
                     <div class="name">平台管理端</div>
                     <div class="desc">租户管理、租户服务配置等平台级管理能力。</div>
                   </a>
-                  <a class="nav-card" href="./admin/">
+                  <a class="nav-card" href="./b/">
                     <span class="tag">B 端</span>
                     <div class="name">业务管理端</div>
                     <div class="desc">医护工作台、患者管理和业务运营能力。</div>
                   </a>
-                  <a class="nav-card" href="./patient/">
+                  <a class="nav-card" href="./c/">
                     <span class="tag">C 端</span>
                     <div class="name">患者端</div>
                     <div class="desc">患者移动端预览入口。</div>

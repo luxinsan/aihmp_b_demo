@@ -11,5 +11,5 @@ export default defineConfig(({ mode }) => ({
     host: "0.0.0.0",
     port: 4180,
   },
-  base: mode === "pages-platform-admin" ? "/aihmp_b_demo/platform-admin/" : "/",
+  base: mode === "pages-platform-admin" ? "/aihmp_b_demo/m/" : "/",
 }));

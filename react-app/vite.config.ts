@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
     port: 4174,
     strictPort: true,
   },
-  base: mode === "pages-admin" ? "/aihmp_b_demo/admin/" : "/",
+  base: mode === "pages-admin" ? "/aihmp_b_demo/b/" : "/",
   build: {
     rollupOptions: {
       output: {

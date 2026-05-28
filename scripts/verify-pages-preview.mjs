@@ -9,27 +9,27 @@ const checks = [
   {
     name: "root navigation includes platform admin entry",
     file: join(pagesOut, "index.html"),
-    includes: "./platform-admin/",
+    includes: "./m/",
   },
   {
     name: "root navigation includes admin entry",
     file: join(pagesOut, "index.html"),
-    includes: "./admin/",
+    includes: "./b/",
   },
   {
     name: "root navigation includes patient entry",
     file: join(pagesOut, "index.html"),
-    includes: "./patient/",
+    includes: "./c/",
   },
   {
-    name: "admin bundle uses GitHub Pages base path",
-    file: join(pagesOut, "admin", "index.html"),
-    includes: "/aihmp_b_demo/admin/assets/",
+    name: "B end bundle uses GitHub Pages base path",
+    file: join(pagesOut, "b", "index.html"),
+    includes: "/aihmp_b_demo/b/assets/",
   },
   {
-    name: "platform admin bundle uses GitHub Pages base path",
-    file: join(pagesOut, "platform-admin", "index.html"),
-    includes: "/aihmp_b_demo/platform-admin/assets/",
+    name: "M end bundle uses GitHub Pages base path",
+    file: join(pagesOut, "m", "index.html"),
+    includes: "/aihmp_b_demo/m/assets/",
   },
   {
     name: "patient H5 bundle uses GitHub Pages base path",
@@ -37,9 +37,9 @@ const checks = [
     includes: "/aihmp_b_demo/patient-h5/assets/",
   },
   {
-    name: "patient shell bundle uses GitHub Pages base path",
-    file: join(pagesOut, "patient", "index.html"),
-    includes: "/aihmp_b_demo/patient/assets/",
+    name: "C end shell bundle uses GitHub Pages base path",
+    file: join(pagesOut, "c", "index.html"),
+    includes: "/aihmp_b_demo/c/assets/",
   },
 ];
 
@@ -59,7 +59,7 @@ for (const check of checks) {
   }
 }
 
-const patientShellAssetsDir = join(pagesOut, "patient", "assets");
+const patientShellAssetsDir = join(pagesOut, "c", "assets");
 
 if (!existsSync(patientShellAssetsDir)) {
   throw new Error(`Missing patient shell assets directory: ${patientShellAssetsDir}`);
