@@ -1,4 +1,4 @@
-name: Deploy Admin And Patient Previews To GitHub Pages
+name: Deploy Admin, Platform Admin And Patient Previews To GitHub Pages
 
 on:
   push:
@@ -31,6 +31,10 @@ jobs:
         working-directory: react-app
         run: npm ci
 
+      - name: Install Platform Admin Dependencies
+        working-directory: platform-admin
+        run: npm ci
+
       - name: Install Patient Preview Dependencies
         working-directory: patient-web-preview
         run: npm ci
@@ -42,6 +46,10 @@ jobs:
       - name: Build Admin Pages Bundle
         working-directory: react-app
         run: npm run build:pages:admin
+
+      - name: Build Platform Admin Pages Bundle
+        working-directory: platform-admin
+        run: npm run build:pages:platform-admin
 
       - name: Build Patient H5 Pages Bundle
         working-directory: patient-mobile-h5
@@ -56,9 +64,11 @@ jobs:
       - name: Assemble Pages Artifact
         run: |
           mkdir -p pages-out/admin
+          mkdir -p pages-out/platform-admin
           mkdir -p pages-out/patient
           mkdir -p pages-out/patient-h5
           cp -R react-app/dist/. pages-out/admin/
+          cp -R platform-admin/dist/. pages-out/platform-admin/
           cp -R patient-mobile-h5/dist/. pages-out/patient-h5/
           cp -R patient-web-preview/dist/. pages-out/patient/
           cat > pages-out/index.html <<'EOF'

@@ -12,6 +12,11 @@ const checks = [
     includes: "/aihmp_b_demo/admin/assets/",
   },
   {
+    name: "platform admin bundle uses GitHub Pages base path",
+    file: join(pagesOut, "platform-admin", "index.html"),
+    includes: "/aihmp_b_demo/platform-admin/assets/",
+  },
+  {
     name: "patient H5 bundle uses GitHub Pages base path",
     file: join(pagesOut, "patient-h5", "index.html"),
     includes: "/aihmp_b_demo/patient-h5/assets/",

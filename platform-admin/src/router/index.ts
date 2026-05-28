@@ -4,7 +4,7 @@ import TenantListPage from "../pages/TenantListPage.vue";
 import ModuleConfigPage from "../pages/ModuleConfigPage.vue";
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
