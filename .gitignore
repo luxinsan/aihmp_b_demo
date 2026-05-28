@@ -12,5 +12,6 @@ patient-mobile-h5/dist
 patient-mobile-h5/*.tsbuildinfo
 platform-admin/node_modules
 platform-admin/dist
+platform-admin/.vite
 platform-admin/*.tsbuildinfo
 pages-out

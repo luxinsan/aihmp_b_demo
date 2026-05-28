@@ -7,6 +7,21 @@ const pagesOut = join(root, "pages-out");
 
 const checks = [
   {
+    name: "root navigation includes platform admin entry",
+    file: join(pagesOut, "index.html"),
+    includes: "./platform-admin/",
+  },
+  {
+    name: "root navigation includes admin entry",
+    file: join(pagesOut, "index.html"),
+    includes: "./admin/",
+  },
+  {
+    name: "root navigation includes patient entry",
+    file: join(pagesOut, "index.html"),
+    includes: "./patient/",
+  },
+  {
     name: "admin bundle uses GitHub Pages base path",
     file: join(pagesOut, "admin", "index.html"),
     includes: "/aihmp_b_demo/admin/assets/",
