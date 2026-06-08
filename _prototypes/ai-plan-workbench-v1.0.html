@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI 生成方案工作台草稿</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: #111;
+        background: #f5f5f5;
+        font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-size: 14px;
+      }
+
+      header {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        border-bottom: 1px solid #d8d8d8;
+        background: #fff;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: 280px 1fr 300px;
+        gap: 12px;
+        padding: 12px;
+        height: calc(100vh - 56px);
+      }
+
+      section {
+        min-height: 0;
+        overflow: auto;
+        border: 1px solid #d8d8d8;
+        background: #fff;
+      }
+
+      .panel-title {
+        padding: 12px;
+        border-bottom: 1px solid #e2e2e2;
+        font-weight: 700;
+      }
+
+      .panel-body {
+        padding: 12px;
+      }
+
+      textarea,
+      input,
+      select {
+        width: 100%;
+        border: 1px solid #cfcfcf;
+        padding: 8px;
+        background: #fff;
+        color: #111;
+        font: inherit;
+      }
+
+      textarea {
+        min-height: 150px;
+        resize: vertical;
+      }
+
+      label {
+        display: block;
+        margin: 12px 0 6px;
+        color: #444;
+      }
+
+      button {
+        border: 1px solid #111;
+        background: #111;
+        color: #fff;
+        padding: 8px 12px;
+        font: inherit;
+        cursor: default;
+      }
+
+      button.secondary {
+        background: #fff;
+        color: #111;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .block {
+        border: 1px solid #ddd;
+        margin-bottom: 12px;
+        background: #fafafa;
+      }
+
+      .block h3 {
+        margin: 0;
+        padding: 10px;
+        border-bottom: 1px solid #e2e2e2;
+        font-size: 14px;
+      }
+
+      .block-content {
+        padding: 10px;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 90px 1fr;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+
+      .muted {
+        color: #666;
+      }
+
+      .node {
+        border-left: 3px solid #111;
+        padding: 8px 10px;
+        margin-bottom: 8px;
+        background: #fff;
+      }
+
+      .node-title {
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .tag {
+        display: inline-block;
+        border: 1px solid #bbb;
+        padding: 2px 6px;
+        margin: 2px 4px 2px 0;
+        color: #333;
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .agent {
+        border-bottom: 1px solid #e2e2e2;
+        padding: 10px 0;
+      }
+
+      .agent:first-child {
+        padding-top: 0;
+      }
+
+      .status {
+        display: inline-block;
+        padding: 2px 6px;
+        background: #eee;
+        color: #333;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>AI 生成方案工作台</strong>
+      <div class="actions">
+        <button class="secondary">保存草稿</button>
+        <button class="secondary">转表单编辑</button>
+        <button>提交确认</button>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <div class="panel-title">AI 输入</div>
+        <div class="panel-body">
+          <label>自然语言需求</label>
+          <textarea>为 2 型糖尿病超重患者生成一份 90 天健康管理方案，重点包含饮食控制、运动干预、血糖监测、阶段评估。要求每日饮食记录，每周运动复盘，每 14 天随访一次。</textarea>
+
+          <label>管理主题</label>
+          <select>
+            <option>2 型糖尿病管理</option>
+          </select>
+
+          <label>管理周期</label>
+          <input value="90 天" />
+
+          <label>重点方向</label>
+          <div>
+            <span class="tag">营养</span>
+            <span class="tag">运动</span>
+            <span class="tag">血糖监测</span>
+            <span class="tag">阶段评估</span>
+          </div>
+
+          <label>生成控制</label>
+          <div class="actions">
+            <button>生成方案草稿</button>
+            <button class="secondary">补充约束</button>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="panel-title">结构化方案草稿</div>
+        <div class="panel-body">
+          <div class="block">
+            <h3>基本信息</h3>
+            <div class="block-content">
+              <div class="row"><span class="muted">方案名称</span><span>2 型糖尿病超重人群 90 天管理方案</span></div>
+              <div class="row"><span class="muted">适用对象</span><span>2 型糖尿病，BMI 超重，需饮食与运动干预</span></div>
+              <div class="row"><span class="muted">生成状态</span><span>AI 草稿，待人工确认</span></div>
+            </div>
+          </div>
+
+          <div class="block">
+            <h3>管理目标</h3>
+            <div class="block-content">
+              <span class="tag">空腹血糖控制</span>
+              <span class="tag">体重下降</span>
+              <span class="tag">饮食依从性提升</span>
+              <span class="tag">运动习惯建立</span>
+            </div>
+          </div>
+
+          <div class="block">
+            <h3>监测数据</h3>
+            <div class="block-content">
+              <span class="tag">空腹血糖</span>
+              <span class="tag">餐后血糖</span>
+              <span class="tag">体重</span>
+              <span class="tag">饮食记录</span>
+              <span class="tag">运动记录</span>
+            </div>
+          </div>
+
+          <div class="block">
+            <h3>管理路径节点</h3>
+            <div class="block-content">
+              <div class="node">
+                <div class="node-title">第 1 天：基线问卷</div>
+                <div class="muted">节点类型：问卷；业务方向：基线评估；执行对象：患者</div>
+              </div>
+              <div class="node">
+                <div class="node-title">第 1-90 天：每日三餐饮食打卡</div>
+                <div class="muted">节点类型：打卡；业务方向：营养；重复规则：每日 3 次</div>
+              </div>
+              <div class="node">
+                <div class="node-title">每周 3 次：运动执行记录</div>
+                <div class="muted">节点类型：打卡；业务方向：运动；执行对象：患者</div>
+              </div>
+              <div class="node">
+                <div class="node-title">第 14 / 28 / 56 / 90 天：阶段评估</div>
+                <div class="muted">节点类型：评估；业务方向：整体管理；执行对象：医护 / 系统</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="block">
+            <h3>预警与调整</h3>
+            <div class="block-content">
+              <div class="row"><span class="muted">依从性</span><span>连续 3 天未完成饮食打卡，触发随访提醒</span></div>
+              <div class="row"><span class="muted">指标</span><span>血糖超过阈值，触发医护审核</span></div>
+              <div class="row"><span class="muted">调整</span><span>阶段评估长期未达标，建议人工确认是否调整方案</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="panel-title">智能体协作与确认</div>
+        <div class="panel-body">
+          <div class="agent">
+            <strong>营养师智能体</strong>
+            <p class="muted">已生成饮食记录、控糖饮食建议、营养干预节点。</p>
+            <span class="status">待确认 1 项</span>
+          </div>
+
+          <div class="agent">
+            <strong>运动智能体</strong>
+            <p class="muted">已生成每周运动频次和运动记录节点。</p>
+            <span class="status">无高风险</span>
+          </div>
+
+          <div class="agent">
+            <strong>慢病管理智能体</strong>
+            <p class="muted">已校验目标、监测数据、阶段评估节奏。</p>
+            <span class="status">建议补充 HbA1c 复查</span>
+          </div>
+
+          <div class="agent">
+            <strong>安全校验智能体</strong>
+            <p class="muted">发现用药、转诊、阈值相关内容需要人工确认。</p>
+            <span class="status">需人工确认 3 项</span>
+          </div>
+
+          <div class="block" style="margin-top: 12px;">
+            <h3>待确认项</h3>
+            <div class="block-content">
+              <p>1. 血糖预警阈值需医护确认。</p>
+              <p>2. 是否加入 HbA1c 复查节点。</p>
+              <p>3. 运动强度需结合患者基础情况确认。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

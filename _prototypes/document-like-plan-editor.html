@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>可计算方案文档草稿</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: #111;
+        background: #ececec;
+        font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-size: 15px;
+      }
+
+      header {
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        border-bottom: 1px solid #d6d6d6;
+        background: #fff;
+      }
+
+      .status {
+        color: #666;
+        font-size: 13px;
+      }
+
+      main {
+        height: calc(100vh - 52px);
+        overflow: auto;
+        padding: 28px 0 72px;
+      }
+
+      .paper {
+        position: relative;
+        width: min(860px, calc(100vw - 48px));
+        min-height: 980px;
+        margin: 0 auto;
+        padding: 56px 64px 80px;
+        background: #fff;
+        border: 1px solid #d8d8d8;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: 28px;
+        line-height: 1.3;
+      }
+
+      h2 {
+        margin: 34px 0 12px;
+        font-size: 18px;
+      }
+
+      p {
+        margin: 0 0 12px;
+        line-height: 1.8;
+      }
+
+      .lead {
+        color: #555;
+        margin-bottom: 28px;
+      }
+
+      .editable {
+        position: relative;
+        padding: 8px 10px;
+        margin: 0 -10px 8px;
+        border: 1px solid transparent;
+      }
+
+      .editable.active {
+        border-color: #111;
+        background: #fafafa;
+      }
+
+      .chip {
+        display: inline-block;
+        border: 1px solid #bbb;
+        padding: 2px 7px;
+        margin: 3px 4px 3px 0;
+        font-size: 12px;
+        color: #333;
+        background: #fff;
+      }
+
+      .floating-tools {
+        position: absolute;
+        top: 240px;
+        right: -26px;
+        transform: translateX(100%);
+        width: 230px;
+        border: 1px solid #111;
+        background: #fff;
+        padding: 10px;
+      }
+
+      .floating-tools strong {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      button {
+        width: 100%;
+        border: 1px solid #111;
+        background: #fff;
+        color: #111;
+        padding: 7px 8px;
+        margin-top: 6px;
+        text-align: left;
+        font: inherit;
+        font-size: 13px;
+      }
+
+      button.primary {
+        background: #111;
+        color: #fff;
+      }
+
+      .annotation {
+        position: absolute;
+        right: 40px;
+        top: 510px;
+        width: 220px;
+        border-left: 3px solid #111;
+        padding: 8px 10px;
+        background: #f3f3f3;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+
+      .timeline {
+        margin-top: 10px;
+        border-left: 2px solid #111;
+        padding-left: 16px;
+      }
+
+      .timeline-item {
+        margin-bottom: 14px;
+      }
+
+      .timeline-item strong {
+        display: block;
+      }
+
+      .bottom-sync {
+        position: fixed;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        width: min(760px, calc(100vw - 40px));
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border: 1px solid #111;
+        background: #fff;
+        padding: 10px 12px;
+        font-size: 13px;
+      }
+
+      .sync-items {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .sync-items span {
+        border: 1px solid #bbb;
+        padding: 2px 6px;
+        color: #333;
+      }
+
+      @media (max-width: 1100px) {
+        .floating-tools,
+        .annotation {
+          position: static;
+          transform: none;
+          width: auto;
+          margin: 16px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>可计算方案文档</strong>
+      <span class="status">AI 草稿 · 结构已同步 · 待人工确认</span>
+    </header>
+
+    <main>
+      <article class="paper">
+        <h1>2 型糖尿病超重人群 90 天健康管理方案</h1>
+        <p class="lead">这是一份由 AI 根据自然语言需求生成的方案草稿。用户可以直接修改段落、选择局部内容让专业智能体优化，系统在背后同步结构化配置。</p>
+
+        <h2>一、方案目标</h2>
+        <div class="editable">
+          <p>本方案用于帮助患者在 90 天内建立饮食记录、规律运动和血糖监测习惯，并通过阶段评估判断管理效果。</p>
+          <span class="chip">目标：空腹血糖控制</span>
+          <span class="chip">目标：体重下降</span>
+          <span class="chip">目标：饮食依从性提升</span>
+        </div>
+
+        <h2>二、营养干预</h2>
+        <div class="editable active">
+          <p>患者在管理周期内记录每日三餐饮食情况，重点关注主食摄入、蔬菜比例、蛋白质来源和加餐情况。系统根据饮食记录生成依从性摘要，并在阶段评估中用于判断饮食结构改善情况。</p>
+          <span class="chip">节点类型：打卡</span>
+          <span class="chip">业务方向：营养</span>
+          <span class="chip">时间规则：第 1-90 天，每日 3 次</span>
+        </div>
+
+        <div class="floating-tools">
+          <strong>选中：营养干预段落</strong>
+          <button class="primary">让营养师智能体优化</button>
+          <button>改成轻量执行</button>
+          <button>生成路径节点</button>
+          <button>查看结构映射</button>
+        </div>
+
+        <h2>三、运动干预</h2>
+        <div class="editable">
+          <p>建议患者每周完成 3 次中等强度运动记录。运动强度需结合患者基础活动能力、并发症风险和医护判断进行确认。</p>
+          <span class="chip">节点类型：打卡</span>
+          <span class="chip">业务方向：运动</span>
+          <span class="chip">待确认：运动强度</span>
+        </div>
+
+        <div class="annotation">
+          <strong>专业意见</strong>
+          <p>营养师智能体建议：每日三餐记录可能影响依从性，可考虑调整为每日一次饮食总结。</p>
+        </div>
+
+        <h2>四、管理路径</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <strong>第 1 天：完成基线问卷</strong>
+            <span class="status">已映射为问卷类节点</span>
+          </div>
+          <div class="timeline-item">
+            <strong>第 1-90 天：饮食记录</strong>
+            <span class="status">已映射为营养打卡类节点</span>
+          </div>
+          <div class="timeline-item">
+            <strong>每周 3 次：运动记录</strong>
+            <span class="status">已映射为运动打卡类节点</span>
+          </div>
+          <div class="timeline-item">
+            <strong>第 28 / 90 天：阶段评估</strong>
+            <span class="status">已映射为评估类节点</span>
+          </div>
+        </div>
+
+        <h2>五、预警与调整</h2>
+        <div class="editable">
+          <p>连续 3 天未完成饮食记录时，系统提醒患者并提示健康管理师跟进。血糖超过阈值时，进入医护审核。阶段评估长期未达标时，建议人工确认是否调整方案。</p>
+          <span class="chip">规则：依从性异常</span>
+          <span class="chip">规则：指标异常</span>
+          <span class="chip">待确认：血糖阈值</span>
+        </div>
+      </article>
+    </main>
+
+    <div class="bottom-sync">
+      <strong>结构同步</strong>
+      <div class="sync-items">
+        <span>4 个路径节点</span>
+        <span>3 条目标</span>
+        <span>2 条预警规则</span>
+        <span>2 个待确认项</span>
+      </div>
+      <button style="width: auto; margin: 0;">确认并发布</button>
+    </div>
+  </body>
+</html>

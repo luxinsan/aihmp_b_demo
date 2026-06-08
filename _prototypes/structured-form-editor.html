@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>结构化表单编辑草稿</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: #111;
+        background: #f5f5f5;
+        font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-size: 14px;
+      }
+
+      header {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        border-bottom: 1px solid #d8d8d8;
+        background: #fff;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: 220px 1fr 280px;
+        gap: 12px;
+        height: calc(100vh - 56px);
+        padding: 12px;
+      }
+
+      aside,
+      section {
+        min-height: 0;
+        overflow: auto;
+        border: 1px solid #d8d8d8;
+        background: #fff;
+      }
+
+      .title {
+        padding: 12px;
+        border-bottom: 1px solid #e2e2e2;
+        font-weight: 700;
+      }
+
+      .body {
+        padding: 12px;
+      }
+
+      .nav-item {
+        padding: 10px 12px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .nav-item.active {
+        background: #111;
+        color: #fff;
+      }
+
+      .block {
+        border: 1px solid #ddd;
+        margin-bottom: 12px;
+        background: #fafafa;
+      }
+
+      .block h3 {
+        margin: 0;
+        padding: 10px;
+        border-bottom: 1px solid #e2e2e2;
+        font-size: 14px;
+      }
+
+      .form {
+        padding: 12px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 6px;
+        color: #444;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border: 1px solid #cfcfcf;
+        padding: 8px;
+        background: #fff;
+        color: #111;
+        font: inherit;
+      }
+
+      textarea {
+        min-height: 82px;
+        resize: vertical;
+      }
+
+      button {
+        border: 1px solid #111;
+        background: #111;
+        color: #fff;
+        padding: 8px 12px;
+        font: inherit;
+        cursor: default;
+      }
+
+      button.secondary {
+        background: #fff;
+        color: #111;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .node-row {
+        display: grid;
+        grid-template-columns: 100px 1fr 90px;
+        gap: 8px;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #e5e5e5;
+        background: #fff;
+      }
+
+      .node-row:last-child {
+        border-bottom: 0;
+      }
+
+      .muted {
+        color: #666;
+      }
+
+      .tag {
+        display: inline-block;
+        border: 1px solid #bbb;
+        padding: 2px 6px;
+        margin: 2px 4px 2px 0;
+        color: #333;
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .check {
+        padding: 10px 0;
+        border-bottom: 1px solid #e2e2e2;
+      }
+
+      .check:last-child {
+        border-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>结构化表单编辑：2 型糖尿病 90 天管理方案</strong>
+      <div class="actions">
+        <button class="secondary">返回 AI 草稿</button>
+        <button class="secondary">保存</button>
+        <button>提交确认</button>
+      </div>
+    </header>
+
+    <main>
+      <aside>
+        <div class="title">配置目录</div>
+        <div class="nav-item">基本信息</div>
+        <div class="nav-item">适用对象</div>
+        <div class="nav-item">管理目标</div>
+        <div class="nav-item">监测数据</div>
+        <div class="nav-item active">管理路径节点</div>
+        <div class="nav-item">预警规则</div>
+        <div class="nav-item">评估类节点</div>
+        <div class="nav-item">调整与退出</div>
+      </aside>
+
+      <section>
+        <div class="title">管理路径节点</div>
+        <div class="body">
+          <div class="block">
+            <h3>节点列表</h3>
+            <div class="node-row">
+              <strong>第 1 天</strong>
+              <span>基线问卷</span>
+              <span class="muted">问卷</span>
+            </div>
+            <div class="node-row">
+              <strong>每日</strong>
+              <span>三餐饮食打卡</span>
+              <span class="muted">打卡</span>
+            </div>
+            <div class="node-row">
+              <strong>每周 3 次</strong>
+              <span>运动执行记录</span>
+              <span class="muted">打卡</span>
+            </div>
+            <div class="node-row">
+              <strong>第 14 天</strong>
+              <span>阶段随访</span>
+              <span class="muted">随访</span>
+            </div>
+          </div>
+
+          <div class="block">
+            <h3>当前节点：三餐饮食打卡</h3>
+            <div class="form">
+              <div class="grid">
+                <div>
+                  <label>节点名称</label>
+                  <input value="每日三餐饮食打卡" />
+                </div>
+                <div>
+                  <label>节点类型</label>
+                  <select>
+                    <option>打卡</option>
+                    <option>宣教</option>
+                    <option>问卷</option>
+                    <option>处方</option>
+                    <option>随访</option>
+                    <option>评估</option>
+                  </select>
+                </div>
+                <div>
+                  <label>业务方向</label>
+                  <select>
+                    <option>营养</option>
+                    <option>运动</option>
+                    <option>用药</option>
+                    <option>睡眠</option>
+                    <option>监测</option>
+                  </select>
+                </div>
+                <div>
+                  <label>执行对象</label>
+                  <select>
+                    <option>患者</option>
+                    <option>医护</option>
+                    <option>系统</option>
+                  </select>
+                </div>
+                <div>
+                  <label>起始偏移</label>
+                  <input value="第 1 天开始" />
+                </div>
+                <div>
+                  <label>结束条件</label>
+                  <input value="管理周期结束" />
+                </div>
+                <div>
+                  <label>重复频率</label>
+                  <select>
+                    <option>每日</option>
+                    <option>每周</option>
+                    <option>每月</option>
+                    <option>自定义</option>
+                  </select>
+                </div>
+                <div>
+                  <label>执行次数</label>
+                  <input value="每日 3 次" />
+                </div>
+              </div>
+
+              <label>执行时段</label>
+              <div>
+                <span class="tag">早餐</span>
+                <span class="tag">午餐</span>
+                <span class="tag">晚餐</span>
+              </div>
+
+              <label>执行内容</label>
+              <textarea>记录每餐主食、蔬菜、蛋白质摄入情况，可上传图片。系统用于生成饮食依从性和营养结构摘要。</textarea>
+
+              <label>提醒规则</label>
+              <textarea>早餐、午餐、晚餐后 30 分钟提醒。当天 21:00 仍未完成时补充提醒一次。</textarea>
+
+              <label>完成记录</label>
+              <select>
+                <option>生成饮食打卡记录</option>
+                <option>仅确认完成</option>
+                <option>上传材料</option>
+                <option>系统自动记录</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside>
+        <div class="title">AI 辅助与校验</div>
+        <div class="body">
+          <div class="check">
+            <strong>生成来源</strong>
+            <p class="muted">营养师智能体生成，人工未确认。</p>
+          </div>
+          <div class="check">
+            <strong>字段完整性</strong>
+            <p class="muted">时间规则、执行内容、完成记录已填写。</p>
+          </div>
+          <div class="check">
+            <strong>建议</strong>
+            <p class="muted">可补充饮食照片上传要求，便于后续营养结构分析。</p>
+          </div>
+          <div class="check">
+            <strong>风险提示</strong>
+            <p class="muted">未发现高风险医学建议。饮食目标仍需人工确认。</p>
+          </div>
+          <div class="actions" style="margin-top: 12px;">
+            <button class="secondary">AI 优化节点</button>
+            <button class="secondary">检查冲突</button>
+            <button>确认本节点</button>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </body>
+</html>

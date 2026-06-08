@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>自由画布方案配置草稿</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: #111;
+        background: #f4f4f4;
+        font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-size: 14px;
+      }
+
+      header {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        border-bottom: 1px solid #d8d8d8;
+        background: #fff;
+      }
+
+      button {
+        border: 1px solid #111;
+        background: #111;
+        color: #fff;
+        padding: 7px 10px;
+        font: inherit;
+      }
+
+      button.secondary {
+        background: #fff;
+        color: #111;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid #cfcfcf;
+        padding: 8px;
+        font: inherit;
+      }
+
+      textarea {
+        min-height: 72px;
+        resize: vertical;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        height: calc(100vh - 56px);
+      }
+
+      .title {
+        padding: 12px;
+        border-bottom: 1px solid #e2e2e2;
+        font-weight: 700;
+      }
+
+      .nav-item {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+      }
+
+      .nav-item:last-child {
+        border-bottom: 0;
+      }
+
+      .nav-item.active {
+        color: #fff;
+        background: #111;
+      }
+
+      .nav-meta {
+        display: block;
+        margin-top: 4px;
+        color: #666;
+        font-size: 12px;
+      }
+
+      .nav-item.active .nav-meta {
+        color: #ddd;
+      }
+
+      .viewport {
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        cursor: grab;
+        background:
+          linear-gradient(#e5e5e5 1px, transparent 1px),
+          linear-gradient(90deg, #e5e5e5 1px, transparent 1px);
+        background-size: 32px 32px;
+      }
+
+      .canvas-menu {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        width: 178px;
+        border: 1px solid #111;
+        background: #fff;
+        z-index: 6;
+        cursor: default;
+      }
+
+      .collab-panel {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border-left: 1px solid #d8d8d8;
+        background: #fff;
+      }
+
+      .panel-body {
+        flex: 1;
+        overflow: auto;
+      }
+
+      .panel-section {
+        border-bottom: 1px solid #e2e2e2;
+      }
+
+      .panel-section:last-child {
+        border-bottom: 0;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        font-weight: 700;
+      }
+
+      .agent-row {
+        display: grid;
+        grid-template-columns: 58px 1fr;
+        gap: 8px;
+        padding: 8px 12px;
+        border-top: 1px solid #eee;
+      }
+
+      .chat {
+        padding: 0 12px 10px;
+      }
+
+      .message {
+        padding: 8px;
+        margin-bottom: 8px;
+        border: 1px solid #d8d8d8;
+        background: #fafafa;
+      }
+
+      .message.user {
+        background: #111;
+        color: #fff;
+      }
+
+      .target-box {
+        margin: 0 12px 12px;
+        padding: 10px;
+        border: 1px solid #d8d8d8;
+        background: #fafafa;
+      }
+
+      .intent-box {
+        margin: 0 12px 12px;
+      }
+
+      .intent-box button {
+        width: 100%;
+        margin-top: 8px;
+      }
+
+      .change {
+        margin: 0 12px 12px;
+        border: 1px solid #111;
+      }
+
+      .change-row {
+        display: grid;
+        grid-template-columns: 72px 1fr;
+        gap: 8px;
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .change-row:last-child {
+        border-bottom: 0;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 0 12px 12px;
+      }
+
+      .outline-list {
+        display: grid;
+        gap: 8px;
+        padding: 0 12px 12px;
+      }
+
+      .outline-item {
+        padding: 8px;
+        border: 1px solid #d8d8d8;
+        background: #fafafa;
+      }
+
+      .composer {
+        padding: 10px;
+        border-top: 1px solid #d8d8d8;
+        background: #fff;
+      }
+
+      .composer button {
+        width: 100%;
+        margin-top: 8px;
+      }
+
+      .viewport.dragging {
+        cursor: grabbing;
+      }
+
+      .surface {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 2080px;
+        height: 1000px;
+        transform-origin: 0 0;
+      }
+
+      .card {
+        position: absolute;
+        width: 360px;
+        min-height: 190px;
+        border: 1px solid #111;
+        background: #fff;
+      }
+
+      .card.selected {
+        outline: 3px solid #111;
+        outline-offset: 4px;
+      }
+
+      .card.wide {
+        width: 620px;
+        min-height: 330px;
+      }
+
+      .card-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        background: #f8f8f8;
+        font-weight: 700;
+      }
+
+      .card-body {
+        padding: 10px;
+      }
+
+      .muted {
+        color: #666;
+      }
+
+      .tag {
+        display: inline-block;
+        border: 1px solid #bbb;
+        padding: 2px 6px;
+        margin: 2px 4px 2px 0;
+        background: #fff;
+        color: #333;
+        font-size: 12px;
+      }
+
+      .status {
+        border-color: #111;
+        font-weight: 700;
+      }
+
+      .summary {
+        display: grid;
+        gap: 8px;
+      }
+
+      .summary-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .summary-row:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+      }
+
+      .summary-row strong {
+        min-width: 72px;
+      }
+
+      .decision {
+        padding: 10px;
+        border: 1px solid #d8d8d8;
+        background: #fafafa;
+      }
+
+      .decision strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .node {
+        display: grid;
+        grid-template-columns: 90px 1fr 110px;
+        gap: 10px;
+        padding: 9px;
+        margin-bottom: 8px;
+        border-left: 3px solid #111;
+        background: #f7f7f7;
+      }
+
+      .node.repeat {
+        border-left-style: dashed;
+      }
+
+      .node.warn {
+        border-left-width: 5px;
+      }
+
+      .node strong {
+        display: block;
+        margin-bottom: 3px;
+      }
+
+      .p-basic { left: 80px; top: 70px; }
+      .p-data { left: 500px; top: 70px; }
+      .p-path { left: 920px; top: 70px; }
+      .p-warning { left: 1580px; top: 70px; }
+
+      .zoom {
+        position: absolute;
+        left: 12px;
+        bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px;
+        border: 1px solid #d8d8d8;
+        background: #fff;
+        z-index: 5;
+      }
+
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>AI 原生健康管理方案生成与编排工作台</strong>
+      <div>
+        <button class="secondary">保存草案</button>
+        <button class="secondary">结构校验</button>
+        <button>提交人工确认</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <main class="viewport" id="viewport">
+        <div class="canvas-menu" id="canvasMenu">
+          <div class="title">配置菜单</div>
+          <div class="nav-item active" data-target="basic">基础信息</div>
+          <div class="nav-item" data-target="data">监测数据</div>
+          <div class="nav-item" data-target="path">管理路径</div>
+          <div class="nav-item" data-target="warning">预警规则</div>
+        </div>
+
+        <div class="surface" id="surface">
+          <section class="card p-basic selected" data-card="basic">
+            <div class="card-head">
+              <span>基础信息</span>
+              <span class="tag status">待确认</span>
+            </div>
+            <div class="card-body">
+              <div class="decision">
+                <strong>糖尿病超重人群 90 天管理</strong>
+                <span class="muted">面向 2 型糖尿病且 BMI 超重患者，按阶段评估、预警或医护判断调整方案。</span>
+              </div>
+              <div style="margin-top: 10px;">
+                <span class="tag">90 天</span>
+                <span class="tag">结营 / 续管 / 转诊</span>
+                <span class="tag">风险等级待确认</span>
+                <span class="tag">用药情况待确认</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="card p-data" data-card="data">
+            <div class="card-head">
+              <span>监测数据</span>
+              <span class="tag status">已生成</span>
+            </div>
+            <div class="card-body">
+              <div class="decision">
+                <strong>围绕血糖、体重、饮食、运动持续观察</strong>
+                <span class="muted">数据用于预警、趋势分析、阶段评估和报告生成，不作为孤立采集项。</span>
+              </div>
+              <div style="margin-top: 12px;">
+                <span class="tag">空腹血糖</span>
+                <span class="tag">餐后血糖</span>
+                <span class="tag">体重</span>
+                <span class="tag">饮食记录</span>
+                <span class="tag">运动记录</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="card wide p-path" data-card="path">
+            <div class="card-head">
+              <span>管理路径</span>
+              <span class="tag status">有变更预览</span>
+            </div>
+            <div class="card-body">
+              <div class="decision" style="margin-bottom: 10px;">
+                <strong>以管理开始日为锚点生成执行节奏</strong>
+                <span class="muted">重复节点只配置规则，由系统推导具体日期和待办。</span>
+              </div>
+              <div class="node">
+                <div><strong>第 1 天</strong></div>
+                <div>
+                  <strong>基线问卷</strong>
+                  <span class="muted">记录患者进入管理时的必要起点。</span>
+                </div>
+                <div><span class="tag">问卷</span></div>
+              </div>
+              <div class="node repeat">
+                <div><strong>第 1-90 天</strong></div>
+                <div>
+                  <strong>每日饮食总结</strong>
+                  <span class="muted">每日 1 次，由营养智能体生成并降强度。</span>
+                </div>
+                <div><span class="tag">营养</span></div>
+              </div>
+              <div class="node repeat">
+                <div><strong>每周 3 次</strong></div>
+                <div>
+                  <strong>运动执行记录</strong>
+                  <span class="muted">强度需要结合患者基础情况确认。</span>
+                </div>
+                <div><span class="tag">运动</span></div>
+              </div>
+              <div class="node">
+                <div><strong>第 28 / 90 天</strong></div>
+                <div>
+                  <strong>阶段评估</strong>
+                  <span class="muted">评估类节点，汇总目标、趋势、完成情况和预警处理。</span>
+                </div>
+                <div><span class="tag">评估</span></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="card p-warning" data-card="warning">
+            <div class="card-head">
+              <span>预警规则</span>
+              <span class="tag status">待确认</span>
+            </div>
+            <div class="card-body">
+              <div class="decision" style="margin-bottom: 10px;">
+                <strong>异常必须连接处理动作</strong>
+                <span class="muted">规则不只提示风险，还应生成复测、随访、医护审核或升级处理。</span>
+              </div>
+              <div class="node warn" style="grid-template-columns: 1fr;">
+                <strong>血糖超过阈值</strong>
+                <span class="muted">触发医护审核、复测建议，记录处理结果。</span>
+              </div>
+              <div class="node warn" style="grid-template-columns: 1fr;">
+                <strong>连续 3 天未完成节点</strong>
+                <span class="muted">提醒患者，生成随访节点或临时处置动作。</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="zoom">
+          <button class="secondary" id="zoomOut">-</button>
+          <span id="zoomText">100%</span>
+          <button class="secondary" id="zoomIn">+</button>
+          <button class="secondary" id="reset">重置</button>
+        </div>
+      </main>
+
+      <aside class="collab-panel" id="collabPanel">
+          <div class="title">AI 协同创作</div>
+          <div class="panel-body">
+            <div class="panel-section">
+              <div class="section-head">
+                <span>审方案</span>
+                <span class="tag">画布选中</span>
+              </div>
+              <div class="target-box">
+                <strong id="activeTitle">基础信息</strong>
+                <p class="muted" id="activeDesc">确认适用对象、管理周期、调整与退出规则。</p>
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <div class="section-head">
+                <span>调方案</span>
+                <span class="tag">自然语言</span>
+              </div>
+              <div class="intent-box">
+                <textarea>把饮食节点改成每周 5 天，周末不提醒，保留第 28 天阶段评估。</textarea>
+                <button>生成变更预览</button>
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <div class="section-head">
+                <span>变更预览</span>
+                <span class="tag">待确认</span>
+              </div>
+              <div class="change">
+                <div class="change-row"><strong>对象</strong><span>管理路径 / 饮食节点</span></div>
+                <div class="change-row"><strong>内容</strong><span>每日饮食总结调整为每周 5 天，周末不提醒。</span></div>
+                <div class="change-row"><strong>范围</strong><span>第 1-90 天管理周期。</span></div>
+                <div class="change-row"><strong>影响</strong><span>同步影响提醒频次、依从性统计和阶段评估口径。</span></div>
+                <div class="change-row"><strong>风险</strong><span>饮食记录减少后，营养反馈颗粒度下降。</span></div>
+              </div>
+              <div class="actions">
+                <button>确认应用</button>
+                <button class="secondary">继续调整</button>
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <div class="section-head">
+                <span>智能体协作</span>
+                <span class="tag">业务对象</span>
+              </div>
+              <div class="agent-row"><strong>营养</strong><span class="muted">建议保留工作日饮食记录，周末生成轻量提醒。</span></div>
+              <div class="agent-row"><strong>运动</strong><span class="muted">运动频次不受本次饮食节点调整影响。</span></div>
+              <div class="agent-row"><strong>安全</strong><span class="muted">低血糖风险人群仍需保留异常反馈入口。</span></div>
+            </div>
+
+            <div class="panel-section">
+              <div class="section-head">
+                <span>结构明细</span>
+                <span class="tag">按需展开</span>
+              </div>
+              <div class="outline-list">
+                <div class="outline-item">管理路径节点：饮食总结</div>
+                <div class="outline-item">重复规则：每周 5 天</div>
+                <div class="outline-item">提醒规则：周末关闭</div>
+                <div class="outline-item">评估引用：第 28 / 90 天</div>
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <div class="section-head">协作记录</div>
+              <div class="chat">
+                <div class="message user">为 2 型糖尿病超重患者生成 90 天管理方案。</div>
+                <div class="message">已生成四类对象草案，并标记待确认项。</div>
+                <div class="message">营养智能体建议降低饮食记录强度。</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="composer">
+            <button>提交人工确认</button>
+          </div>
+      </aside>
+    </div>
+
+    <script>
+      const viewport = document.getElementById("viewport");
+      const surface = document.getElementById("surface");
+      const zoomText = document.getElementById("zoomText");
+      const activeTitle = document.getElementById("activeTitle");
+      const activeDesc = document.getElementById("activeDesc");
+      let scale = 0.88;
+      let x = 180;
+      let y = 28;
+      let dragging = false;
+      let startX = 0;
+      let startY = 0;
+
+      function render() {
+        surface.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+        zoomText.textContent = `${Math.round(scale * 100)}%`;
+      }
+
+      document.getElementById("zoomIn").onclick = () => {
+        scale = Math.min(1.4, scale + 0.1);
+        render();
+      };
+
+      document.getElementById("zoomOut").onclick = () => {
+        scale = Math.max(0.5, scale - 0.1);
+        render();
+      };
+
+      document.getElementById("reset").onclick = () => {
+        scale = 0.88;
+        x = 180;
+        y = 28;
+        render();
+      };
+
+      viewport.addEventListener("pointerdown", (event) => {
+        dragging = true;
+        viewport.classList.add("dragging");
+        startX = event.clientX - x;
+        startY = event.clientY - y;
+      });
+
+      window.addEventListener("pointermove", (event) => {
+        if (!dragging) return;
+        x = event.clientX - startX;
+        y = event.clientY - startY;
+        render();
+      });
+
+      window.addEventListener("pointerup", () => {
+        dragging = false;
+        viewport.classList.remove("dragging");
+      });
+
+      document.getElementById("canvasMenu").addEventListener("pointerdown", (event) => {
+        event.stopPropagation();
+      });
+
+      const targets = {
+        basic: { x: 180, y: 28, title: "基础信息", desc: "确认适用对象、管理周期、调整与退出规则。" },
+        data: { x: -180, y: 28, title: "监测数据", desc: "确认持续观察的数据项，以及它们如何服务预警和评估。" },
+        path: { x: -560, y: 28, title: "管理路径", desc: "确认节点、重复规则、日期锚点和阶段评估安排。" },
+        warning: { x: -1140, y: 28, title: "预警规则", desc: "确认异常识别条件、处理动作和人工审核边界。" },
+      };
+
+      document.querySelectorAll("[data-target]").forEach((item) => {
+        item.addEventListener("click", () => {
+          const key = item.dataset.target;
+          const target = targets[key];
+          document.querySelectorAll("[data-target]").forEach((nav) => nav.classList.remove("active"));
+          item.classList.add("active");
+          document.querySelectorAll("[data-card]").forEach((card) => card.classList.remove("selected"));
+          document.querySelector(`[data-card="${key}"]`).classList.add("selected");
+          x = target.x;
+          y = target.y;
+          activeTitle.textContent = target.title;
+          activeDesc.textContent = target.desc;
+          render();
+        });
+      });
+
+      render();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>方案画布化草稿</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: #111;
+        background: #f5f5f5;
+        font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-size: 14px;
+      }
+
+      header {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        border-bottom: 1px solid #d8d8d8;
+        background: #fff;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 12px;
+        height: calc(100vh - 56px);
+        padding: 12px;
+      }
+
+      section,
+      aside {
+        min-height: 0;
+        overflow: auto;
+        border: 1px solid #d8d8d8;
+        background: #fff;
+      }
+
+      .canvas {
+        padding: 28px;
+      }
+
+      .canvas-header {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 18px;
+        margin-bottom: 18px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 24px;
+      }
+
+      h2 {
+        margin: 0 0 12px;
+        font-size: 18px;
+      }
+
+      h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+
+      p {
+        line-height: 1.7;
+        margin: 0 0 8px;
+      }
+
+      .muted {
+        color: #666;
+      }
+
+      .section-block {
+        border: 1px solid #ddd;
+        padding: 16px;
+        margin-bottom: 14px;
+        background: #fafafa;
+      }
+
+      .section-block.active {
+        border-color: #111;
+        background: #fff;
+      }
+
+      .tag {
+        display: inline-block;
+        border: 1px solid #bbb;
+        padding: 2px 6px;
+        margin: 2px 4px 2px 0;
+        color: #333;
+        background: #fff;
+        font-size: 12px;
+      }
+
+      .timeline {
+        display: grid;
+        gap: 10px;
+      }
+
+      .node {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 12px;
+        border-left: 3px solid #111;
+        padding: 10px 12px;
+        background: #fff;
+      }
+
+      .node-time {
+        font-weight: 700;
+      }
+
+      .side-title {
+        padding: 12px;
+        border-bottom: 1px solid #e2e2e2;
+        font-weight: 700;
+      }
+
+      .side-body {
+        padding: 12px;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 104px;
+        border: 1px solid #cfcfcf;
+        padding: 8px;
+        resize: vertical;
+        font: inherit;
+      }
+
+      button {
+        border: 1px solid #111;
+        background: #111;
+        color: #fff;
+        padding: 8px 12px;
+        font: inherit;
+      }
+
+      button.secondary {
+        background: #fff;
+        color: #111;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .comment {
+        border-bottom: 1px solid #e2e2e2;
+        padding: 12px 0;
+      }
+
+      .comment:first-child {
+        padding-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>方案画布：AI 生成方案草稿</strong>
+      <div class="actions">
+        <button class="secondary">路径视图</button>
+        <button class="secondary">结构视图</button>
+        <button>确认草稿</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="canvas">
+        <div class="canvas-header">
+          <h1>2 型糖尿病超重人群 90 天健康管理方案</h1>
+          <p class="muted">AI 草稿 · 适用于 2 型糖尿病且 BMI 超重的患者 · 待人工确认</p>
+        </div>
+
+        <div class="section-block">
+          <h2>方案目标</h2>
+          <p>本方案用于帮助患者建立饮食记录、规律运动和血糖监测习惯，并在 90 天内完成阶段性复盘。</p>
+          <span class="tag">空腹血糖控制</span>
+          <span class="tag">体重下降</span>
+          <span class="tag">饮食依从性提升</span>
+          <span class="tag">运动习惯建立</span>
+        </div>
+
+        <div class="section-block active">
+          <h2>营养干预</h2>
+          <p>建议患者在管理周期内记录每日三餐饮食情况，重点关注主食摄入、蔬菜比例、蛋白质来源和加餐情况。</p>
+          <p>系统将根据饮食记录生成依从性摘要，并在阶段评估中用于判断饮食结构改善情况。</p>
+          <span class="tag">营养师智能体生成</span>
+          <span class="tag">包含结构化节点</span>
+        </div>
+
+        <div class="section-block">
+          <h2>运动干预</h2>
+          <p>建议患者每周完成 3 次中等强度运动记录。运动强度需结合患者基础情况进行人工确认。</p>
+          <span class="tag">运动智能体生成</span>
+          <span class="tag">需确认运动强度</span>
+        </div>
+
+        <div class="section-block">
+          <h2>管理路径</h2>
+          <div class="timeline">
+            <div class="node">
+              <div class="node-time">第 1 天</div>
+              <div>
+                <h3>完成基线问卷</h3>
+                <p class="muted">用于形成患者计划实例的初始状态快照。</p>
+              </div>
+            </div>
+            <div class="node">
+              <div class="node-time">第 1-90 天</div>
+              <div>
+                <h3>每日三餐饮食记录</h3>
+                <p class="muted">每日 3 次，早餐 / 午餐 / 晚餐后提醒。</p>
+              </div>
+            </div>
+            <div class="node">
+              <div class="node-time">每周</div>
+              <div>
+                <h3>运动执行记录</h3>
+                <p class="muted">每周 3 次，形成运动依从性数据。</p>
+              </div>
+            </div>
+            <div class="node">
+              <div class="node-time">第 28 / 90 天</div>
+              <div>
+                <h3>阶段评估</h3>
+                <p class="muted">汇总目标、指标趋势、节点完成情况和预警处理。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <h2>预警与调整</h2>
+          <p>连续 3 天未完成饮食记录时，系统提示患者并提醒健康管理师跟进。血糖超过阈值时，进入医护审核。</p>
+        </div>
+      </section>
+
+      <aside>
+        <div class="side-title">AI 修改与专业意见</div>
+        <div class="side-body">
+          <textarea>把营养干预改得更轻量一些，饮食记录从每日三餐改为每日一次总结。</textarea>
+          <div class="actions" style="margin: 10px 0 16px;">
+            <button>应用修改</button>
+            <button class="secondary">只预览差异</button>
+          </div>
+
+          <div class="comment">
+            <strong>营养建议</strong>
+            <p class="muted">当前饮食打卡频率较高，可能影响依从性。可考虑从每日 3 次调整为每日 1 次总结。</p>
+          </div>
+
+          <div class="comment">
+            <strong>运动建议</strong>
+            <p class="muted">运动强度需要结合患者基础活动能力和并发症风险确认。</p>
+          </div>
+
+          <div class="comment">
+            <strong>慢病管理建议</strong>
+            <p class="muted">建议补充 HbA1c 复查节点，作为 90 天管理效果评价依据。</p>
+          </div>
+
+          <div class="comment">
+            <strong>结构化影子层</strong>
+            <p class="muted">当前选中“营养干预”，底层包含 1 个打卡类路径节点、1 条提醒规则、1 条完成记录规则。</p>
+            <button class="secondary">展开结构详情</button>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI 原生方案配置工作台草稿</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: #111;
+        background: #f4f4f4;
+        font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-size: 14px;
+      }
+
+      header {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        background: #fff;
+        border-bottom: 1px solid #d8d8d8;
+      }
+
+      button {
+        border: 1px solid #111;
+        background: #111;
+        color: #fff;
+        padding: 8px 12px;
+        font: inherit;
+      }
+
+      button.secondary {
+        background: #fff;
+        color: #111;
+      }
+
+      .shell {
+        display: grid;
+        grid-template-columns: 220px 1fr 300px;
+        gap: 12px;
+        height: calc(100vh - 56px);
+        padding: 12px;
+      }
+
+      nav,
+      aside,
+      main {
+        min-height: 0;
+        overflow: auto;
+        background: #fff;
+        border: 1px solid #d8d8d8;
+      }
+
+      .title {
+        padding: 12px;
+        border-bottom: 1px solid #e2e2e2;
+        font-weight: 700;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 10px 12px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .nav-item.active {
+        background: #111;
+        color: #fff;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border: 1px solid currentColor;
+        border-radius: 50%;
+      }
+
+      .dot.done {
+        background: currentColor;
+      }
+
+      .content {
+        padding: 14px;
+      }
+
+      .intent {
+        display: grid;
+        grid-template-columns: 86px 1fr auto;
+        gap: 10px;
+        align-items: center;
+        padding: 10px;
+        margin-bottom: 12px;
+        border: 1px solid #d8d8d8;
+        background: #fafafa;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        border: 1px solid #cfcfcf;
+        padding: 8px;
+        background: #fff;
+        color: #111;
+        font: inherit;
+      }
+
+      textarea {
+        min-height: 74px;
+        resize: vertical;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        padding: 16px;
+        margin-bottom: 12px;
+        border: 1px solid #d8d8d8;
+        background: #fff;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 22px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 17px;
+      }
+
+      h3 {
+        margin: 0 0 8px;
+        font-size: 15px;
+      }
+
+      p {
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .muted {
+        color: #666;
+      }
+
+      .tag {
+        display: inline-block;
+        border: 1px solid #bbb;
+        padding: 2px 6px;
+        margin: 2px 4px 2px 0;
+        background: #fff;
+        color: #333;
+        font-size: 12px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .block {
+        border: 1px solid #d8d8d8;
+        background: #fff;
+        margin-bottom: 12px;
+      }
+
+      .block-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px;
+        border-bottom: 1px solid #e2e2e2;
+      }
+
+      .block-body {
+        padding: 12px;
+      }
+
+      .field-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .field {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 8px;
+      }
+
+      .path {
+        display: grid;
+        gap: 10px;
+      }
+
+      .node {
+        display: grid;
+        grid-template-columns: 110px 1fr 160px;
+        gap: 12px;
+        padding: 10px;
+        border-left: 3px solid #111;
+        background: #fafafa;
+      }
+
+      .node.repeat {
+        border-left-style: dashed;
+      }
+
+      .node.warn {
+        border-left-width: 5px;
+      }
+
+      .side-body {
+        padding: 12px;
+      }
+
+      .advice {
+        padding: 10px 0;
+        border-bottom: 1px solid #e2e2e2;
+      }
+
+      .advice:first-child {
+        padding-top: 0;
+      }
+
+      .advice strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .confirm-bar {
+        position: sticky;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+        border: 1px solid #111;
+        background: #fff;
+      }
+
+      @media (max-width: 1100px) {
+        .shell,
+        .summary,
+        .grid,
+        .node {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>AI 原生健康管理方案生成与编排工作台</strong>
+      <div>
+        <button class="secondary">保存草稿</button>
+        <button class="secondary">结构校验</button>
+        <button>提交人工确认</button>
+      </div>
+    </header>
+
+    <div class="shell">
+      <nav>
+        <div class="title">方案配置结构</div>
+        <div class="nav-item"><span>基础信息</span><span class="dot done"></span></div>
+        <div class="nav-item"><span>管理主题</span><span class="dot done"></span></div>
+        <div class="nav-item"><span>适用对象</span><span class="dot done"></span></div>
+        <div class="nav-item"><span>基线评估</span><span class="dot"></span></div>
+        <div class="nav-item"><span>管理目标</span><span class="dot done"></span></div>
+        <div class="nav-item"><span>监测数据</span><span class="dot done"></span></div>
+        <div class="nav-item active"><span>管理路径节点</span><span class="dot done"></span></div>
+        <div class="nav-item"><span>预警干预</span><span class="dot"></span></div>
+        <div class="nav-item"><span>评估与调整</span><span class="dot"></span></div>
+      </nav>
+
+      <main>
+        <div class="content">
+          <div class="intent">
+            <strong>意图</strong>
+            <input value="为 2 型糖尿病超重患者生成 90 天管理方案，重点包含营养、运动、血糖监测、阶段评估。" />
+            <button>让 AI 调整</button>
+          </div>
+
+          <section class="summary">
+            <div>
+              <h1>2 型糖尿病超重人群 90 天管理方案</h1>
+              <p class="muted">AI 已按 V3.0 结构生成方案草稿。当前重点确认管理路径节点、预警和评估调整规则。</p>
+              <div style="margin-top: 8px;">
+                <span class="tag">AI 草稿</span>
+                <span class="tag">管理周期 90 天</span>
+                <span class="tag">12 个路径节点</span>
+                <span class="tag">4 个待确认项</span>
+              </div>
+            </div>
+            <div>
+              <button class="secondary">查看方案摘要</button>
+              <button class="secondary">展开完整结构</button>
+            </div>
+          </section>
+
+          <div class="grid">
+            <section class="block">
+              <div class="block-head">
+                <h2>基础信息 / 主题 / 适用对象</h2>
+                <button class="secondary">编辑</button>
+              </div>
+              <div class="block-body field-list">
+                <div class="field"><span class="muted">方案名称</span><span>2 型糖尿病超重人群 90 天管理方案</span></div>
+                <div class="field"><span class="muted">管理主题</span><span>2 型糖尿病管理</span></div>
+                <div class="field"><span class="muted">适用对象</span><span>2 型糖尿病，BMI 超重，需生活方式干预</span></div>
+                <div class="field"><span class="muted">匹配边界</span><span>需医护确认风险等级、用药情况和并发症风险</span></div>
+              </div>
+            </section>
+
+            <section class="block">
+              <div class="block-head">
+                <h2>目标与监测数据</h2>
+                <button class="secondary">编辑</button>
+              </div>
+              <div class="block-body">
+                <h3>管理目标</h3>
+                <span class="tag">空腹血糖控制</span>
+                <span class="tag">体重下降</span>
+                <span class="tag">饮食依从性提升</span>
+                <span class="tag">运动习惯建立</span>
+                <h3 style="margin-top: 12px;">监测数据</h3>
+                <span class="tag">空腹血糖</span>
+                <span class="tag">餐后血糖</span>
+                <span class="tag">体重</span>
+                <span class="tag">饮食记录</span>
+                <span class="tag">运动记录</span>
+              </div>
+            </section>
+          </div>
+
+          <section class="block">
+            <div class="block-head">
+              <div>
+                <h2>管理路径节点</h2>
+                <p class="muted">以管理开始时间为锚点配置相对时间规则，重复执行场景只配置一个节点。</p>
+              </div>
+              <button>新增节点</button>
+            </div>
+            <div class="block-body path">
+              <div class="node">
+                <div><strong>第 1 天</strong></div>
+                <div>
+                  <strong>基线问卷</strong>
+                  <p class="muted">节点类型：问卷；业务方向：基线评估；执行对象：患者</p>
+                </div>
+                <div>
+                  <span class="tag">AI 生成</span>
+                  <span class="tag">待确认</span>
+                </div>
+              </div>
+
+              <div class="node repeat">
+                <div><strong>第 1-90 天</strong></div>
+                <div>
+                  <strong>每日饮食总结</strong>
+                  <p class="muted">节点类型：打卡；业务方向：营养；重复频率：每日 1 次；完成记录：饮食记录</p>
+                </div>
+                <div>
+                  <span class="tag">营养智能体</span>
+                  <span class="tag">已降强度</span>
+                </div>
+              </div>
+
+              <div class="node repeat">
+                <div><strong>每周 3 次</strong></div>
+                <div>
+                  <strong>运动执行记录</strong>
+                  <p class="muted">节点类型：打卡；业务方向：运动；执行对象：患者；完成记录：运动记录</p>
+                </div>
+                <div>
+                  <span class="tag">运动智能体</span>
+                  <span class="tag">需确认强度</span>
+                </div>
+              </div>
+
+              <div class="node">
+                <div><strong>第 14 天</strong></div>
+                <div>
+                  <strong>阶段随访</strong>
+                  <p class="muted">节点类型：随访；业务方向：复查；执行对象：健康管理师</p>
+                </div>
+                <div>
+                  <span class="tag">AI 生成</span>
+                </div>
+              </div>
+
+              <div class="node">
+                <div><strong>第 28 / 90 天</strong></div>
+                <div>
+                  <strong>阶段评估</strong>
+                  <p class="muted">节点类型：评估；汇总目标达成、指标趋势、节点完成和预警处理</p>
+                </div>
+                <div>
+                  <span class="tag">评估类节点</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="block">
+            <div class="block-head">
+              <h2>预警干预 / 评估调整</h2>
+              <button class="secondary">编辑规则</button>
+            </div>
+            <div class="block-body grid">
+              <div>
+                <h3>预警干预</h3>
+                <div class="node warn" style="grid-template-columns: 1fr;">
+                  <strong>血糖超过阈值</strong>
+                  <p class="muted">触发医护审核、复测建议，需记录处理结果。</p>
+                </div>
+                <div class="node warn" style="grid-template-columns: 1fr;">
+                  <strong>连续 3 天未完成路径节点</strong>
+                  <p class="muted">先提醒患者，再提示健康管理师跟进。</p>
+                </div>
+              </div>
+              <div>
+                <h3>评估与调整</h3>
+                <div class="node" style="grid-template-columns: 1fr;">
+                  <strong>长期未达标</strong>
+                  <p class="muted">由评估类节点触发，建议医护确认是否调整目标或路径强度。</p>
+                </div>
+                <div class="node" style="grid-template-columns: 1fr;">
+                  <strong>管理周期结束</strong>
+                  <p class="muted">判断结营、续管、转诊或进入下一阶段。</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="confirm-bar">
+            <div>
+              <strong>发布前确认</strong>
+              <span class="tag">血糖阈值</span>
+              <span class="tag">运动强度</span>
+              <span class="tag">基线快照</span>
+              <span class="tag">HbA1c 复查是否加入</span>
+            </div>
+            <button>进入人工确认</button>
+          </div>
+        </div>
+      </main>
+
+      <aside>
+        <div class="title">AI 建议 / 风险 / 缺失项</div>
+        <div class="side-body">
+          <div class="advice">
+            <strong>结构完整性</strong>
+            <p class="muted">已覆盖基础信息、主题、适用对象、目标、监测数据、路径节点、预警和评估调整。</p>
+          </div>
+          <div class="advice">
+            <strong>营养智能体</strong>
+            <p class="muted">已将每日三餐记录改为每日一次总结，降低执行负担。</p>
+          </div>
+          <div class="advice">
+            <strong>慢病管理智能体</strong>
+            <p class="muted">建议补充 HbA1c 复查节点，作为 90 天效果评估依据。</p>
+          </div>
+          <div class="advice">
+            <strong>安全校验</strong>
+            <p class="muted">血糖阈值、转诊建议、运动强度需要人工确认后发布。</p>
+          </div>
+          <div class="advice">
+            <strong>局部指令</strong>
+            <textarea>把饮食记录改成每周 5 天即可，保留第 28 天阶段评估。</textarea>
+            <div style="margin-top: 8px;">
+              <button>应用到当前方案</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </body>
+</html>
