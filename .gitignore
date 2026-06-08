@@ -15,3 +15,5 @@ platform-admin/dist
 platform-admin/.vite
 platform-admin/*.tsbuildinfo
 pages-out
+.vscode/
+.claude/settings.local.json
